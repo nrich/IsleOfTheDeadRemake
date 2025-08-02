@@ -51,6 +51,7 @@ CelThree::CelThree(const std::string &filename, const Palette &palette) : filena
     image = image.FlipHorizontal();
 
     texture = raylib::TextureUnmanaged(image); 
+    texture.SetWrap(TEXTURE_WRAP_CLAMP);
 }
 
 CelThree::~CelThree() {

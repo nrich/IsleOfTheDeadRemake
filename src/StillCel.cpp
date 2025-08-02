@@ -65,6 +65,7 @@ StillCel::StillCel(const std::string &filename) : filename(filename) {
 //    image = image.RotateCCW();
 
     texture = raylib::TextureUnmanaged(image);
+    texture.SetWrap(TEXTURE_WRAP_CLAMP);
 }
 
 StillCel::~StillCel() {

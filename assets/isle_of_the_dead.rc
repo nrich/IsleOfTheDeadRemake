@@ -1,0 +1,50 @@
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <windows.h>
+
+#pragma code_page(65001)
+
+#ifdef _DEBUG
+    #define VER_FILEFLAGS   VS_FF_DEBUG
+#else
+    #define VER_FILEFLAGS   0x0L
+#endif
+
+#define VERSION_STR "0.0.1"
+
+#ifdef _WIN64
+    #define VER_FILEDESCRIPTION_STR     "Isle of the Dead - Remake"
+    #define VER_ORIGINALFILENAME_STR    "isle_of_the_dead.exe"
+#endif
+
+#define PRODUCT_NAME "Isle of the Dead - Remake"
+#define INTERNAL_NAME "iotdr"
+
+1 VERSIONINFO
+FILEVERSION     0,0,1,0
+PRODUCTVERSION  0,0,1,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "CompanyName", ""
+      VALUE "FileDescription", VER_FILEDESCRIPTION_STR
+      VALUE "FileVersion", VERSION_STR
+      VALUE "InternalName", INTERNAL_NAME
+      VALUE "LegalCopyright", "Copyright © 2025 Neil Richardson"
+      VALUE "OriginalFilename", VER_FILEDESCRIPTION_STR
+      VALUE "ProductName", PRODUCT_NAME
+      VALUE "ProductVersion", VERSION_STR
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END
+
+100 ICON "isle_of_the_dead.ico"
+GLFW_ICON ICON "isle_of_the_dead.ico"

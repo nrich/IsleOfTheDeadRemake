@@ -1,0 +1,224 @@
+#ifndef ENTITY_H
+#define ENTITY_H
+
+#include <cstdint>
+#include <unordered_map>
+#include <functional>
+#include <optional>
+
+#include <raylib-cpp.hpp>
+
+#include "Game.h"
+#include "Segment.h"
+#include "Entrance.h"
+
+enum class Collision {
+    Pass,
+    Block,
+    Touch,
+};
+
+class Player;
+
+class Entity {
+protected:
+    uint16_t x1;
+    uint16_t y1;
+    uint16_t x2;
+    uint16_t y2;
+public:
+    Entity(const Segment *segment) {
+        x1 = segment->x1;
+        y1 = segment->y1;
+        x2 = segment->x2;
+        y2 = segment->y2;
+    }
+
+    virtual void draw(const raylib::Camera3D *camera, uint64_t frame_count) const = 0;
+
+    virtual Collision collide() const {
+        return Collision::Pass;
+    }
+
+    virtual void touch(Player *player) {
+    }
+
+    virtual void damage(const DamageType damage_type, int amount) {
+    }
+
+    virtual std::optional<raylib::RayCollision> collide(const raylib::Ray &ray) {
+        return std::nullopt;
+    }
+
+    virtual void update(Player *player, uint64_t frame_count) {
+    }
+
+    virtual std::optional<std::pair<raylib::Vector2, float>> getBounds() const {
+        return std::nullopt;
+    }
+
+    virtual std::optional<raylib::Vector2> getPosition() const {
+        return std::nullopt;
+    }
+
+    virtual ~Entity();
+};
+
+class Wall : public Entity {
+    raylib::TextureUnmanaged texture; 
+public:
+    Wall(const Segment *segment, const raylib::TextureUnmanaged &texture) : Entity(segment), texture(texture) {
+    }
+
+    Collision collide() const {
+        return Collision::Block;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+};
+
+class AnimatedWall : public Entity {
+    std::vector<raylib::TextureUnmanaged> textures;
+    uint32_t frameRate;
+
+public:
+    AnimatedWall(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate) : Entity(segment), textures(textures), frameRate(frame_rate) {
+    }
+
+    Collision collide() const {
+        return Collision::Block;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+};
+
+class Portal : public Entity {
+    Entrance entrance;
+public:
+    Portal(const Segment *segment, const Entrance &entrance) : Entity(segment), entrance(entrance) {
+    }
+
+    Collision collide() const {
+        return Collision::Touch;
+    }
+
+    //void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    void touch(Player *player);
+};
+
+class Passage : public Portal {
+    raylib::TextureUnmanaged texture;
+public:
+    Passage(const Segment *segment, const raylib::TextureUnmanaged &texture, const Entrance &entrance) : Portal(segment, entrance), texture(texture) {
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+};
+
+class Door : public Portal {
+protected:
+    bool open = false;
+    raylib::TextureUnmanaged closedTexture;
+    raylib::TextureUnmanaged openedTexture;
+public:
+    Door(const Segment *segment, const raylib::TextureUnmanaged &closed_texture, const raylib::TextureUnmanaged &opened_texture, const Entrance &entrance) : Portal(segment, entrance), closedTexture(closed_texture), openedTexture(opened_texture) {
+    }
+
+    Collision collide() const {
+        if (open)
+            return Collision::Touch;
+
+        return Collision::Block;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+};
+
+class Barricade : public Door {
+    DamageType expected;
+public: 
+    Barricade(const Segment *segment, const raylib::TextureUnmanaged &closed_texture, const raylib::TextureUnmanaged &opened_texture, const Entrance &entrance, DamageType expected) : Door(segment, closed_texture, opened_texture, entrance), expected(expected) {
+    }
+
+    std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
+
+    void damage(const DamageType damage_type, int amount) {
+        if (damage_type == expected) {
+            open = true;
+        }
+    }
+};
+
+class AnimatedRoomEntry : public AnimatedWall {
+    State scene;
+public:
+    AnimatedRoomEntry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const State scene) : AnimatedWall(segment, textures, frame_rate), scene(scene) {
+    }
+
+    Collision collide() const {
+        return Collision::Touch;
+    }
+
+    void touch(Player *player);
+};
+
+class BarricadedRoomEntry : public Entity {
+    bool open = false;
+
+    raylib::TextureUnmanaged closedTexture;
+    raylib::TextureUnmanaged openedTexture;
+    DamageType expected;
+    State scene;
+public:
+    BarricadedRoomEntry(const Segment *segment, const raylib::TextureUnmanaged &closed_texture, const raylib::TextureUnmanaged &opened_texture, DamageType expected, State scene) : Entity(segment), closedTexture(closed_texture), openedTexture(opened_texture), expected(expected), scene(scene) {
+    }
+
+    void damage(const DamageType damage_type, int amount) {
+        std::cerr << "HERE\n";
+
+        if (damage_type == expected) {
+            open = true;
+        }
+    }
+
+    Collision collide() const {
+        if (open)
+            return Collision::Touch;
+
+        return Collision::Block;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    void touch(Player *player);
+    std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
+};
+
+class ItemPickup : public Entity {
+    raylib::TextureUnmanaged texture;
+
+    Item item;
+    int count;
+
+    bool taken = false;
+public:
+    ItemPickup(const Segment *segment, const raylib::TextureUnmanaged &texture, const Item item, int count) : Entity(segment), texture(texture), item(item), count(count) {
+        x1 = segment->x1;
+        y1 = segment->y1;
+        x2 = segment->x2;
+        y2 = segment->y2;
+    }
+
+    Collision collide() const {
+        if (taken)
+            return Collision::Pass;
+
+        return Collision::Touch;
+    }
+
+    std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    void touch(Player *player);
+};
+
+#endif //ENTITY_H

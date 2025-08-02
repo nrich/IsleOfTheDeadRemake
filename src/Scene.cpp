@@ -1,0 +1,332 @@
+#include <iostream>
+
+#include "Scene.h"
+#include "StillCel.h"
+#include "Strings.h"
+
+Scene::Scene(Panel *panel, const std::string &background_filename) : panel(panel) {
+    background = StillCel(background_filename).getTexture(); 
+}
+
+std::tuple<bool, std::string, DeathType> Scene::useItemOnItem(Item source, Item destination) {
+    const static std::string DIDNT_WORK = Strings::Lookup(326);
+
+    return std::make_tuple(false, DIDNT_WORK, DeathType::None);
+}
+
+std::tuple<bool, std::string, DeathType> Scene::getItem(const Layout &layout) {
+    return std::make_tuple(true, layout.pickup, DeathType::None);
+}
+
+void Scene::draw(Player *player, int scale) {
+    const static std::string NOTHING_INTEREST = Strings::Lookup(240);
+    const static std::string USE = Strings::Lookup(184);
+    const static std::string USE_ON = Strings::Lookup(197);
+
+    const static std::vector<Input> navigation_inputs {
+        Input::StepForward,
+        Input::StepBack,
+        Input::StepLeft,
+        Input::StepRight,
+        Input::TurnLeft,
+        Input::TurnRight,
+        Input::LookUp,
+        Input::LookDown,
+    };
+
+    BeginDrawing();
+    {
+        background.Draw(Vector2(0, 0), 0.0f, scale);
+
+        for (const auto &layout : layouts) {
+            layout.draw(scale);
+        }
+
+        uint64_t player_input = player->getInput();
+
+        if (player_input) {
+            for (const auto navigation_input : navigation_inputs) {
+                if (player_input & navigation_input) {
+                    if (navigation.contains(navigation_input)) {
+                        State state = navigation.at(navigation_input);
+
+                        if (state == State::World) {
+                            if (entrance) {
+                                player->setPosition(raylib::Vector2(entrance->X(), entrance->Y()));
+                                player->setAngles(raylib::Vector2(entrance->getDirection(), 0));
+                            }
+                        }
+
+                        player->setState(state);
+                        player_input = 0;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (player_input & Input::PrimaryAction) {
+            player_input &= ~Input::PrimaryAction;
+
+            auto position = raylib::Mouse::GetPosition();
+
+            std::optional<Layout> selected = std::nullopt;
+            if (position.GetY() < 138) {
+                for (const auto &layout : layouts) {
+                    auto border = layout.Border();
+
+                    if (border.CheckCollision(position)) {
+                        selected = layout;
+                    }
+                }
+            }
+
+            auto action = player->getAction();
+
+            if (action) {
+                switch (*action) {
+                    case Action::Look:
+                        if (selected) {
+                            player->setHighlight(selected->description);
+                        } else {
+                            player->setHighlight(NOTHING_INTEREST);
+                        }
+                        break;
+                    case Action::Get:
+                        if (selected) {
+                            auto [result, highlight, death_type] = getItem(*selected);
+
+                            if (death_type != DeathType::None) {
+                                player->death(death_type);
+                            }
+
+                            if (result) {
+                                player->addItem(selected->item);
+
+                                layouts.erase(std::remove_if(std::begin(layouts), std::end(layouts), [selected](const auto &layout) {
+                                    return layout.item == selected->item;
+                                }));
+                            }
+                            player->setHighlight(highlight);
+                        } else {
+                            player->setHighlight();
+                        }
+                        break;
+
+                    case Action::Use:
+                        if (auto player_selected = player->getSelectedItem()) {
+                            auto [use_result, highlight, death_type] = useItemOnItem(*player_selected, selected->item); 
+
+                            if (death_type != DeathType::None) {
+                                player->death(death_type);
+                            }
+
+                            if (use_result) {
+                                player->setSelectedItem(std::nullopt);
+                            }
+
+                            player->setHighlight(highlight);
+                        }
+                        break;
+                    default:
+                        player->setHighlight();
+                }
+            }
+        }
+
+        player->setInput(player_input);
+
+        panel->draw(player, player->getHighlight(), scale);
+    }
+    EndDrawing(); 
+}
+
+Scene::~Scene() {
+
+}
+
+CrashedPlaneEntryScene::CrashedPlaneEntryScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room3.cel") {
+    entrance = new_entrance;
+
+    layouts.emplace_back(raylib::Vector2(203, 115), StillCel("stillcel/clippers.cel").getTexture(), Item::WireClipper, Strings::Lookup(315), Strings::Lookup(316), Strings::Lookup(317));
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
+    navigation[Input::TurnLeft] = State::CrashedPlaneLeft;
+    navigation[Input::TurnRight] = State::CrashedPlaneRight;
+}
+
+CrashedPlaneEntryScene::~CrashedPlaneEntryScene() {
+
+}
+
+CrashedPlaneLeftScene::CrashedPlaneLeftScene(Panel *panel) : Scene(panel, "stillcel/room1.cel") {
+    layouts.emplace_back(raylib::Vector2(36, 127), StillCel("stillcel/phbook.cel").getTexture(), Item::Machete, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+
+    navigation[Input::StepForward] = State::CrashedPlaneCockpit;
+    navigation[Input::LookUp] = State::CrashedPlaneCockpit;
+    navigation[Input::TurnLeft] = State::CrashedPlaneExit;
+    navigation[Input::TurnRight] = State::CrashedPlaneEntry;
+}
+
+CrashedPlaneLeftScene::~CrashedPlaneLeftScene() {
+
+}
+
+CrashedPlaneCockpitScene::CrashedPlaneCockpitScene(Panel *panel) : Scene(panel, "stillcel/room2.cel") {
+    //layouts.emplace_back(raylib::Vector2(166, 48), StillCel("stillcel/compass.cel").getTexture(), Item::Compass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
+    layouts.emplace_back(raylib::Vector2(166, 48), StillCel("stillcel/compass.cel").getTexture(), Item::StuckCompass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
+    layouts.emplace_back(raylib::Vector2(98, 92), StillCel("stillcel/flaregun.cel").getTexture(), Item::FlareGun, Strings::Lookup(327), Strings::Lookup(328), Strings::Lookup(329));
+
+    navigation[Input::StepBack] = State::CrashedPlaneLeft;
+    navigation[Input::LookDown] = State::CrashedPlaneLeft;
+}
+
+std::tuple<bool, std::string, DeathType> CrashedPlaneCockpitScene::useItemOnItem(Item source, Item destination) {
+    const static std::string DIDNT_WORK = Strings::Lookup(326);
+
+    if (source == Item::WireClipper && destination == Item::StuckCompass) {
+        layouts.erase(std::remove_if(std::begin(layouts), std::end(layouts), [](const auto &layout) {
+            return layout.item == Item::StuckCompass;
+        }));
+
+        layouts.emplace_back(raylib::Vector2(166, 48), StillCel("stillcel/compass.cel").getTexture(), Item::Compass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
+
+        return std::make_tuple(true, Strings::Lookup(324), DeathType::None);
+    }
+
+    return std::make_tuple(false, DIDNT_WORK, DeathType::None);
+}
+
+std::tuple<bool, std::string, DeathType> CrashedPlaneCockpitScene::getItem(const Layout &layout) {
+    if (layout.item == Item::StuckCompass) {
+        return std::make_tuple(false, Strings::Lookup(323), DeathType::None);
+    }
+
+    return Scene::getItem(layout);
+}
+
+CrashedPlaneCockpitScene::~CrashedPlaneCockpitScene() {
+
+}
+
+CrashedPlaneRightScene::CrashedPlaneRightScene(Panel *panel) : Scene(panel, "stillcel/room4.cel") {
+    layouts.emplace_back(raylib::Vector2(25, 62), StillCel("stillcel/machetis.cel").getTexture(), Item::Machete, Strings::Lookup(308), Strings::Lookup(309), Strings::Lookup(310));
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
+    navigation[Input::TurnLeft] = State::CrashedPlaneEntry;
+    navigation[Input::TurnRight] = State::CrashedPlaneExit;
+}
+
+CrashedPlaneRightScene::~CrashedPlaneRightScene() {
+
+}
+
+CrashedPlaneExitScene::CrashedPlaneExitScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room5.cel") {
+    entrance = new_entrance;
+
+    navigation[Input::StepForward] = State::World;
+    navigation[Input::LookUp] = State::World;
+    navigation[Input::TurnLeft] = State::CrashedPlaneRight;
+    navigation[Input::TurnRight] = State::CrashedPlaneLeft;
+}
+
+CrashedPlaneExitScene::~CrashedPlaneExitScene() {
+
+}
+
+BunkerEntryScene::BunkerEntryScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/bunkerbg.cel") {
+    entrance = new_entrance;
+
+    layouts.emplace_back(raylib::Vector2(244, 71), StillCel("stillcel/guninbun.cel").getTexture(), Item::Rifle, Strings::Lookup(376), Strings::Lookup(377), Strings::Lookup(378));
+    layouts.emplace_back(raylib::Vector2(14, 83), StillCel("stillcel/crates.cel").getTexture(), Item::Crate, Strings::Lookup(364), Strings::Lookup(365), Strings::Lookup(366));
+    layouts.emplace_back(raylib::Vector2(64, 133), StillCel("stillcel/wire.cel").getTexture(), Item::TripWire, Strings::Lookup(370), Strings::Lookup(370), Strings::Lookup(370));
+
+    navigation[Input::TurnLeft] = State::BunkerLeft;
+    navigation[Input::TurnRight] = State::BunkerRight;
+}
+
+std::tuple<bool, std::string, DeathType> BunkerEntryScene::getItem(const Layout &layout) {
+    if (trapped && layout.item == Item::Rifle)
+        return std::make_tuple(false, "", DeathType::Wire);
+
+    return Scene::getItem(layout);
+}
+
+std::tuple<bool, std::string, DeathType> BunkerEntryScene::useItemOnItem(Item source, Item destination) {
+    const static std::string DIDNT_WORK = Strings::Lookup(326);
+
+    if (source == Item::WireClipper && destination == Item::TripWire) {
+        trapped = false;
+
+        layouts.erase(std::remove_if(std::begin(layouts), std::end(layouts), [destination](const auto &layout) {
+            return layout.item == destination;
+        }));
+
+        return std::make_tuple(true, Strings::Lookup(373), DeathType::None);
+    }
+
+    return std::make_tuple(false, DIDNT_WORK, DeathType::None);
+}
+
+BunkerEntryScene::~BunkerEntryScene() {
+
+}
+
+BunkerExitScene::BunkerExitScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/bunkin.cel") {
+    entrance = new_entrance;
+
+    navigation[Input::StepForward] = State::World;
+    navigation[Input::LookUp] = State::World;
+    navigation[Input::TurnLeft] = State::BunkerRight;
+    navigation[Input::TurnRight] = State::BunkerLeft;
+}
+
+BunkerExitScene::~BunkerExitScene() {
+
+}
+
+BunkerLeftScene::BunkerLeftScene(Panel *panel) : Scene(panel, "stillcel/bunkleft.cel") {
+    layouts.emplace_back(raylib::Vector2(0, 0), StillCel("stillcel/bunkleft.cel").getTexture(), Item::Soldier, Strings::Lookup(391), Strings::Lookup(392), Strings::Lookup(393));
+
+    navigation[Input::TurnLeft] = State::BunkerExit;
+    navigation[Input::TurnRight] = State::BunkerEntry;
+}
+
+std::tuple<bool, std::string, DeathType> BunkerLeftScene::getItem(const Layout &layout) {
+    return std::make_tuple(false, Strings::Lookup(393), DeathType::None);
+}
+
+std::tuple<bool, std::string, DeathType> BunkerLeftScene::useItemOnItem(Item source, Item destination) {
+    const static std::string WONT_HELP = Strings::Lookup(395);
+
+    return std::make_tuple(false, WONT_HELP, DeathType::None);
+}
+
+BunkerLeftScene::~BunkerLeftScene() {
+
+}
+
+BunkerRightScene::BunkerRightScene(Panel *panel) : Scene(panel, "stillcel/bunkrt.cel") {
+    layouts.emplace_back(raylib::Vector2(7, 41), StillCel("stillcel/rag.cel").getTexture(), Item::Rags, Strings::Lookup(376), Strings::Lookup(377), Strings::Lookup(378));
+    layouts.emplace_back(raylib::Vector2(86, 66), StillCel("stillcel/oil.cel").getTexture(), Item::OilCan, Strings::Lookup(364), Strings::Lookup(365), Strings::Lookup(366));
+
+    navigation[Input::TurnRight] = State::BunkerExit;
+    navigation[Input::TurnLeft] = State::BunkerEntry;
+}
+
+std::tuple<bool, std::string, DeathType> BunkerRightScene::getItem(const Layout &layout) {
+    return Scene::getItem(layout);
+}
+
+std::tuple<bool, std::string, DeathType> BunkerRightScene::useItemOnItem(Item source, Item destination) {
+    const static std::string DIDNT_WORK = Strings::Lookup(326);
+
+    return std::make_tuple(false, DIDNT_WORK, DeathType::None);
+}
+
+BunkerRightScene::~BunkerRightScene() {
+
+}
+

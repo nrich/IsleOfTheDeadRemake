@@ -1,0 +1,7 @@
+.nix
+.win32
+.win64
+.emcc
+*.swp
+isle_of_the_dead
+isle_of_the_dead.exe

@@ -82,9 +82,9 @@ enum class Item {
     Machete,
     Jacket,
 
-    Ammo1,
-    Ammo2,
-    Ammo3,
+    Ammo1,      // Shells
+    Ammo2,      // Bullets
+    Ammo3,      // clips
     Flower,
     Crystal,
     Compass,

@@ -119,7 +119,13 @@ void Scene::draw(Player *player, int scale) {
                             }
 
                             if (result) {
-                                player->addItem(selected->item);
+                                switch (selected->item) {
+                                    case Item::Crate:
+                                        player->addItem(Item::Ammo2, 150);
+                                        break;
+                                    default:
+                                        player->addItem(selected->item);
+                                }
 
                                 layouts.erase(std::remove_if(std::begin(layouts), std::end(layouts), [selected](const auto &layout) {
                                     return layout.item == selected->item;
@@ -266,7 +272,7 @@ BunkerEntryScene::BunkerEntryScene(Panel *panel, const Entrance &new_entrance) :
 }
 
 std::tuple<bool, std::string, DeathType> BunkerEntryScene::getItem(const Layout &layout) {
-    if (trapped && layout.item == Item::Rifle)
+    if (trapped)
         return std::make_tuple(false, "", DeathType::Wire);
 
     return Scene::getItem(layout);

@@ -141,7 +141,7 @@ void World::spawnPassage(const Segment &segment) {
             break;
         case 0x2eef2e59b2b6ba86:
             // 20.map
-            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[90], DamageType::Machete));
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[88], DamageType::Machete));
             break;
         case 0x2fc72f71b3a8bba4:
             // 21.map
@@ -343,6 +343,53 @@ void World::spawnPassage(const Segment &segment) {
             break;
 
         // 19.map
+        case 0xe902a21ddb690d8a:
+            // 17.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, cave_entry, entrances[75]));
+            break;
+
+        // 20.map
+        case 0x8ff8e10da10d8828:
+            // 04.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[19], DamageType::Machete));
+            break;
+        case 0x8e4ce113a0a3883c:
+            // 17.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[77], DamageType::Machete));
+            break;
+        case 0x8e12e12ba0e7881e:
+            // 21.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[95], DamageType::Machete));
+            break;
+
+        // 21.map
+        case 0xddbbb06349f2ef08:
+            // 04.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[20], DamageType::Machete));
+            break;
+        case 0xddafb1bf49eceede:
+            // 07.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[38], DamageType::Machete));
+            break;
+        case 0xdd11b1cd4952eebc:
+            // 20.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[90], DamageType::Machete));
+            break;
+        case 0xddddb1814964eeea:
+            // 22.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[98], DamageType::Machete));
+            break;
+
+        // 22.map
+        case 0x10308b1b23661b81:
+            // 21.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[96], DamageType::Machete));
+            break;
+
+        // 28.map
+            // 27.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, jungle_entry, cave_entry, entrances[112], DamageType::Machete));
+            break;
 
         // 29.map
         case 0x1db0d5af45726024:

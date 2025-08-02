@@ -78,7 +78,6 @@ void Base::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
 }
 
 void Base::update(Player *player, uint64_t frame_count) {
-    return;
     if (frame_count % 5 == 0)
         currentFrame += 1;
 

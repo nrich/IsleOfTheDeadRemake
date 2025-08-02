@@ -81,6 +81,8 @@ void World::spawnPassage(const Segment &segment) {
     static const auto cave_entry = load_cel3_texture("cels3/cav2cave.cel");
     static const auto jungle_entry = load_cel3_texture("cels3/cavetoj.cel");
 
+//    static const auto temple_door = load_cel3_texture("cels3/tmpdoor1.cel");
+
     switch (segment.id) {
         // 01.map
         case 0x20a8dba56cca7792:
@@ -367,8 +369,84 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     static const auto rcave3 = load_cel3_texture("cels3/rcave3.cel");
     static const auto rcave4 = load_cel3_texture("cels3/rcave4.cel");
 
+    static const auto hut_wall_north = load_cel3_texture("cels3/nhut.cel");
+    static const auto hut_wall_west = load_cel3_texture("cels3/whut.cel");
+    static const auto hut_wall_east = load_cel3_texture("cels3/ehut.cel");
+    static const auto hut_wall_south = load_cel3_texture("cels3/shut.cel");
+
+    static const auto boowall_north = load_cel3_texture("cels3/nboowall.cel");
+    static const auto boowall_west = load_cel3_texture("cels3/wboowall.cel");
+    static const auto boowall_east = load_cel3_texture("cels3/eboowall.cel");
+    static const auto boowall_south = load_cel3_texture("cels3/sboowall.cel");
+
+    static const auto boogate = load_cel3_texture("cels3/boogate.cel");
+
+    static const auto mansion_window_light = load_cel3_texture("cels3/mansext1.cel");
+    static const auto mansion_window_dark = load_cel3_texture("cels3/mansext2.cel");
+    static const auto mansion_wall_light = load_cel3_texture("cels3/mansext7.cel");
+    static const auto mansion_wall_dark = load_cel3_texture("cels3/mansext8.cel");
+
+    static const auto hanger_dark = load_cel3_texture("cels3/hngar01.cel");
+    static const auto hanger_light = load_cel3_texture("cels3/hngar02.cel");
+
+    static const auto compound_wall_light = load_cel3_texture("cels3/compnd51.cel");
+    static const auto compound_wall_dark = load_cel3_texture("cels3/compnd53.cel");
+    static const auto compound_window_light = load_cel3_texture("cels3/compnd54.cel");
+    static const auto compound_window_dark = load_cel3_texture("cels3/compnd55.cel");
+
+    static const auto husk1 = load_cel3_texture("cels3/husk1.cel");
+    static const auto husk2 = load_cel3_texture("cels3/husk2.cel");
+    static const auto husk3 = load_cel3_texture("cels3/husk3.cel");
+
+    static const auto temple_wall_light = load_cel3_texture("cels3/tmpl2.cel");
+    static const auto temple_wall_dark = load_cel3_texture("cels3/tmpl4.cel");
+    static const auto temple_face_left = load_cel3_texture("cels3/tmpltex1.cel");
+    static const auto temple_face_mid = load_cel3_texture("cels3/tmpltex2.cel");
+    static const auto temple_face_right = load_cel3_texture("cels3/tmpltex3.cel");
+
+    static const auto shack1 = load_cel3_texture("cels3/shack1.cel");
+    static const auto shack2 = load_cel3_texture("cels3/shack2.cel");
+    static const auto shack3 = load_cel3_texture("cels3/shack3.cel");
+
+    static const auto fence = load_cel3_texture("cels3/fence.cel");
+    static const auto jungle_fence = load_cel3_texture("cels3/jfence.cel");
+
+    static const auto runway = load_cel3_texture("cels3/runway.cel");
+    static const auto plane_fence_left = load_cel3_texture("cels3/fencepl1.cel");
+    static const auto plane_fence_right = load_cel3_texture("cels3/fencepl2.cel");
+
+    // Damageable/animated walls
+    static const auto fireplace_left = load_cel3_texture({
+        "cels3/firepl1a.cel",
+        "cels3/firepl1b.cel",
+        "cels3/firepl1c.cel",
+    });
+
+    static const auto fireplace_right = load_cel3_texture({
+        "cels3/firepl2a.cel",
+        "cels3/firepl2b.cel",
+        "cels3/firepl2c.cel",
+    });
+
+    const auto bookshelf = load_cel3_texture("cels3/frnture4.cel");
+    const auto bookshelf_damaged = load_cel3_texture("cels3/frnture3.cel");
+
+    const auto tv = load_cel3_texture("cels3/frnture7.cel");
+    const auto tv_damaged = load_cel3_texture("cels3/frnture7.cel");
+
+    const auto portrait = load_cel3_texture("cels3/frnture5.cel");
+    const auto portrait_damaged = load_cel3_texture("cels3/frnture6.cel");
+
+    // Doors,passages,entries
     static const auto bunker_entry_closed = load_cel3_texture("cels3/bunkent1.cel");
     static const auto bunker_entry_opened = load_cel3_texture("cels3/bunkent2.cel");
+
+    static const auto temple_door = load_cel3_texture({
+        "cels3/tmpdoor1.cel",
+        "cels3/tmpdoor2.cel",
+        "cels3/tmpdoor3.cel",
+        "cels3/tmpdoor4.cel",
+    });
 
     static const auto plane_fire_left = load_cel3_texture({
         "cels3/fire1a.cel",
@@ -388,6 +466,8 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/fire3c.cel",
     });
 
+    const auto camp_gate_open = load_cel3_texture("cels3/cmpgate3.cel");
+
     // Items
     static const auto jacket = load_cel3_texture("cels3/jacket.cel");
     static const auto coconut = load_cel3_texture("cels3/food2c1.cel");
@@ -401,6 +481,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     static const auto crystal = load_cel3_texture("cels3/crystalc.cel");
 
     // Props
+    static const auto trees = load_cel3_texture("cels3/rtrees.cel");
     static const auto barrel = load_cel3_texture("cels3/barrel.cel");
     static const auto bed = load_cel3_texture("cels3/bed.cel");
     static const auto dish = load_cel3_texture("cels3/dish.cel");
@@ -409,6 +490,17 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     static const auto labtable = load_cel3_texture("cels3/labtable.cel");
     static const auto table = load_cel3_texture("cels3/table.cel");
     static const auto vine = load_cel3_texture("cels3/vine.cel");
+    static const auto tiki = load_cel3_texture({
+        "cels3/tiki1.cel",
+        "cels3/tiki2.cel",
+        "cels3/tiki3.cel",
+        "cels3/tiki4.cel",
+        "cels3/tiki5.cel",
+        "cels3/tiki6.cel",
+    });
+
+    const auto red_chair = load_cel3_texture("cels3/frnture2.cel");
+    const auto red_chair_damaged = load_cel3_texture("cels3/frnture1.cel");
 
     // Traps
     static const auto pit = load_cel3_texture("cels3/pit.cel");
@@ -416,6 +508,47 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     static const auto trapdoor = load_cel3_texture("cels3/trapdoor.cel");
 
     // Monsters
+    static const auto bat = load_cel3_texture({
+        "cels3/rbat01.cel",
+        "cels3/rbat02.cel",
+        "cels3/rbat03.cel",
+        "cels3/rbat04.cel",
+        "cels3/rbat05.cel",
+        "cels3/rbat06.cel",
+        "cels3/rbat07.cel",
+        "cels3/rbat08.cel",
+        "cels3/rbat09.cel",
+        "cels3/rbat10.cel",
+        "cels3/rbat11.cel",
+        "cels3/rbat12.cel",
+        "cels3/rbat13.cel",
+        "cels3/rbat14.cel",
+        "cels3/rbat15.cel",
+        "cels3/rbat16.cel",
+        "cels3/rbat17.cel",
+        "cels3/rbat18.cel",
+        "cels3/rbat19.cel",
+        "cels3/rbat20.cel",
+        "cels3/rbat21.cel",
+        "cels3/rbat22.cel",
+        "cels3/rbat23.cel",
+        "cels3/rbat24.cel",
+        "cels3/rbat25.cel",
+        "cels3/rbat26.cel",
+        "cels3/rbat27.cel",
+        "cels3/rbat28.cel",
+        "cels3/rbat29.cel",
+        "cels3/rbat30.cel",
+        "cels3/rbat31.cel",
+        "cels3/rbat32.cel",
+        "cels3/rbat33.cel",
+        "cels3/rbat34.cel",
+        "cels3/rbat35.cel",
+        "cels3/rbat36.cel",
+        "cels3/rbat37.cel",
+        "cels3/rbat38.cel",
+    });
+
     static const auto cj = load_cel3_texture({
         "cels3/cj01.cel",
         "cels3/cj02.cel",
@@ -780,6 +913,55 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rtor53.cel",
     });
 
+    static const auto wolf = load_cel3_texture({
+        "cels3/rwolf01.cel",
+        "cels3/rwolf02.cel",
+        "cels3/rwolf03.cel",
+        "cels3/rwolf04.cel",
+        "cels3/rwolf05.cel",
+        "cels3/rwolf06.cel",
+        "cels3/rwolf07.cel",
+        "cels3/rwolf08.cel",
+        "cels3/rwolf09.cel",
+        "cels3/rwolf10.cel",
+        "cels3/rwolf11.cel",
+        "cels3/rwolf12.cel",
+        "cels3/rwolf13.cel",
+        "cels3/rwolf14.cel",
+        "cels3/rwolf15.cel",
+        "cels3/rwolf16.cel",
+        "cels3/rwolf17.cel",
+        "cels3/rwolf18.cel",
+        "cels3/rwolf19.cel",
+        "cels3/rwolf20.cel",
+        "cels3/rwolf21.cel",
+        "cels3/rwolf22.cel",
+        "cels3/rwolf23.cel",
+        "cels3/rwolf24.cel",
+        "cels3/rwolf25.cel",
+        "cels3/rwolf26.cel",
+        "cels3/rwolf27.cel",
+        "cels3/rwolf28.cel",
+        "cels3/rwolf29.cel",
+        "cels3/rwolf30.cel",
+        "cels3/rwolf31.cel",
+        "cels3/rwolf32.cel",
+        "cels3/rwolf33.cel",
+        "cels3/rwolf34.cel",
+        "cels3/rwolf35.cel",
+        "cels3/rwolf36.cel",
+        "cels3/rwolf37.cel",
+        "cels3/rwolf38.cel",
+        "cels3/rwolf39.cel",
+        "cels3/rwolf40.cel",
+        "cels3/rwolf41.cel",
+        "cels3/rwolf42.cel",
+        "cels3/rwolf43.cel",
+        "cels3/rwolf44.cel",
+        "cels3/rwolf45.cel",
+    });
+
+
     static const auto drummer = load_cel3_texture({
         "cels3/drumr01.cel",
         "cels3/drumr02.cel",
@@ -815,6 +997,15 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             std::cout << "\t JUNGLE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             spawnPassage(segment);
             break;
+        case 15:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, husk1));
+            break;
+        case 16:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, husk2));
+            break;
+        case 17:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, husk3));
+            break;
         case 21:
         case 22:
             std::cout << "\t CAVE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
@@ -849,8 +1040,100 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 46:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, trees2));
             break;
+        case 29:
+        case 30:
+        case 31:
+        case 32:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, jungle_fence));
+            break;
+        case 34:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, boowall_west));
+            break;
+        case 35:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, boowall_north));
+            break;
+        case 36:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, boowall_east));
+            break;
+        case 37:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, boowall_south));
+            break;
+        case 38:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, boogate));
+            break;
+        case 39:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hut_wall_west));
+            break;
+        case 40:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hut_wall_north));
+            break;
+        case 41:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hut_wall_east));
+            break;
+        case 42:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hut_wall_south));
+            break;
         case 43:
             entities.emplace(segment.id, std::make_unique<BarricadedRoomEntry>(&segment, bunker_entry_closed, bunker_entry_opened, DamageType::Machete, State::BunkerEntry));
+            break;
+        case 52:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, compound_wall_dark));
+            break;
+        case 53:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, compound_wall_light));
+            break;
+        case 54:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, compound_window_light));
+            break;
+        case 55:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, compound_window_dark));
+            break;
+        case 59:
+            std::cout << "\t TEMPLE DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //spawnPassage(segment);
+            entities.emplace(segment.id, std::make_unique<AnimatedWall>(&segment, temple_door, 6));
+            break;
+        case 63:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, fence));
+            break;
+        case 69:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, shack2));
+            break;
+        case 70:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, shack3));
+            break;
+        case 71:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, shack2));
+            break;
+        case 72:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, shack1));
+            break;
+        case 81:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, mansion_window_light));
+            break;
+        case 82:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, mansion_window_dark));
+            break;
+        case 85:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, mansion_wall_light));
+            break;
+        case 86:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, mansion_wall_dark));
+            break;
+        case 91:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_wall_dark));
+            break;
+        case 92:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_wall_light));
+            break;
+        case 94:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_face_left));
+            break;
+        case 95:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_face_mid));
+            break;
+        case 96:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_face_right));
             break;
         case 100:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, jacket, Item::Jacket, -1));
@@ -861,6 +1144,9 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             break;
         case 106:
             entities.emplace(segment.id, std::make_unique<Trap>(&segment, pit, DeathType::Acid));
+            break;
+        case 107:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, trees, Collision::Block));
             break;
         case 108:
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, vine, Collision::Pass));
@@ -876,6 +1162,12 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             break;
         case 116:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_shells, Item::Ammo1, 50));
+            break;
+        case 117:
+            entities.emplace(segment.id, std::make_unique<Monster::Bat>(&segment, bat));
+            break;
+        case 118:
+            entities.emplace(segment.id, std::make_unique<Monster::Wolf>(&segment, wolf));
             break;
         case 119:
             entities.emplace(segment.id, std::make_unique<Monster::Roy>(&segment, roy));
@@ -914,6 +1206,9 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 134:
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, dish, Collision::Block));
             break;
+        case 135:
+            entities.emplace(segment.id, std::make_unique<AnimatedProp>(&segment, tiki, 6, Collision::Block));
+            break;
         case 138:
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, bed, Collision::Block));
             break;
@@ -941,8 +1236,41 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 151:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_clips, Item::Ammo3, 20));
             break;
+        case 160:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hanger_dark));
+            break;
+        case 161:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hanger_light));
+            break;
+        case 166:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, plane_fence_left));
+            break;
+        case 167:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, plane_fence_right));
+            break;
+        case 168:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, runway));
+            break;
         case 169:
             entities.emplace(segment.id, std::make_unique<Monster::Drummer>(&segment, drummer));
+            break;
+        case 171:
+            entities.emplace(segment.id, std::make_unique<DamageableProp>(&segment, red_chair, red_chair_damaged, Collision::Block));
+            break;
+        case 173:
+            entities.emplace(segment.id, std::make_unique<DamageableWall>(&segment, bookshelf, bookshelf_damaged));
+            break;
+        case 174:
+            entities.emplace(segment.id, std::make_unique<DamageableWall>(&segment, tv, tv_damaged));
+            break;
+        case 176:
+            entities.emplace(segment.id, std::make_unique<DamageableWall>(&segment, portrait, portrait_damaged));
+            break;
+        case 250:
+            entities.emplace(segment.id, std::make_unique<AnimatedWall>(&segment, fireplace_left, 12));
+            break;
+        case 251:
+            entities.emplace(segment.id, std::make_unique<AnimatedWall>(&segment, fireplace_right, 12));
             break;
         case 252:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, shotgun, Item::Shotgun, -1));
@@ -953,8 +1281,6 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
 }
 
 raylib::Vector2 World::findSpawn() const {
-    std::cerr << currentMap << "\n";
-
     const auto &map_entrance = entrances[1];
 
     return raylib::Vector2(map_entrance.X(), map_entrance.Y());

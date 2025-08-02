@@ -89,6 +89,20 @@ public:
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
 };
 
+class DamageableWall : public Entity {
+    raylib::TextureUnmanaged texture;
+    raylib::TextureUnmanaged damaged;
+    Collision collision;
+    bool isDamaged = false;
+public:
+    DamageableWall(const Segment *segment, const raylib::TextureUnmanaged &texture, const raylib::TextureUnmanaged &damaged) : Entity(segment), texture(texture), damaged(damaged) {
+    }
+
+    void damage(const DamageType damage_type, int amount);
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+};
+
+
 class AnimatedWall : public Entity {
     std::vector<raylib::TextureUnmanaged> textures;
     uint32_t frameRate;
@@ -210,6 +224,41 @@ class Prop : public Entity {
     Collision collision;
 public:
     Prop(const Segment *segment, const raylib::TextureUnmanaged &texture, Collision collision) : Entity(segment), texture(texture), collision(collision) {
+    }
+
+    Collision collide() const {
+        return collision;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+};
+
+class DamageableProp : public Entity {
+    raylib::TextureUnmanaged texture;
+    raylib::TextureUnmanaged damaged;
+    Collision collision;
+
+    bool isDamaged = false;
+public:
+    DamageableProp(const Segment *segment, const raylib::TextureUnmanaged &texture, const raylib::TextureUnmanaged &damaged, Collision collision) : Entity(segment), texture(texture), damaged(damaged), collision(collision) {
+    }
+
+    Collision collide() const {
+        return collision;
+    }
+
+    void damage(const DamageType damage_type, int amount);
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+};
+
+class AnimatedProp : public Entity {
+    std::vector<raylib::TextureUnmanaged> textures;
+    uint32_t frameRate;
+    Collision collision;
+public:
+    AnimatedProp(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, Collision collision) : Entity(segment), textures(textures), frameRate(frame_rate), collision(collision) {
     }
 
     Collision collide() const {

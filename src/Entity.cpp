@@ -86,6 +86,18 @@ void Wall::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
     draw_wall(x1, y1, x2, y2, texture);
 }
 
+void DamageableWall::damage(const DamageType damage_type, int amount) {
+    isDamaged = true;
+}
+
+void DamageableWall::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
+    if (isDamaged)
+        draw_wall(x1, y1, x2, y2, damaged);
+    else
+        draw_wall(x1, y1, x2, y2, texture);
+}
+
+
 void AnimatedWall::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
     size_t anim = frame_count / frameRate; 
 
@@ -204,6 +216,67 @@ std::optional<std::pair<raylib::Vector2, float>> Prop::getBounds() const {
     return std::make_pair(raylib::Vector2(x1, centre_y), radius);
 }
 
+void DamageableProp::damage(const DamageType damage_type, int amount) {
+    isDamaged = true;
+}
+
+void DamageableProp::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
+    if (isDamaged)
+        draw_entity(camera, x1, y1, x2, y2, damaged);
+    else
+        draw_entity(camera, x1, y1, x2, y2, texture);
+}
+
+std::optional<std::pair<raylib::Vector2, float>> DamageableProp::getBounds() const {
+    if (y1 == y2) {
+        float min_x = std::min(x1, x2);
+        float max_x = std::max(x1, x2);
+
+        float radius = (max_x - min_x) / 2.0f;
+        float centre_x = min_x + radius;
+
+        return std::make_pair(raylib::Vector2(centre_x, y1), radius);
+    }
+
+    float min_y = std::min(y1, y2);
+    float max_y = std::max(y1, y2);
+
+    float radius = (max_y - min_y) / 2.0f;
+    float centre_y = min_y + radius;
+
+    return std::make_pair(raylib::Vector2(x1, centre_y), radius);
+}
+
+
+void AnimatedProp::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
+    size_t anim = frame_count / frameRate;
+
+    auto texture = textures[anim % textures.size()];
+
+    draw_entity(camera, x1, y1, x2, y2, texture);
+}
+
+std::optional<std::pair<raylib::Vector2, float>> AnimatedProp::getBounds() const {
+    if (y1 == y2) {
+        float min_x = std::min(x1, x2);
+        float max_x = std::max(x1, x2);
+
+        float radius = (max_x - min_x) / 2.0f;
+        float centre_x = min_x + radius;
+
+        return std::make_pair(raylib::Vector2(centre_x, y1), radius);
+    }
+
+    float min_y = std::min(y1, y2);
+    float max_y = std::max(y1, y2);
+
+    float radius = (max_y - min_y) / 2.0f;
+    float centre_y = min_y + radius;
+
+    return std::make_pair(raylib::Vector2(x1, centre_y), radius);
+}
+
+
 void Trap::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
     if (triggered)
         return;
@@ -216,6 +289,7 @@ void Trap::touch(Player *player) {
     if (triggered)
         return;
 
+    triggered = true;
     player->takeDamage(999, deathType);
 }
 
@@ -238,7 +312,6 @@ std::optional<std::pair<raylib::Vector2, float>> Trap::getBounds() const {
 
     return std::make_pair(raylib::Vector2(x1, centre_y), radius);
 }
-
 
 std::optional<std::pair<raylib::Vector2, float>> ItemPickup::getBounds() const {
     if (y1 == y2) {

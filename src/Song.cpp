@@ -162,7 +162,7 @@ void Song::generateBuffer(void *buffer, uint32_t frames) {
 
     for (auto &channel : channels) {
         for (auto &[note, tone] : channel) {
-            remaining += tone.generateSamples((float *)buffer, frames * 2, 1.0);
+            remaining += tone.generateSamples((float *)buffer, frames * 2, 0.5);
         }
     }
 

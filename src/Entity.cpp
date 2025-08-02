@@ -180,6 +180,66 @@ std::optional<raylib::RayCollision> BarricadedRoomEntry::collide(const raylib::R
     return std::nullopt;
 }
 
+void Prop::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
+    draw_entity(camera, x1, y1, x2, y2, texture);
+}
+
+std::optional<std::pair<raylib::Vector2, float>> Prop::getBounds() const {
+    if (y1 == y2) {
+        float min_x = std::min(x1, x2);
+        float max_x = std::max(x1, x2);
+
+        float radius = (max_x - min_x) / 2.0f;
+        float centre_x = min_x + radius;
+
+        return std::make_pair(raylib::Vector2(centre_x, y1), radius);
+    }
+
+    float min_y = std::min(y1, y2);
+    float max_y = std::max(y1, y2);
+
+    float radius = (max_y - min_y) / 2.0f;
+    float centre_y = min_y + radius;
+
+    return std::make_pair(raylib::Vector2(x1, centre_y), radius);
+}
+
+void Trap::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
+    if (triggered)
+        return;
+
+    draw_entity(camera, x1, y1, x2, y2, texture);
+}
+
+
+void Trap::touch(Player *player) {
+    if (triggered)
+        return;
+
+    player->takeDamage(999, deathType);
+}
+
+std::optional<std::pair<raylib::Vector2, float>> Trap::getBounds() const {
+    if (y1 == y2) {
+        float min_x = std::min(x1, x2);
+        float max_x = std::max(x1, x2);
+
+        float radius = (max_x - min_x) / 2.0f;
+        float centre_x = min_x + radius;
+
+        return std::make_pair(raylib::Vector2(centre_x, y1), radius);
+    }
+
+    float min_y = std::min(y1, y2);
+    float max_y = std::max(y1, y2);
+
+    float radius = (max_y - min_y) / 2.0f;
+    float centre_y = min_y + radius;
+
+    return std::make_pair(raylib::Vector2(x1, centre_y), radius);
+}
+
+
 std::optional<std::pair<raylib::Vector2, float>> ItemPickup::getBounds() const {
     if (y1 == y2) {
         float min_x = std::min(x1, x2);

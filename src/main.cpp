@@ -115,7 +115,9 @@ static void draw_map(Player *player, raylib::Window &window, const int scale) {
 static void play_death_scene(Player *player, raylib::Window &window, const int scale) {
     DeathType death_type = player->getDeathType();
 
+    static auto acid_anim = Animation("fli/acid.fli");
     static auto rifle_anim = Animation("fli/rflekill.fli", "sound/rifle.voc");
+    static auto snare_anim = Animation("fli/snare.fli");
     static auto wire_anim = Animation("fli/wirekill.fli", "sound/explode.voc");
     static auto zombie_anim = Animation("fli/death.fli", "sound/aarh4.voc");
 
@@ -124,8 +126,16 @@ static void play_death_scene(Player *player, raylib::Window &window, const int s
         window.ClearBackground(raylib::BLACK);
 
         switch (death_type) {
+            case DeathType::Acid:
+                if (acid_anim.play(scale))
+                    player->setState(State::Laugh);
+                break;
             case DeathType::Rifle:
                 if (rifle_anim.play(scale))
+                    player->setState(State::Laugh);
+                break;
+            case DeathType::Snare:
+                if (snare_anim.play(scale))
                     player->setState(State::Laugh);
                 break;
             case DeathType::Wire:

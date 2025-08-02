@@ -30,12 +30,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Segment.h"
 #include "Entrance.h"
 
-enum class Collision {
-    Pass,
-    Block,
-    Touch,
-};
-
 class Player;
 
 class Entity {
@@ -209,6 +203,41 @@ public:
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     void touch(Player *player);
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
+};
+
+class Prop : public Entity {
+    raylib::TextureUnmanaged texture;
+    Collision collision;
+public:
+    Prop(const Segment *segment, const raylib::TextureUnmanaged &texture, Collision collision) : Entity(segment), texture(texture), collision(collision) {
+    }
+
+    Collision collide() const {
+        return collision;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+};
+
+class Trap : public Entity {
+    raylib::TextureUnmanaged texture;
+    DeathType deathType;
+    bool triggered = false;
+public:
+    Trap(const Segment *segment, const raylib::TextureUnmanaged &texture, const DeathType death_type) : Entity(segment), texture(texture), deathType(death_type) {
+    }
+
+    Collision collide() const {
+        if (triggered)
+            return Collision::Pass;
+
+        return Collision::Touch;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    void touch(Player *player);
+    std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
 };
 
 class ItemPickup : public Entity {

@@ -33,33 +33,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Map.h"
 #include "World.h"
 
-enum class Action {
-    Look,
-    Get,
-    Talk,
-    Use,
-    Inventory,
-    Help,
-};
-
-enum Input : uint64_t {
-    PrimaryAction   = 1 << 0,
-    ViewMap         = 1 << 1,
-    StepForward     = 1 << 2,
-    StepBack        = 1 << 3,
-    StepLeft        = 1 << 4,
-    StepRight       = 1 << 5,
-    TurnLeft        = 1 << 6,
-    TurnRight       = 1 << 7,
-    LookUp          = 1 << 8,
-    LookDown        = 1 << 9,
-    ViewInventory   = 1 << 10,
-    EquipMachete    = 1 << 11,
-    EquipRifle      = 1 << 12,
-    EquipShotgun    = 1 << 13,
-    EquipUzi        = 1 << 14,
-};
-
 class Player {
     struct Weapon {
         int attackFrameCount;

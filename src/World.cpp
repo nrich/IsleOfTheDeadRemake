@@ -398,8 +398,22 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     static const auto ammo_clips = load_cel3_texture("cels3/ammo3c1.cel");
     static const auto shotgun = load_cel3_texture("cels3/sgunc1.cel");
     static const auto flower = load_cel3_texture("cels3/flowerc1.cel");
-    static const auto vine = load_cel3_texture("cels3/vine.cel");
     static const auto crystal = load_cel3_texture("cels3/crystalc.cel");
+
+    // Props
+    static const auto barrel = load_cel3_texture("cels3/barrel.cel");
+    static const auto bed = load_cel3_texture("cels3/bed.cel");
+    static const auto dish = load_cel3_texture("cels3/dish.cel");
+    static const auto driftwood = load_cel3_texture("cels3/driftwd.cel");
+    static const auto labsink = load_cel3_texture("cels3/labsink.cel");
+    static const auto labtable = load_cel3_texture("cels3/labtable.cel");
+    static const auto table = load_cel3_texture("cels3/table.cel");
+    static const auto vine = load_cel3_texture("cels3/vine.cel");
+
+    // Traps
+    static const auto pit = load_cel3_texture("cels3/pit.cel");
+    static const auto snare = load_cel3_texture("cels3/snare.cel");
+    static const auto trapdoor = load_cel3_texture("cels3/trapdoor.cel");
 
     // Monsters
     static const auto cj = load_cel3_texture({
@@ -845,9 +859,12 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 132:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, banana, Item::Banana, 1));
             break;
-//        case 108:
-//            entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, vine, Item::Vine, -1));
-//            break;
+        case 106:
+            entities.emplace(segment.id, std::make_unique<Trap>(&segment, pit, DeathType::Acid));
+            break;
+        case 108:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, vine, Collision::Pass));
+            break;
         case 109:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, crystal, Item::Crystal, -1));
             break;
@@ -858,7 +875,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, aid_kit, Item::FirstAid, 1));
             break;
         case 116:
-            entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_shells, Item::Ammo1, 20));
+            entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_shells, Item::Ammo1, 50));
             break;
         case 119:
             entities.emplace(segment.id, std::make_unique<Monster::Roy>(&segment, roy));
@@ -878,6 +895,10 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 124:
             entities.emplace(segment.id, std::make_unique<Monster::Doc>(&segment, doc));
             break;
+        case 125:
+        case 127:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, driftwood, Collision::Pass));
+            break;
         case 126:
             entities.emplace(segment.id, std::make_unique<Monster::Kid>(&segment, kid));
             break;
@@ -889,6 +910,30 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 131:
         case 133:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, coconut, Item::Coconut, 1));
+            break;
+        case 134:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, dish, Collision::Block));
+            break;
+        case 138:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, bed, Collision::Block));
+            break;
+        case 139:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, labtable, Collision::Block));
+            break;
+        case 140:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, labsink, Collision::Block));
+            break;
+        case 141:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, table, Collision::Block));
+            break;
+        case 144:
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, barrel, Collision::Block));
+            break;
+        case 145:
+            entities.emplace(segment.id, std::make_unique<Trap>(&segment, snare, DeathType::Snare));
+            break;
+        case 146:
+            entities.emplace(segment.id, std::make_unique<Trap>(&segment, trapdoor, DeathType::Acid));
             break;
         case 150:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_bullets, Item::Ammo2, 20));

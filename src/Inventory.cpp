@@ -161,6 +161,7 @@ void Inventory::draw(Player *player, int scale) {
                                 case Item::Banana:
                                 case Item::FirstAid:
                                     player->useItem(*selected);
+                                    player->setSelectedItem(std::nullopt);
                                     break;
                                 default:
                                     player->equipWeapon(std::nullopt);

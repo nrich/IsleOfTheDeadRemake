@@ -315,25 +315,25 @@ void Player::useWeapon(uint64_t frame_count) {
 void Player::useItem(const Item item) {
     switch (item) {
         case Item::Coconut:
-            if (getItemCount(Item::Coconut) > 0) {
+            if (getItemCount(item) > 0) {
                 health += 50;
-                items[Item::Coconut] -= 1;
+                items[item] -= 1;
                 if (health > 100)
                     health = 100;
             }
             break;
         case Item::Banana:
-            if (getItemCount(Item::Coconut) > 0) {
+            if (getItemCount(item) > 0) {
                 health += 30;
-                items[Item::Coconut] -= 1;
+                items[item] -= 1;
                 if (health > 100)
                     health = 100;
             }
             break;
         case Item::FirstAid:
-            if (getItemCount(Item::Coconut) > 0) {
+            if (getItemCount(item) > 0) {
                 health += 100;
-                items[Item::Coconut] -= 1;
+                items[item] -= 1;
                 if (health > 100)
                     health = 100;
             }

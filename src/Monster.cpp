@@ -31,7 +31,7 @@ static void draw_entity(const raylib::Camera3D *camera, const raylib::Vector2 &p
     camera->DrawBillboard(texture, Vector3(position.GetX(), y_offset, position.GetY()), scale);
 }
 
-Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size) : Entity(segment), textures(textures), stepSize(step_size) {
+Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage) : Entity(segment), textures(textures), stepSize(step_size), deathType(death_type), attackDamage(attack_damage) {
     int x = 0;
     int y = 0;
 
@@ -42,14 +42,14 @@ Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
         radius = (max_y - min_y) / 2.0f;
 
         x = x1;
-        y = min_y + ((max_y + min_y) / 2);
+        y = min_y + (int)radius;
     } else {
         float min_x = std::min(x1, x2);
         float max_x = std::max(x1, x2);
 
         radius = (max_x - min_x) / 2.0f;
 
-        x = min_x + ((max_x - min_x) / 2);
+        x = min_x + (int)radius;
         y = y1;
     }
 
@@ -100,7 +100,7 @@ void Base::update(Player *player, uint64_t frame_count) {
             if (sounds[MonsterSound::Attack])
                 sounds[MonsterSound::Attack]->Play();
 
-            player->takeDamage(5, DeathType::Zombie);
+            player->takeDamage(attackDamage, deathType);
         }
     }
 
@@ -188,7 +188,7 @@ Base::~Base() {
 
 }
 
-Bat::Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Bat::Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Bat, 2) {
     static const raylib::Wave wake_wav = Voc::Load("sound/batwake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -213,7 +213,7 @@ Bat::~Bat() {
 
 }
 
-CJ::CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+CJ::CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
     static const raylib::Wave wake_wav = Voc::Load("sound/fgrowl.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -250,7 +250,7 @@ CJ::~CJ() {
 
 }
 
-Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Doc, 4) {
     health = 30;
     state = MonsterState::Standing;
 
@@ -268,7 +268,7 @@ Doc::~Doc() {
 
 }
 
-Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -305,7 +305,7 @@ Dude::~Dude() {
 
 }
 
-Harry::Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Harry::Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -342,7 +342,7 @@ Harry::~Harry() {
 
 }
 
-Kid::Kid(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Kid::Kid(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 1) {
     static const raylib::Wave wake_wav = Voc::Load("sound/daddy.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -380,7 +380,7 @@ Kid::~Kid() {
 }
 
 
-Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Nurse, 3) {
     health = 30;
     state = MonsterState::Standing;
 
@@ -399,7 +399,7 @@ Nurse::~Nurse() {
 }
 
 
-Roy::Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Roy::Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -436,7 +436,7 @@ Roy::~Roy() {
 
 }
 
-Tor::Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Tor::Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -473,7 +473,7 @@ Tor::~Tor() {
 
 }
 
-Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wolfw.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -510,7 +510,7 @@ Wolf::~Wolf() {
 
 }
 
-Drummer::Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f) {
+Drummer::Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 0) {
     health = 1;
     state = MonsterState::Standing;
 

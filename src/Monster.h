@@ -60,8 +60,10 @@ protected:
     std::unordered_map<MonsterSound, raylib::Sound*> sounds;
     int32_t health = 0;
     float stepSize;
+    DeathType deathType;
+    int attackDamage;
 public:
-    Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size);
+    Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage);
 
     void damage(const DamageType damage_type, int amount);
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
@@ -146,8 +148,6 @@ public:
     void update(Player *player, uint64_t frame_count);
     ~Drummer();
 };
-
-
 
 };
 

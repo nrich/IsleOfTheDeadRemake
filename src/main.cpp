@@ -113,7 +113,7 @@ static void draw_map(Player *player, raylib::Window &window, const int scale) {
                             DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::YELLOW);
                             break;
                         case SegmentType::Door:
-                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::BROWN);
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::BLUE);
                             break;
                         case SegmentType::Monster:
                             DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::RED);

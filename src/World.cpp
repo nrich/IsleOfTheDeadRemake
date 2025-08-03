@@ -1019,7 +1019,6 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rwolf45.cel",
     });
 
-
     static const auto drummer = load_cel3_texture({
         "cels3/drumr01.cel",
         "cels3/drumr02.cel",
@@ -1029,6 +1028,8 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/drumr06.cel",
         "cels3/drumr07.cel",
     });
+
+    static const auto hut_door = load_cel3_texture("cels3/hutdoor1.cel");
 
     switch (segment.texture) {
         case 0:
@@ -1135,6 +1136,14 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 43:
             entities.emplace(segment.id, std::make_unique<BarricadedRoomEntry>(&segment, bunker_entry_closed, bunker_entry_opened, DamageType::Machete, State::BunkerEntry));
             break;
+
+        //case 47:
+        //case 48:
+        case 49:
+        case 50:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hut_door));
+            break;
+
         case 52:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, compound_wall_dark));
             break;
@@ -1340,7 +1349,43 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
 }
 
 raylib::Vector2 World::findSpawn() const {
-    const auto &map_entrance = entrances[1];
+    const static std::map<std::string, size_t> spawns = {
+        {"maps/01.map", 1},
+        {"maps/02.map", 7},
+        {"maps/03.map", 13},
+        {"maps/04.map", 18},
+        {"maps/05.map", 22},
+        {"maps/06.map", 28},
+        {"maps/07.map", 34},
+        {"maps/08.map", 40},
+        {"maps/09.map", 44},
+        {"maps/10.map", 47},
+        {"maps/11.map", 51},
+        {"maps/12.map", 56},
+        {"maps/13.map", 59},
+        {"maps/14.map", 63},
+        {"maps/15.map", 67},
+        {"maps/16.map", 70},
+        {"maps/17.map", 74},
+        {"maps/18.map", 79},
+        {"maps/19.map", 83},
+        {"maps/20.map", 88},
+        {"maps/21.map", 93},
+        {"maps/22.map", 98},
+        {"maps/23.map", 100},
+        {"maps/24.map", 103},
+        {"maps/25.map", 108},
+        {"maps/26.map", 112},
+        {"maps/27.map", 114},
+        {"maps/28.map", 117},
+        {"maps/29.map", 121},
+        {"maps/30.map", 124},
+        {"maps/31.map", 126},
+    };
+
+    size_t index = spawns.at(currentMap);
+
+    const auto &map_entrance = entrances[index];
 
     return raylib::Vector2(map_entrance.X(), map_entrance.Y());
 

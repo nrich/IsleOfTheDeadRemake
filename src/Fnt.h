@@ -20,6 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #define FNT_H
 
 #include <cstdint>
+#include <optional>
 
 #include <raylib-cpp.hpp>
 
@@ -27,7 +28,8 @@ class Fnt {
 public:
     static raylib::TextureUnmanaged Get(char c);
     static void ExtractFonts(const std::string &filename);
-    static void Write(const std::string &text, int x, int y, int scale, float rotation=0.0f);
+    //static void Write(const std::string &text, int x, int y, int scale, raylib::Color tint=raylib::Color(0xCF, 0xCD, 0x50, 0xFF), float rotation=0.0f);
+    static void Write(const std::string &text, int x, int y, int scale, std::optional<raylib::Color> tint=std::nullopt, float rotation=0.0f);
 };
 
 #endif //FNT_H

@@ -66,6 +66,7 @@ class Player {
     State inventoryReturnState;
 
     std::string highlight = "";
+    std::optional<raylib::Color> highlightColour = std::nullopt;
 
     std::pair<raylib::Vector3, raylib::Vector3> processInput(const uint64_t frame_count);
     void tryMove(const raylib::Vector3 &movement, const raylib::Vector3 &rotation);
@@ -170,12 +171,13 @@ public:
         input = new_input;
     }
 
-    std::string getHighlight() const {
-        return highlight;
+    std::pair<std::string, std::optional<raylib::Color>> getHighlight() const {
+        return std::make_pair(highlight, highlightColour);
     }
 
-    void setHighlight(const std::string &new_highlight="") {
+    void setHighlight(const std::string &new_highlight="", std::optional<raylib::Color> highlight_colour=std::nullopt) {
         highlight = new_highlight;
+        highlightColour = highlight_colour;
     }
 
     void takeDamage(const int amount, const DeathType death_type);

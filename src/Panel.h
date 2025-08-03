@@ -53,7 +53,7 @@ class Panel {
     State previous;
 public: 
     Panel();
-    void draw(Player *player, const std::string &message, int scale);
+    void draw(Player *player, const std::pair<std::string, std::optional<raylib::Color>> &higlight, int scale);
     ~Panel();
 };
 

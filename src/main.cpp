@@ -267,6 +267,9 @@ int main(int argc, char *argv[]) {
     BunkerLeftScene bunker_left_scene(&panel);
     BunkerRightScene bunker_right_scene(&panel);
 
+    VillageGateOne village_gate_one(&panel, world.getEntrance(83));
+    VillageGateTwo village_gate_two(&panel, world.getEntrance(100));
+
     Player player(&world);
 
     //player.death(DeathType::Zombie);
@@ -281,6 +284,8 @@ int main(int argc, char *argv[]) {
     } else {
         player.setState(State::Title);
     }
+
+    player.setState(State::VillageGate1);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
@@ -415,6 +420,16 @@ int main(int argc, char *argv[]) {
                 break;
             case State::BunkerRight:
                 bunker_right_scene.draw(&player, scale);
+                break;
+
+            case State::VillageGate1:
+                village_gate_one.draw(&player, scale);
+                break;
+            case State::VillageGate2:
+                village_gate_two.draw(&player, scale);
+                break;
+
+            case State::TempleEntrance:
                 break;
 
             case State::Title:

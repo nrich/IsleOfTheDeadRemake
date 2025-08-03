@@ -61,9 +61,9 @@ void Fnt::ExtractFonts(const std::string &filename) {
             fh.read((char *)&b, 1);
 
             if (b) {
-                pixels.push_back(0xCF);
-                pixels.push_back(0xCD);
-                pixels.push_back(0x50);
+                pixels.push_back(0xFF);
+                pixels.push_back(0xFF);
+                pixels.push_back(0xFF);
                 pixels.push_back(0xFF);
             } else {
                 pixels.push_back(0x00);
@@ -84,9 +84,12 @@ void Fnt::ExtractFonts(const std::string &filename) {
     }
 }
 
-void Fnt::Write(const std::string &text, int x, int y, int scale, float rotation) {
+void Fnt::Write(const std::string &text, int x, int y, int scale, std::optional<raylib::Color> tint, float rotation) {
+    if (!tint)
+        tint = raylib::Color(0xCF, 0xCD, 0x50, 0xFF);
+
     for (size_t i = 0; i < text.size(); i++) {
         auto texture = Fnt::Get(text[i]);
-        texture.Draw(Vector2(x + (i * scale * 6), y), rotation, scale);
+        texture.Draw(Vector2(x + (i * scale * 6), y), rotation, scale, *tint);
     }
 }

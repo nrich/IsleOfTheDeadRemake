@@ -39,7 +39,16 @@ enum class State {
     BunkerEntry,            // bunkerbg
     BunkerExit,             // bunkerin
     BunkerLeft,             // bunkerleft
-    BunkerRight             // bunkert
+    BunkerRight,            // bunkert
+
+    // 17.MAP
+    VillageGate1,
+
+    // 20.MAP
+    VillageGate2,
+
+    // 22.MAP
+    TempleEntrance,         // room17
 };
 
 enum class Collision {

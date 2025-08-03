@@ -1106,6 +1106,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, boowall_south));
             break;
         case 38:
+            std::cout << "\t GATE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, boogate));
             break;
         case 39:
@@ -1254,7 +1255,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, dish, Collision::Block));
             break;
         case 135:
-            entities.emplace(segment.id, std::make_unique<AnimatedProp>(&segment, tiki, 6, Collision::Block));
+            entities.emplace(segment.id, std::make_unique<AnimatedProp>(&segment, tiki, 6, Collision::Pass));
             break;
         case 138:
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, bed, Collision::Block));
@@ -1281,7 +1282,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_bullets, Item::Ammo2, 20));
             break;
         case 151:
-            entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_clips, Item::Ammo3, 20));
+            entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_clips, Item::Ammo3, 25));
             break;
         case 160:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, hanger_dark));

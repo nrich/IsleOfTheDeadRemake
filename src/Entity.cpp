@@ -97,7 +97,6 @@ void DamageableWall::draw(const raylib::Camera3D *camera, uint64_t frame_count) 
         draw_wall(x1, y1, x2, y2, texture);
 }
 
-
 void AnimatedWall::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
     size_t anim = frame_count / frameRate; 
 

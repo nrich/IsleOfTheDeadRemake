@@ -36,6 +36,10 @@ std::tuple<bool, std::string, DeathType> Scene::getItem(const Layout &layout) {
     return std::make_tuple(true, layout.pickup, DeathType::None);
 }
 
+std::optional<Scene::Dialogue> Scene::talk() {
+    return std::nullopt;
+}
+
 void Scene::draw(Player *player, int scale) {
     const static std::string NOTHING_INTEREST = Strings::Lookup(240);
     const static std::string USE = Strings::Lookup(184);
@@ -151,6 +155,16 @@ void Scene::draw(Player *player, int scale) {
 
                             player->setHighlight(highlight);
                         }
+                        break;
+                    case Action::Talk:
+                        if (auto dialogue = talk()) {
+                            player->setHighlight(dialogue->text, dialogue->colour);
+                            if (dialogue->sound) {
+                                dialogue->sound->Play();
+                            }
+                        } else {
+                            player->setHighlight();
+                        } 
                         break;
                     default:
                         player->setHighlight();
@@ -354,3 +368,39 @@ BunkerRightScene::~BunkerRightScene() {
 
 }
 
+VillageGateOne::VillageGateOne(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsabg.cel") {
+    static raylib::Sound guards(Voc::Load("sound/umaguma.voc"));
+
+    entrance = new_entrance;
+    script = {
+        Dialogue(Strings::Lookup(53), raylib::RAYWHITE, &guards),
+        Dialogue(Strings::Lookup(54)),
+        Dialogue(Strings::Lookup(55), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(56)),
+        Dialogue(Strings::Lookup(57), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(58)),
+        Dialogue(Strings::Lookup(59), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(60)),
+        Dialogue(Strings::Lookup(61), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(62)),
+        Dialogue(Strings::Lookup(63), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(64)),
+        Dialogue(Strings::Lookup(65), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(66)),
+        Dialogue(Strings::Lookup(68)),
+        Dialogue(Strings::Lookup(69), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(70)),
+        Dialogue(Strings::Lookup(71), raylib::RAYWHITE),
+    };
+}
+
+std::optional<Scene::Dialogue> VillageGateOne::talk() {
+    if (dialogueIndex < script.size()) {
+        return script[dialogueIndex++];
+    }
+    return Scene::talk();
+}
+
+VillageGateTwo::VillageGateTwo(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsbbg.cel") {
+    entrance = new_entrance;
+}

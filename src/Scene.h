@@ -32,9 +32,16 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Panel.h"
 #include "StillCel.h"
 #include "Entrance.h"
+#include "Voc.h"
 
 class Scene {
 protected:
+    struct Dialogue {
+        std::string text;
+        std::optional<raylib::Color> colour;
+        raylib::Sound *sound = nullptr;
+    };
+
     struct Layout {
         raylib::Vector2 position;
         raylib::TextureUnmanaged image;
@@ -62,10 +69,11 @@ protected:
 
     virtual std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     virtual std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
+    virtual std::optional<Dialogue> talk();
 
     std::optional<Entrance> entrance = std::nullopt;
 public:
-    void draw(Player *player, int scale);
+    virtual void draw(Player *player, int scale);
     virtual ~Scene();
 };
 
@@ -131,6 +139,21 @@ class BunkerRightScene : public Scene {
 public:
     BunkerRightScene(Panel *panel);
     ~BunkerRightScene();
+};
+
+class VillageGateOne : public Scene {
+    std::vector<Dialogue> script;
+    std::optional<Dialogue> talk();
+    size_t dialogueIndex = 0;
+    bool pass = false;
+public:
+    VillageGateOne(Panel *panel, const Entrance &new_entrance);
+};
+
+class VillageGateTwo : public Scene {
+    std::vector<Dialogue> script;
+public:
+    VillageGateTwo(Panel *panel, const Entrance &new_entrance);
 };
 
 #endif //SCENE_H

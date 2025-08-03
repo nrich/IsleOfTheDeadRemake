@@ -38,10 +38,12 @@ Panel::Panel() {
     movements.emplace(Input::StepRight, Button(raylib::Vector2(255, 162), StillCel("stillcel/b_arrow5.cel").getTexture()));
 }
 
-void Panel::draw(Player *player, const std::string &message, int scale) {
+void Panel::draw(Player *player, const std::pair<std::string, std::optional<raylib::Color>> &higlight, int scale) {
     background.Draw(Vector2(0, 138*scale), 0.0f, scale);
 
-    Fnt::Write(message, 12*scale, 183*scale, scale);
+    auto [message, colour] = higlight;
+
+    Fnt::Write(message, 12*scale, 183*scale, scale, colour);
 
     auto health_text = std::to_string(player->getHealth());
     auto ammo1_text = std::to_string(player->getItemCount(Item::Ammo1));
@@ -65,6 +67,8 @@ void Panel::draw(Player *player, const std::string &message, int scale) {
                 } else if (action == Action::Inventory) {
                     player->setSelectedItem(std::nullopt);
                     player->setState(State::Inventory);
+                } else if (action == Action::Talk) {
+                    player->setSelectedItem(std::nullopt);
                 }
                 break;
             }

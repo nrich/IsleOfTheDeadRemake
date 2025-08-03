@@ -158,7 +158,9 @@ void Inventory::draw(Player *player, int scale) {
                                     player->setHighlight(USE + layout.name + USE_ON);
                                     break;
                                 case Item::Coconut:
-                                    player->useItem(Item::Coconut);
+                                case Item::Banana:
+                                case Item::FirstAid:
+                                    player->useItem(*selected);
                                     break;
                                 default:
                                     player->equipWeapon(std::nullopt);

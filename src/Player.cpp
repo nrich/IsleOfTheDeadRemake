@@ -322,6 +322,22 @@ void Player::useItem(const Item item) {
                     health = 100;
             }
             break;
+        case Item::Banana:
+            if (getItemCount(Item::Coconut) > 0) {
+                health += 30;
+                items[Item::Coconut] -= 1;
+                if (health > 100)
+                    health = 100;
+            }
+            break;
+        case Item::FirstAid:
+            if (getItemCount(Item::Coconut) > 0) {
+                health += 100;
+                items[Item::Coconut] -= 1;
+                if (health > 100)
+                    health = 100;
+            }
+            break;
         default:
             break;
     }

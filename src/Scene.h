@@ -69,7 +69,7 @@ protected:
 
     virtual std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     virtual std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
-    virtual std::optional<Dialogue> talk();
+    virtual std::optional<Dialogue> talk(Player *player);
 
     std::optional<Entrance> entrance = std::nullopt;
 public:
@@ -143,7 +143,7 @@ public:
 
 class VillageGateShaman : public Scene {
     std::vector<Dialogue> script;
-    std::optional<Dialogue> talk();
+    std::optional<Dialogue> talk(Player *player);
     size_t dialogueIndex = 0;
     bool pass = false;
 public:
@@ -152,7 +152,7 @@ public:
 
 class VillageGateChief : public Scene {
     std::vector<Dialogue> script;
-    std::optional<Dialogue> talk();
+    std::optional<Dialogue> talk(Player *player);
     size_t dialogueIndex = 0;
     bool pass = false;
 public:

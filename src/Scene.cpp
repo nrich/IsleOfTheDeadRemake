@@ -36,7 +36,7 @@ std::tuple<bool, std::string, DeathType> Scene::getItem(const Layout &layout) {
     return std::make_tuple(true, layout.pickup, DeathType::None);
 }
 
-std::optional<Scene::Dialogue> Scene::talk() {
+std::optional<Scene::Dialogue> Scene::talk(Player *player) {
     return std::nullopt;
 }
 
@@ -160,7 +160,7 @@ void Scene::draw(Player *player, int scale) {
                         }
                         break;
                     case Action::Talk:
-                        if (auto dialogue = talk()) {
+                        if (auto dialogue = talk(player)) {
                             player->setHighlight(dialogue->text, dialogue->colour);
                             if (dialogue->sound) {
                                 dialogue->sound->Play();
@@ -397,11 +397,11 @@ VillageGateShaman::VillageGateShaman(Panel *panel, const Entrance &new_entrance)
     };
 }
 
-std::optional<Scene::Dialogue> VillageGateShaman::talk() {
+std::optional<Scene::Dialogue> VillageGateShaman::talk(Player *player) {
     const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsa2.cel").getTexture();
 
     if (pass)
-        return Scene::talk();
+        return Scene::talk(player);
 
     if (dialogueIndex < script.size()) {
         return script[dialogueIndex++];
@@ -412,8 +412,10 @@ std::optional<Scene::Dialogue> VillageGateShaman::talk() {
     navigation[Input::StepForward] = State::World;
     navigation[Input::LookUp] = State::World;
 
+    player->addGameFlag(PlayerGameFlag::VisitedVillage);
+
     pass = true;
-    return Scene::talk();
+    return Scene::talk(player);
 }
 
 VillageGateChief::VillageGateChief(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsbbg.cel") {
@@ -440,11 +442,15 @@ VillageGateChief::VillageGateChief(Panel *panel, const Entrance &new_entrance) :
     };
 }
 
-std::optional<Scene::Dialogue> VillageGateChief::talk() {
+std::optional<Scene::Dialogue> VillageGateChief::talk(Player *player) {
     const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsb2.cel").getTexture();
 
     if (pass)
-        return Scene::talk();
+        return Scene::talk(player);
+
+    if (!player->testGameFlag(PlayerGameFlag::VisitedVillage)) {
+        return Dialogue(Strings::Lookup(223), raylib::RAYWHITE);
+    }
 
     if (dialogueIndex < script.size()) {
         return script[dialogueIndex++];
@@ -456,6 +462,6 @@ std::optional<Scene::Dialogue> VillageGateChief::talk() {
     navigation[Input::LookUp] = State::World;
 
     pass = true;
-    return Scene::talk();
+    return Scene::talk(player);
 }
 

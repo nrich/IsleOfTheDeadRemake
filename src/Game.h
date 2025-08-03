@@ -180,4 +180,8 @@ enum class SegmentType {
     Monster,
 };
 
+enum PlayerGameFlag : uint64_t {
+    VisitedVillage      = 1<<0,
+};
+
 #endif //GAME_H

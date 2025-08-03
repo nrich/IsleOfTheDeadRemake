@@ -72,6 +72,7 @@ class Player {
     void tryMove(const raylib::Vector3 &movement, const raylib::Vector3 &rotation);
 
     DeathType deathType;
+    uint64_t flags = 0;
 public:
     Player(World *world);
 
@@ -192,6 +193,18 @@ public:
     }
 
     void respawn(const raylib::Vector2 &new_position, const bool reset_inventory=false);
+
+    void addGameFlag(const PlayerGameFlag flag) {
+        flags |= flag;
+    }
+
+    void removeGameFlag(const PlayerGameFlag flag) {
+        flags &= ~flag;
+    }
+
+    bool testGameFlag(const PlayerGameFlag flag) const {
+        return flags & flag;
+    }
 
     ~Player();
 };

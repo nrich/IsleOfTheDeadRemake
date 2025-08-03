@@ -73,6 +73,10 @@ public:
         return std::nullopt;
     }
 
+    virtual SegmentType getType() const {
+        return SegmentType::Unknown;
+    }
+
     virtual ~Entity();
 };
 
@@ -87,6 +91,10 @@ public:
     }
 
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+
+    SegmentType getType() const {
+        return SegmentType::Wall;
+    }
 };
 
 class DamageableWall : public Entity {
@@ -100,6 +108,10 @@ public:
 
     void damage(const DamageType damage_type, int amount);
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+
+    SegmentType getType() const {
+        return SegmentType::Wall;
+    }
 };
 
 
@@ -116,6 +128,10 @@ public:
     }
 
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+
+    SegmentType getType() const {
+        return SegmentType::Wall;
+    }
 };
 
 class Portal : public Entity {
@@ -130,6 +146,10 @@ public:
 
     //void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     void touch(Player *player);
+
+    SegmentType getType() const {
+        return SegmentType::Door;
+    }
 };
 
 class Passage : public Portal {
@@ -175,6 +195,24 @@ public:
     }
 };
 
+class RoomEntry : public Wall {
+    State scene;
+public:
+    RoomEntry(const Segment *segment, const raylib::TextureUnmanaged &texture, const State scene) : Wall(segment, texture), scene(scene) {
+    }
+
+    Collision collide() const {
+        return Collision::Touch;
+    }
+
+    void touch(Player *player);
+
+    SegmentType getType() const {
+        return SegmentType::Door;
+    }
+};
+
+
 class AnimatedRoomEntry : public AnimatedWall {
     State scene;
 public:
@@ -186,6 +224,10 @@ public:
     }
 
     void touch(Player *player);
+
+    SegmentType getType() const {
+        return SegmentType::Door;
+    }
 };
 
 class BarricadedRoomEntry : public Entity {
@@ -217,6 +259,10 @@ public:
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     void touch(Player *player);
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
+
+    SegmentType getType() const {
+        return SegmentType::Door;
+    }
 };
 
 class Prop : public Entity {
@@ -232,6 +278,10 @@ public:
 
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+
+    SegmentType getType() const {
+        return SegmentType::Prop;
+    }
 };
 
 class DamageableProp : public Entity {
@@ -251,6 +301,10 @@ public:
     void damage(const DamageType damage_type, int amount);
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+
+    SegmentType getType() const {
+        return SegmentType::Prop;
+    }
 };
 
 class AnimatedProp : public Entity {
@@ -267,6 +321,10 @@ public:
 
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+
+    SegmentType getType() const {
+        return SegmentType::Prop;
+    }
 };
 
 class Trap : public Entity {
@@ -287,6 +345,10 @@ public:
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     void touch(Player *player);
     std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+
+    SegmentType getType() const {
+        return SegmentType::Trap;
+    }
 };
 
 class ItemPickup : public Entity {
@@ -315,6 +377,10 @@ public:
 
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     void touch(Player *player);
+
+    SegmentType getType() const {
+        return SegmentType::Item;
+    }
 };
 
 #endif //ENTITY_H

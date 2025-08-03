@@ -102,10 +102,37 @@ static void draw_map(Player *player, raylib::Window &window, const int scale) {
         camera.BeginMode();
         {
             for (const auto &segment : map->getSegments()) {
-                DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::YELLOW);
+                Entity *entity = world->getEntity(segment.id);
+
+                if (entity) {
+                    switch (entity->getType()) {
+                        case SegmentType::Unknown:
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::GRAY);
+                            break;
+                        case SegmentType::Wall:
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::YELLOW);
+                            break;
+                        case SegmentType::Door:
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::BROWN);
+                            break;
+                        case SegmentType::Monster:
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::RED);
+                            break;
+                        case SegmentType::Item:
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::WHITE);
+                            break;
+                        case SegmentType::Prop:
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::GREEN);
+                            break;
+                        case SegmentType::Trap:
+                            DrawLineEx(raylib::Vector2(segment.x1, segment.y1) * 0.4 * scale, raylib::Vector2(segment.x2, segment.y2) * 0.4 * scale, scale, raylib::PURPLE);
+                            break;
+                    }
+                }
             }
 
             DrawLineEx(player_position * 0.4 * scale, player_position_angled * 0.4 * scale, scale, raylib::BLUE);
+            DrawCircleV(player_position * 0.4 * scale, 0.4 * scale * 3, raylib::BLUE); 
         }
         camera.EndMode();
     }
@@ -267,8 +294,8 @@ int main(int argc, char *argv[]) {
     BunkerLeftScene bunker_left_scene(&panel);
     BunkerRightScene bunker_right_scene(&panel);
 
-    VillageGateOne village_gate_one(&panel, world.getEntrance(83));
-    VillageGateTwo village_gate_two(&panel, world.getEntrance(100));
+    VillageGateChief village_gate_chief(&panel, world.getEntrance(83));
+    VillageGateShaman village_gate_shaman(&panel, world.getEntrance(100));
 
     Player player(&world);
 
@@ -285,7 +312,7 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-    player.setState(State::VillageGate1);
+    //player.setState(State::VillageGate2);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
@@ -423,10 +450,10 @@ int main(int argc, char *argv[]) {
                 break;
 
             case State::VillageGate1:
-                village_gate_one.draw(&player, scale);
+                village_gate_shaman.draw(&player, scale);
                 break;
             case State::VillageGate2:
-                village_gate_two.draw(&player, scale);
+                village_gate_chief.draw(&player, scale);
                 break;
 
             case State::TempleEntrance:

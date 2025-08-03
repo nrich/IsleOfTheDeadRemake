@@ -32,8 +32,8 @@ static void draw_entity(const raylib::Camera3D *camera, const raylib::Vector2 &p
 }
 
 Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size) : Entity(segment), textures(textures), stepSize(step_size) {
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
 
     if (x1 == x2) {
         float min_y = std::min(y1, y2);
@@ -42,14 +42,14 @@ Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
         radius = (max_y - min_y) / 2.0f;
 
         x = x1;
-        y = (max_y + min_y) / 2;
+        y = min_y + ((max_y + min_y) / 2);
     } else {
         float min_x = std::min(x1, x2);
         float max_x = std::max(x1, x2);
 
         radius = (max_x - min_x) / 2.0f;
 
-        x = (max_x - min_x) / 2;
+        x = min_x + ((max_x - min_x) / 2);
         y = y1;
     }
 
@@ -78,8 +78,6 @@ void Base::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
 }
 
 void Base::update(Player *player, uint64_t frame_count) {
-    return;
-
     if (frame_count % 5 == 0)
         currentFrame += 1;
 

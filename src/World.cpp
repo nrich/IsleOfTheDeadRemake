@@ -399,6 +399,19 @@ void World::spawnPassage(const Segment &segment) {
     }
 }
 
+void World::spawnRoomEntry(const Segment &segment) {
+    static const auto boogate = load_cel3_texture("cels3/boogate.cel");
+
+    switch (segment.id) {
+        case 0x65331b55c15848b5:
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, boogate, State::VillageGate2));
+            break;
+        case 0x8e62e1b9a0ad8896:
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, boogate, State::VillageGate1));
+            break;
+    }
+}
+
 void World::spawnEntityForSegment(const std::string &map_filename, const Segment &segment) {
     static const auto beach = load_cel3_texture({
         "cels3/beach1.cel",
@@ -425,8 +438,6 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     static const auto boowall_west = load_cel3_texture("cels3/wboowall.cel");
     static const auto boowall_east = load_cel3_texture("cels3/eboowall.cel");
     static const auto boowall_south = load_cel3_texture("cels3/sboowall.cel");
-
-    static const auto boogate = load_cel3_texture("cels3/boogate.cel");
 
     static const auto mansion_window_light = load_cel3_texture("cels3/mansext1.cel");
     static const auto mansion_window_dark = load_cel3_texture("cels3/mansext2.cel");
@@ -1107,7 +1118,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             break;
         case 38:
             std::cout << "\t GATE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
-            entities.emplace(segment.id, std::make_unique<Wall>(&segment, boogate));
+            spawnRoomEntry(segment);
             break;
         case 39:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, hut_wall_west));

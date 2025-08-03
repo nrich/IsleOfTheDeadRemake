@@ -74,6 +74,9 @@ void Scene::draw(Player *player, int scale) {
 
                         if (state == State::World) {
                             if (entrance) {
+                                World *world = player->getWorld();
+                                world->setCurrentLevel(entrance->getName());
+
                                 player->setPosition(raylib::Vector2(entrance->X(), entrance->Y()));
                                 player->setAngles(raylib::Vector2(entrance->getDirection(), 0));
                             }
@@ -368,12 +371,12 @@ BunkerRightScene::~BunkerRightScene() {
 
 }
 
-VillageGateOne::VillageGateOne(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsabg.cel") {
-    static raylib::Sound guards(Voc::Load("sound/umaguma.voc"));
+VillageGateShaman::VillageGateShaman(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsabg.cel") {
+    static raylib::Sound guard_talk(Voc::Load("sound/umaguma.voc"));
 
     entrance = new_entrance;
     script = {
-        Dialogue(Strings::Lookup(53), raylib::RAYWHITE, &guards),
+        Dialogue(Strings::Lookup(53), raylib::RAYWHITE, &guard_talk),
         Dialogue(Strings::Lookup(54)),
         Dialogue(Strings::Lookup(55), raylib::RAYWHITE),
         Dialogue(Strings::Lookup(56)),
@@ -394,13 +397,65 @@ VillageGateOne::VillageGateOne(Panel *panel, const Entrance &new_entrance) : Sce
     };
 }
 
-std::optional<Scene::Dialogue> VillageGateOne::talk() {
+std::optional<Scene::Dialogue> VillageGateShaman::talk() {
+    const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsa2.cel").getTexture();
+
+    if (pass)
+        return Scene::talk();
+
     if (dialogueIndex < script.size()) {
         return script[dialogueIndex++];
     }
+
+    background = alt_background;
+
+    navigation[Input::StepForward] = State::World;
+    navigation[Input::LookUp] = State::World;
+
+    pass = true;
     return Scene::talk();
 }
 
-VillageGateTwo::VillageGateTwo(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsbbg.cel") {
+VillageGateChief::VillageGateChief(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsbbg.cel") {
+    static raylib::Sound guard_talk(Voc::Load("sound/umaguma.voc"));
+
     entrance = new_entrance;
+    script = {
+        Dialogue(Strings::Lookup(72), raylib::RAYWHITE, &guard_talk),
+        Dialogue(Strings::Lookup(73)),
+        Dialogue(Strings::Lookup(74), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(75)),
+        Dialogue(Strings::Lookup(76), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(77), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(78)),
+        Dialogue(Strings::Lookup(79), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(80)),
+        Dialogue(Strings::Lookup(81), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(82)),
+        Dialogue(Strings::Lookup(83), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(84)),
+        Dialogue(Strings::Lookup(86)),
+        Dialogue(Strings::Lookup(87), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(88)),
+    };
 }
+
+std::optional<Scene::Dialogue> VillageGateChief::talk() {
+    const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsb2.cel").getTexture();
+
+    if (pass)
+        return Scene::talk();
+
+    if (dialogueIndex < script.size()) {
+        return script[dialogueIndex++];
+    }
+
+    background = alt_background;
+
+    navigation[Input::StepForward] = State::World;
+    navigation[Input::LookUp] = State::World;
+
+    pass = true;
+    return Scene::talk();
+}
+

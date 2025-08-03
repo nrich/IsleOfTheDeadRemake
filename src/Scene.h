@@ -141,19 +141,22 @@ public:
     ~BunkerRightScene();
 };
 
-class VillageGateOne : public Scene {
+class VillageGateShaman : public Scene {
     std::vector<Dialogue> script;
     std::optional<Dialogue> talk();
     size_t dialogueIndex = 0;
     bool pass = false;
 public:
-    VillageGateOne(Panel *panel, const Entrance &new_entrance);
+    VillageGateShaman(Panel *panel, const Entrance &new_entrance);
 };
 
-class VillageGateTwo : public Scene {
+class VillageGateChief : public Scene {
     std::vector<Dialogue> script;
+    std::optional<Dialogue> talk();
+    size_t dialogueIndex = 0;
+    bool pass = false;
 public:
-    VillageGateTwo(Panel *panel, const Entrance &new_entrance);
+    VillageGateChief(Panel *panel, const Entrance &new_entrance);
 };
 
 #endif //SCENE_H

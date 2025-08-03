@@ -170,4 +170,14 @@ enum class Ground {
     Cave,
 };
 
+enum class SegmentType {
+    Unknown,
+    Wall,
+    Door,
+    Prop,
+    Trap,
+    Item,
+    Monster,
+};
+
 #endif //GAME_H

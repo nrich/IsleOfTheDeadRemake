@@ -71,7 +71,12 @@ public:
 
     Collision collide() const;
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
-    void update(Player *player, uint64_t frame_count);
+    virtual void update(Player *player, uint64_t frame_count);
+
+    SegmentType getType() const {
+        return SegmentType::Monster;
+    }
+
     ~Base();
 };
 

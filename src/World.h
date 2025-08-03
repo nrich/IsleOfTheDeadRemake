@@ -41,6 +41,7 @@ class World {
     void spawnEntityForSegment(const std::string &map_filename, const Segment &segment);
 
     void spawnPassage(const Segment &segment);
+    void spawnRoomEntry(const Segment &segment);
 
     std::unordered_map<uint64_t, std::unique_ptr<Entity>> entities;
     MusicPlayer *musicPlayer;

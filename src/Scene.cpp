@@ -104,6 +104,8 @@ void Scene::draw(Player *player, int scale) {
                         selected = layout;
                     }
                 }
+
+                std::cerr << position.ToString() << "\n";
             }
 
             auto action = player->getAction();
@@ -153,6 +155,7 @@ void Scene::draw(Player *player, int scale) {
                             }
 
                             if (use_result) {
+                                player->useItem(*player_selected);
                                 player->setSelectedItem(std::nullopt);
                             }
 
@@ -464,4 +467,32 @@ std::optional<Scene::Dialogue> VillageGateChief::talk(Player *player) {
     pass = true;
     return Scene::talk(player);
 }
+
+TempleEntrance::TempleEntrance(Panel *panel) : Scene(panel, "stillcel/room17.cel") {
+    layouts.emplace_back(raylib::Vector2(144, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHole1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336), true);
+    layouts.emplace_back(raylib::Vector2(168, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHole2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336), true);
+}
+
+std::tuple<bool, std::string, DeathType> TempleEntrance::getItem(const Layout &layout) {
+    if (layout.item == Item::MedalHole1 || layout.item == Item::MedalHole2 || layout.item == Item::MedalHoleFilled1 || layout.item == Item::MedalHoleFilled2) {
+        return std::make_tuple(false, "", DeathType::None);
+    }
+
+    return Scene::getItem(layout);
+}
+
+std::tuple<bool, std::string, DeathType> TempleEntrance::useItemOnItem(Item source, Item destination) {
+    if (source == Item::GoldMedal1 && destination == Item::MedalHole1) {
+        layouts.emplace_back(raylib::Vector2(144, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHoleFilled1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+        return make_tuple(true, Strings::Lookup(425), DeathType::None);
+    }
+
+    if (source == Item::GoldMedal2 && destination == Item::MedalHole2) {
+        layouts.emplace_back(raylib::Vector2(168, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHoleFilled2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+        return make_tuple(true, Strings::Lookup(425), DeathType::None);
+    }
+
+    return Scene::useItemOnItem(source, destination);
+}
+
 

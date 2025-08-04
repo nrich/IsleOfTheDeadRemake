@@ -296,6 +296,7 @@ int main(int argc, char *argv[]) {
 
     VillageGateChief village_gate_chief(&panel, world.getEntrance(83));
     VillageGateShaman village_gate_shaman(&panel, world.getEntrance(100));
+    TempleEntrance temple_entrance(&panel);
 
     Player player(&world);
 
@@ -308,11 +309,13 @@ int main(int argc, char *argv[]) {
         player.setState(State::World);
         player.respawn(spawn_point, true);
         player.addItem(Item::Machete);
+        player.addItem(Item::GoldMedal1);
+        player.addItem(Item::GoldMedal2);
     } else {
         player.setState(State::Title);
     }
 
-    //player.setState(State::VillageGate2);
+    player.setState(State::TempleEntrance);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
@@ -457,6 +460,7 @@ int main(int argc, char *argv[]) {
                 break;
 
             case State::TempleEntrance:
+                temple_entrance.draw(&player, scale);
                 break;
 
             case State::Title:

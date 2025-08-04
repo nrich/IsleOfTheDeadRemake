@@ -338,6 +338,10 @@ void Player::useItem(const Item item) {
                     health = 100;
             }
             break;
+        case Item::GoldMedal1:
+        case Item::GoldMedal2:
+            items[item] = 0;
+            break;
         default:
             break;
     }

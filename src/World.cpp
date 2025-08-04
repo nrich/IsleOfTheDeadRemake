@@ -409,6 +409,10 @@ void World::spawnRoomEntry(const Segment &segment) {
         case 0x8e62e1b9a0ad8896:
             entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, boogate, State::VillageGate1));
             break;
+        case 0xc7fe4d1320e5fca9:
+            // 23.map -> 20.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, boogate, entrances[91]));
+            break;
     }
 }
 
@@ -1030,6 +1034,8 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     });
 
     static const auto hut_door = load_cel3_texture("cels3/hutdoor1.cel");
+    static const auto camp_gate = load_cel3_texture("cels3/cmpgate1.cel");
+    static const auto unknown = load_cel3_texture("cels3/unknown.cel");
 
     switch (segment.texture) {
         case 0:
@@ -1105,6 +1111,11 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 32:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, jungle_fence));
             break;
+
+        case 33:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, camp_gate));
+            break;
+
         case 34:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, boowall_west));
             break;
@@ -1137,8 +1148,8 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<BarricadedRoomEntry>(&segment, bunker_entry_closed, bunker_entry_opened, DamageType::Machete, State::BunkerEntry));
             break;
 
-        //case 47:
-        //case 48:
+        case 47:
+        case 48:
         case 49:
         case 50:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, hut_door));
@@ -1198,7 +1209,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_face_left));
             break;
         case 95:
-            entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_face_mid));
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, temple_face_mid, State::TempleEntrance));
             break;
         case 96:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_face_right));
@@ -1344,6 +1355,8 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, shotgun, Item::Shotgun, -1));
             break;
         default:
+            std::cerr << "UNKNOWN " << segment.id << " " << segment.texture << "\n";
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, unknown));
             break;
     }
 }

@@ -51,11 +51,16 @@ protected:
         std::string description;
         std::string pickup;
 
+        bool invisible = false;
+
         raylib::Rectangle Border() const {
             return raylib::Rectangle(position.GetX(), position.GetY(), image.GetWidth(), image.GetHeight());
         }
 
         void draw(int scale) const {
+            if (invisible)
+                return;
+
             image.Draw(position * scale, 0.0f, scale);
         }
     };
@@ -157,6 +162,13 @@ class VillageGateChief : public Scene {
     bool pass = false;
 public:
     VillageGateChief(Panel *panel, const Entrance &new_entrance);
+};
+
+class TempleEntrance : public Scene {
+    std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
+    std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
+public:
+    TempleEntrance(Panel *panel);
 };
 
 #endif //SCENE_H

@@ -136,6 +136,12 @@ enum class Item {
     TripWire,
     Crate,
     Soldier,
+
+    MedalHole1,
+    MedalHole2,
+
+    MedalHoleFilled1,
+    MedalHoleFilled2,
 };
 
 enum class DamageType {

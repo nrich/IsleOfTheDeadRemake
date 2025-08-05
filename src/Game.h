@@ -44,6 +44,11 @@ enum class State {
     // 17.MAP
     VillageGate1,
 
+    // 18.MAP
+    RocketLauncher,
+    PlaneCockpit,
+    PlaneGalley,
+
     // 20.MAP
     VillageGate2,
 
@@ -58,6 +63,12 @@ enum class State {
     Chief,
     VillageEyes,
     Developers,
+
+    Lab1,               // labbkg
+
+    // 26.MAP
+    Lab2,               // room18
+    Mirror,             // room16
 };
 
 enum class Collision {

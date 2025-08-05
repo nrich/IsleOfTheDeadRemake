@@ -236,4 +236,34 @@ public:
     VillageEyesScene(Panel *panel, const Entrance &new_entrance);
 };
 
+class RocketLauncherScene : public Scene {
+public:
+    RocketLauncherScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class PlaneCockpitScene : public Scene {
+public:
+    PlaneCockpitScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class PlaneGalleyScene : public Scene {
+public:
+    PlaneGalleyScene(Panel *panel);
+};
+
+class LabZombieScene : public Scene {
+public:
+    LabZombieScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class LabCompanionScene : public Scene {
+public:
+    LabCompanionScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class MirrorScene : public Scene {
+public:
+    MirrorScene(Panel *panel, const Entrance &new_entrance);
+};
+
 #endif //SCENE_H

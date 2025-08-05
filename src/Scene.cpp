@@ -663,3 +663,27 @@ std::optional<Scene::Dialogue> VillageEyesScene::talk(Player *player) {
 
     return dialogue;
 }
+
+RocketLauncherScene::RocketLauncherScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room23.cel") {
+    entrance = new_entrance;
+}
+
+PlaneCockpitScene::PlaneCockpitScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room22.cel") {
+    entrance = new_entrance;
+}
+
+PlaneGalleyScene::PlaneGalleyScene(Panel *panel) : Scene(panel, "stillcel/room21.cel"){
+
+}
+
+LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/.cel") {
+    entrance = new_entrance;
+}
+
+LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room18.cel") {
+    entrance = new_entrance;
+}
+
+MirrorScene::MirrorScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room16.cel") {
+    entrance = new_entrance;
+}

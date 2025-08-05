@@ -676,7 +676,7 @@ PlaneGalleyScene::PlaneGalleyScene(Panel *panel) : Scene(panel, "stillcel/room21
 
 }
 
-LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/.cel") {
+LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/labbkg.cel") {
     entrance = new_entrance;
 }
 

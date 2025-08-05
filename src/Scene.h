@@ -44,7 +44,7 @@ protected:
 
     struct Animation {
         raylib::Vector2 position;
-        std::vector<raylib::TextureUnmanaged> frames;
+        std::vector<std::optional<raylib::TextureUnmanaged>> frames;
         bool loop;
         size_t frameRate;
 
@@ -60,11 +60,12 @@ protected:
                 next_frame = 0;
             }
 
-            frames[next_frame].Draw(position * scale, 0.0f, scale);
+            if (frames[next_frame])
+                frames[next_frame]->Draw(position * scale, 0.0f, scale);
             return false;
         }
 
-        Animation(const raylib::Vector2 &position, const std::vector<raylib::TextureUnmanaged> &frames, bool loop=true, size_t frame_rate=6) : position(position), frames(frames), loop(loop), frameRate(frame_rate), count(0) {}
+        Animation(const raylib::Vector2 &position, const std::vector<std::optional<raylib::TextureUnmanaged>> &frames, bool loop=true, size_t frame_rate=6) : position(position), frames(frames), loop(loop), frameRate(frame_rate), count(0) {}
         Animation(const Animation &other) : position(other.position), frames(other.frames), loop(other.loop), frameRate(other.frameRate), count(other.count) {}
         Animation() : loop(true), frameRate(6), count(0) {}
 private:
@@ -208,6 +209,31 @@ class OracleScene : public Scene {
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
 public:
     OracleScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class ToiletScene : public Scene {
+public:
+    ToiletScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class ShowerScene : public Scene {
+public:
+    ShowerScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class DevelopersScene : public Scene {
+    std::optional<Dialogue> talk(Player *player);
+public:
+    DevelopersScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class VillageEyesScene : public Scene {
+    std::optional<Dialogue> talk(Player *player);
+
+    std::vector<Dialogue> script;
+    size_t dialogueIndex = 0;
+public:
+    VillageEyesScene(Panel *panel, const Entrance &new_entrance);
 };
 
 #endif //SCENE_H

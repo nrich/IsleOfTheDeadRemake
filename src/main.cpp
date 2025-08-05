@@ -296,6 +296,11 @@ int main(int argc, char *argv[]) {
 
     VillageGateChiefScene village_gate_chief_scene(&panel, world.getEntrance(83));
     VillageGateShamanScene village_gate_shaman_scene(&panel, world.getEntrance(100));
+    VillageEyesScene village_eyes_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    ToiletScene toilet_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    ShowerScene shower_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    DevelopersScene developers_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+
     TempleEntranceScene temple_entrance_scene(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
     OracleScene oracle_scene(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
 
@@ -317,7 +322,7 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-    player.setState(State::Oracle);
+//    player.setState(State::Developers);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
@@ -469,6 +474,22 @@ int main(int argc, char *argv[]) {
             case State::VillageGate2:
                 music_player.stop();
                 village_gate_chief_scene.draw(&player, scale);
+                break;
+            case State::VillageEyes:
+                music_player.stop();
+                village_eyes_scene.draw(&player, scale);
+                break;
+            case State::Toilet:
+                music_player.stop();
+                toilet_scene.draw(&player, scale);
+                break;
+            case State::Shower:
+                music_player.stop();
+                shower_scene.draw(&player, scale);
+                break;
+            case State::Developers:
+                music_player.stop();
+                developers_scene.draw(&player, scale);
                 break;
 
             case State::TempleEntrance:

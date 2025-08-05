@@ -50,6 +50,14 @@ enum class State {
     // 22.MAP
     TempleEntrance,         // room17
     Oracle,                 // oraclebg
+
+    // 23.MAP
+    Toilet,
+    Shower,
+    Shaman,
+    Chief,
+    VillageEyes,
+    Developers,
 };
 
 enum class Collision {

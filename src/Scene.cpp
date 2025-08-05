@@ -473,14 +473,14 @@ std::tuple<bool, std::string, DeathType> TempleEntranceScene::useItemOnItem(Item
     }
 
     if (source == Item::GoldMedal2 && destination == Item::MedalHole2) {
-        static const std::vector<raylib::TextureUnmanaged> left_eye = {
+        static const std::vector<std::optional<raylib::TextureUnmanaged>> left_eye = {
              StillCel("stillcel/lefteye1.cel").getTexture(),
              StillCel("stillcel/lefteye2.cel").getTexture(),
              StillCel("stillcel/lefteye3.cel").getTexture(),
              StillCel("stillcel/lefteye4.cel").getTexture(),
         };
 
-        static const std::vector<raylib::TextureUnmanaged> right_eye = {
+        static const std::vector<std::optional<raylib::TextureUnmanaged>> right_eye = {
              StillCel("stillcel/rteye1.cel").getTexture(),
              StillCel("stillcel/rteye2.cel").getTexture(),
              StillCel("stillcel/rteye3.cel").getTexture(),
@@ -506,7 +506,7 @@ void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_
     //Scene::animationCompleted(player, animation_id);
 
     if (animation_id == 1) {
-        static const std::vector<raylib::TextureUnmanaged> doors = {
+        static const std::vector<std::optional<raylib::TextureUnmanaged>> doors = {
             StillCel("stillcel/tmpdoor1.cel").getTexture(),
             StillCel("stillcel/tmpdoor2.cel").getTexture(),
             StillCel("stillcel/tmpdoor3.cel").getTexture(),
@@ -570,7 +570,7 @@ OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
 std::tuple<bool, std::string, DeathType> OracleScene::useItemOnItem(Item source, Item destination) {
     if (source == Item::DeadWolf && destination == Item::Oracle) {
         sacrifice = true;
-        static const std::vector<raylib::TextureUnmanaged> oracle = {
+        static const std::vector<std::optional<raylib::TextureUnmanaged>> oracle = {
             StillCel("stillcel/flame1.cel").getTexture(),
             StillCel("stillcel/flame2.cel").getTexture(),
             StillCel("stillcel/flame3.cel").getTexture(),
@@ -599,4 +599,67 @@ std::optional<Scene::Dialogue> OracleScene::talk(Player *player) {
     }
 
     return Scene::talk(player);
+}
+
+ToiletScene::ToiletScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/toilet1.cel") {
+    entrance = new_entrance;
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes = {
+        std::nullopt,
+        StillCel("stillcel/closeye1.cel").getTexture(),
+        StillCel("stillcel/closeye2.cel").getTexture(),
+    };
+
+    animations[1] = Animation(raylib::Vector2(139, 18), eyes, true, 12);
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
+}
+
+ShowerScene::ShowerScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/shower1.cel") {
+    entrance = new_entrance;
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes = {
+        std::nullopt,
+        StillCel("stillcel/shower2.cel").getTexture(),
+        StillCel("stillcel/shower3.cel").getTexture(),
+    };
+
+    animations[1] = Animation(raylib::Vector2(82, 0), eyes, true, 12);
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
+}
+
+DevelopersScene::DevelopersScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/rainhut.cel") {
+    entrance = new_entrance;
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
+}
+
+std::optional<Scene::Dialogue> DevelopersScene::talk(Player *player) {
+    return Dialogue(Strings::Lookup(225), raylib::RAYWHITE);
+}
+
+VillageEyesScene::VillageEyesScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/hut3.cel") {
+    entrance = new_entrance;
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
+
+    script = {
+        Dialogue(Strings::Lookup(223), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(224), raylib::RAYWHITE),
+    };
+}
+
+std::optional<Scene::Dialogue> VillageEyesScene::talk(Player *player) {
+    auto dialogue = script[dialogueIndex++];
+
+    if (dialogueIndex >= script.size()) {
+        dialogueIndex = 0;
+    }
+
+    return dialogue;
 }

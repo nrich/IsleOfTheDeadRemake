@@ -78,13 +78,6 @@ void Scene::draw(Player *player, int scale) {
             }
         }
 
-//        for (auto &[animation_id, animation] : animations) {
-//            for (auto it = m.cbegin(), next_it = it; it != m.cend(); it = next_it)
-//
-//            if (animation.draw(scale))
-//                animationCompleted(player, animation_id);
-//        }
-
         if (player_input) {
             for (const auto navigation_input : navigation_inputs) {
                 if (player_input & navigation_input) {

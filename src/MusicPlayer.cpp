@@ -43,7 +43,8 @@ static void PlayCallback(void *buffer, uint32_t frames) {
     }
 }
 
-MusicPlayer::MusicPlayer() : audioStream(44100, 32, 2) {
+MusicPlayer::MusicPlayer() {
+    audioStream.Load(44100, 32, 2);
 }
 
 void MusicPlayer::play(const std::string &midi_filename) {

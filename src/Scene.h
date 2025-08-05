@@ -111,6 +111,12 @@ private:
     virtual void animationCompleted(Player *player, uint16_t animation_id);
 
     std::optional<Entrance> entrance = std::nullopt;
+
+    void removeItemLayout(Item item) {
+        layouts.erase(std::remove_if(std::begin(layouts), std::end(layouts), [item](const auto &layout) {
+            return layout.item == item;
+        }));
+    }
 public:
     virtual void draw(Player *player, int scale);
     virtual ~Scene();
@@ -237,6 +243,8 @@ public:
 };
 
 class RocketLauncherScene : public Scene {
+    std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
+    std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
 public:
     RocketLauncherScene(Panel *panel, const Entrance &new_entrance);
 };

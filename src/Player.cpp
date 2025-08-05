@@ -332,7 +332,7 @@ void Player::useItem(const Item item) {
             break;
         case Item::FirstAid:
             if (getItemCount(item) > 0) {
-                health += 100;
+                health += 60;
                 items[item] -= 1;
                 if (health > 100)
                     health = 100;

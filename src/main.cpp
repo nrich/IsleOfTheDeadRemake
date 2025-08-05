@@ -329,7 +329,7 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-//    player.setState(State::Developers);
+    player.setState(State::Lab1);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();

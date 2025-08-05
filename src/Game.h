@@ -164,6 +164,12 @@ enum class Item {
     MedalHoleFilled2,
 
     Oracle,
+
+    Panel,
+    OpenPanel,
+    WiresGreenRedBlue,
+    WiresRedBlue,
+    WiresBlue,
 };
 
 enum class DamageType {

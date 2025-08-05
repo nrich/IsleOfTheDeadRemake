@@ -146,8 +146,8 @@ void Inventory::draw(Player *player, int scale) {
                                 case Item::Rifle:
                                 case Item::Uzi:
                                 case Item::Shotgun:
-                                case Item::Machete:
                                 case Item::OiledRifle:
+                                //case Item::Machete:
                                     player->equipWeapon(selected);
                                     player->setState(State::World);
                                     player->setSelectedItem(std::nullopt);
@@ -157,6 +157,7 @@ void Inventory::draw(Player *player, int scale) {
                                 case Item::GoldMedal1:
                                 case Item::GoldMedal2:
                                 case Item::DeadWolf:
+                                case Item::Machete:
                                     player->setState(player->getInventoryReturnState());
                                     player->setHighlight(USE + layout.name + USE_ON);
                                     break;

@@ -474,8 +474,6 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     static const auto jungle_fence = load_cel3_texture("cels3/jfence.cel");
 
     static const auto runway = load_cel3_texture("cels3/runway.cel");
-    static const auto plane_fence_left = load_cel3_texture("cels3/fencepl1.cel");
-    static const auto plane_fence_right = load_cel3_texture("cels3/fencepl2.cel");
 
     // Damageable/animated walls
     static const auto fireplace_left = load_cel3_texture({
@@ -529,6 +527,9 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     });
 
     const auto camp_gate_open = load_cel3_texture("cels3/cmpgate3.cel");
+
+    static const auto plane_fence_left = load_cel3_texture("cels3/fencepl1.cel");
+    static const auto plane_fence_right = load_cel3_texture("cels3/fencepl2.cel");
 
     // Items
     static const auto jacket = load_cel3_texture("cels3/jacket.cel");
@@ -1323,10 +1324,10 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, hanger_light));
             break;
         case 166:
-            entities.emplace(segment.id, std::make_unique<Wall>(&segment, plane_fence_left));
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, plane_fence_left, State::PlaneCockpit));
             break;
         case 167:
-            entities.emplace(segment.id, std::make_unique<Wall>(&segment, plane_fence_right));
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, plane_fence_right, State::PlaneCockpit));
             break;
         case 168:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, runway));

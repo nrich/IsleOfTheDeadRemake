@@ -666,18 +666,103 @@ std::optional<Scene::Dialogue> VillageEyesScene::talk(Player *player) {
 
 RocketLauncherScene::RocketLauncherScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room23.cel") {
     entrance = new_entrance;
+
+    layouts.emplace_back(raylib::Vector2(29, 57), StillCel("stillcel/panel.cel").getTexture(), Item::Panel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
+}
+
+std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layout &layout) {
+    if (layout.item == Item::Panel) {
+        return std::make_tuple(false, Strings::Lookup(443), DeathType::None);
+    }
+
+    if (layout.item == Item::OpenPanel) {
+        //WiresGreenRedBlue,
+        //WiresRedBlue,
+        //WiresBlue,
+        layouts.emplace_back(raylib::Vector2(83, 57), StillCel("stillcel/wires1.cel").getTexture(), Item::WiresGreenRedBlue, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442)); 
+    }
+
+    if (layout.item == Item::WiresGreenRedBlue) {
+
+    }
+
+    return Scene::getItem(layout);
+}
+
+std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item source, Item destination) {
+    if (source == Item::Machete && destination == Item::Panel) {
+        layouts.emplace_back(raylib::Vector2(29, 57), StillCel("stillcel/panel.cel").getTexture(), Item::OpenPanel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
+
+        removeItemLayout(Item::Panel);
+
+        return std::make_tuple(true, Strings::Lookup(444), DeathType::None);
+    }
+
+    return Scene::useItemOnItem(source, destination);
 }
 
 PlaneCockpitScene::PlaneCockpitScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room22.cel") {
     entrance = new_entrance;
+
+    navigation[Input::StepLeft] = State::World;
+    navigation[Input::TurnLeft] = State::World;
+
+    navigation[Input::StepBack] = State::PlaneGalley;
+    navigation[Input::LookDown] = State::PlaneGalley;
 }
 
 PlaneGalleyScene::PlaneGalleyScene(Panel *panel) : Scene(panel, "stillcel/room21.cel"){
+    navigation[Input::StepForward] = State::PlaneCockpit;
+    navigation[Input::LookUp] = State::PlaneCockpit;
 
+    layouts.emplace_back(raylib::Vector2(247, 80), StillCel("stillcel/raft.cel").getTexture(), Item::Rifle, Strings::Lookup(432), Strings::Lookup(433), Strings::Lookup(434));
 }
 
 LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/labbkg.cel") {
     entrance = new_entrance;
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> monitor = {
+        StillCel("stillcel/labd1.cel").getTexture(),
+        StillCel("stillcel/labd2.cel").getTexture(),
+        StillCel("stillcel/labd3.cel").getTexture(),
+        StillCel("stillcel/labd4.cel").getTexture(),
+        StillCel("stillcel/labd5.cel").getTexture(),
+    };
+
+    animations[1] = Animation(raylib::Vector2(260, 6), monitor);
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> spark = {
+        StillCel("stillcel/labb1.cel").getTexture(),
+        StillCel("stillcel/labb2.cel").getTexture(),
+        StillCel("stillcel/labb3.cel").getTexture(),
+        StillCel("stillcel/labb4.cel").getTexture(),
+        StillCel("stillcel/labb5.cel").getTexture(),
+    };
+
+    animations[2] = Animation(raylib::Vector2(174, 0), spark);
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> test_tubes = {
+        StillCel("stillcel/laba1.cel").getTexture(),
+        StillCel("stillcel/laba2.cel").getTexture(),
+        StillCel("stillcel/laba3.cel").getTexture(),
+        StillCel("stillcel/laba4.cel").getTexture(),
+        StillCel("stillcel/laba5.cel").getTexture(),
+    };
+
+    animations[3] = Animation(raylib::Vector2(10, 33), test_tubes);
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> scanner = {
+        StillCel("stillcel/labc1.cel").getTexture(),
+        StillCel("stillcel/labc2.cel").getTexture(),
+        StillCel("stillcel/labc3.cel").getTexture(),
+        StillCel("stillcel/labc4.cel").getTexture(),
+        StillCel("stillcel/labc5.cel").getTexture(),
+    };
+
+    animations[4] = Animation(raylib::Vector2(259, 89), scanner);
+
+    layouts.emplace_back(raylib::Vector2(87, 46), StillCel("stillcel/beaker.cel").getTexture(), Item::Beaker, Strings::Lookup(403), Strings::Lookup(404), Strings::Lookup(405));
+    layouts.emplace_back(raylib::Vector2(163, 128), StillCel("stillcel/syringe.cel").getTexture(), Item::Syringe, Strings::Lookup(409), Strings::Lookup(410), Strings::Lookup(411));
 }
 
 LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room18.cel") {

@@ -58,13 +58,32 @@ void Scene::draw(Player *player, int scale) {
 
     BeginDrawing();
     {
+
+        uint64_t player_input = player->getInput();
+
         background.Draw(Vector2(0, 0), 0.0f, scale);
 
         for (const auto &layout : layouts) {
             layout.draw(scale);
         }
 
-        uint64_t player_input = player->getInput();
+        for (auto it = animations.begin(); it != animations.end();) {
+            auto &[animation_id, animation] = *it;
+
+            if (animation.draw(scale)) {
+                animationCompleted(player, animation_id);
+                animations.erase(it++);
+            } else {
+                ++it;
+            }
+        }
+
+//        for (auto &[animation_id, animation] : animations) {
+//            for (auto it = m.cbegin(), next_it = it; it != m.cend(); it = next_it)
+//
+//            if (animation.draw(scale))
+//                animationCompleted(player, animation_id);
+//        }
 
         if (player_input) {
             for (const auto navigation_input : navigation_inputs) {
@@ -185,6 +204,10 @@ void Scene::draw(Player *player, int scale) {
     EndDrawing(); 
 }
 
+void Scene::animationCompleted(Player *player, uint16_t animation_id) {
+    animations.erase(animation_id);
+}
+
 Scene::~Scene() {
 
 }
@@ -200,10 +223,6 @@ CrashedPlaneEntryScene::CrashedPlaneEntryScene(Panel *panel, const Entrance &new
     navigation[Input::TurnRight] = State::CrashedPlaneRight;
 }
 
-CrashedPlaneEntryScene::~CrashedPlaneEntryScene() {
-
-}
-
 CrashedPlaneLeftScene::CrashedPlaneLeftScene(Panel *panel) : Scene(panel, "stillcel/room1.cel") {
     layouts.emplace_back(raylib::Vector2(36, 127), StillCel("stillcel/phbook.cel").getTexture(), Item::Machete, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
 
@@ -211,10 +230,6 @@ CrashedPlaneLeftScene::CrashedPlaneLeftScene(Panel *panel) : Scene(panel, "still
     navigation[Input::LookUp] = State::CrashedPlaneCockpit;
     navigation[Input::TurnLeft] = State::CrashedPlaneExit;
     navigation[Input::TurnRight] = State::CrashedPlaneEntry;
-}
-
-CrashedPlaneLeftScene::~CrashedPlaneLeftScene() {
-
 }
 
 CrashedPlaneCockpitScene::CrashedPlaneCockpitScene(Panel *panel) : Scene(panel, "stillcel/room2.cel") {
@@ -250,10 +265,6 @@ std::tuple<bool, std::string, DeathType> CrashedPlaneCockpitScene::getItem(const
     return Scene::getItem(layout);
 }
 
-CrashedPlaneCockpitScene::~CrashedPlaneCockpitScene() {
-
-}
-
 CrashedPlaneRightScene::CrashedPlaneRightScene(Panel *panel) : Scene(panel, "stillcel/room4.cel") {
     layouts.emplace_back(raylib::Vector2(25, 62), StillCel("stillcel/machetis.cel").getTexture(), Item::Machete, Strings::Lookup(308), Strings::Lookup(309), Strings::Lookup(310));
 
@@ -263,10 +274,6 @@ CrashedPlaneRightScene::CrashedPlaneRightScene(Panel *panel) : Scene(panel, "sti
     navigation[Input::TurnRight] = State::CrashedPlaneExit;
 }
 
-CrashedPlaneRightScene::~CrashedPlaneRightScene() {
-
-}
-
 CrashedPlaneExitScene::CrashedPlaneExitScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room5.cel") {
     entrance = new_entrance;
 
@@ -274,10 +281,6 @@ CrashedPlaneExitScene::CrashedPlaneExitScene(Panel *panel, const Entrance &new_e
     navigation[Input::LookUp] = State::World;
     navigation[Input::TurnLeft] = State::CrashedPlaneRight;
     navigation[Input::TurnRight] = State::CrashedPlaneLeft;
-}
-
-CrashedPlaneExitScene::~CrashedPlaneExitScene() {
-
 }
 
 BunkerEntryScene::BunkerEntryScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/bunkerbg.cel") {
@@ -314,10 +317,6 @@ std::tuple<bool, std::string, DeathType> BunkerEntryScene::useItemOnItem(Item so
     return std::make_tuple(false, DIDNT_WORK, DeathType::None);
 }
 
-BunkerEntryScene::~BunkerEntryScene() {
-
-}
-
 BunkerExitScene::BunkerExitScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/bunkin.cel") {
     entrance = new_entrance;
 
@@ -325,10 +324,6 @@ BunkerExitScene::BunkerExitScene(Panel *panel, const Entrance &new_entrance) : S
     navigation[Input::LookUp] = State::World;
     navigation[Input::TurnLeft] = State::BunkerRight;
     navigation[Input::TurnRight] = State::BunkerLeft;
-}
-
-BunkerExitScene::~BunkerExitScene() {
-
 }
 
 BunkerLeftScene::BunkerLeftScene(Panel *panel) : Scene(panel, "stillcel/bunkleft.cel") {
@@ -346,10 +341,6 @@ std::tuple<bool, std::string, DeathType> BunkerLeftScene::useItemOnItem(Item sou
     const static std::string WONT_HELP = Strings::Lookup(395);
 
     return std::make_tuple(false, WONT_HELP, DeathType::None);
-}
-
-BunkerLeftScene::~BunkerLeftScene() {
-
 }
 
 BunkerRightScene::BunkerRightScene(Panel *panel) : Scene(panel, "stillcel/bunkrt.cel") {
@@ -370,11 +361,7 @@ std::tuple<bool, std::string, DeathType> BunkerRightScene::useItemOnItem(Item so
     return std::make_tuple(false, DIDNT_WORK, DeathType::None);
 }
 
-BunkerRightScene::~BunkerRightScene() {
-
-}
-
-VillageGateShaman::VillageGateShaman(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsabg.cel") {
+VillageGateShamanScene::VillageGateShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsabg.cel") {
     static raylib::Sound guard_talk(Voc::Load("sound/umaguma.voc"));
 
     entrance = new_entrance;
@@ -400,7 +387,7 @@ VillageGateShaman::VillageGateShaman(Panel *panel, const Entrance &new_entrance)
     };
 }
 
-std::optional<Scene::Dialogue> VillageGateShaman::talk(Player *player) {
+std::optional<Scene::Dialogue> VillageGateShamanScene::talk(Player *player) {
     const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsa2.cel").getTexture();
 
     if (pass)
@@ -421,7 +408,7 @@ std::optional<Scene::Dialogue> VillageGateShaman::talk(Player *player) {
     return Scene::talk(player);
 }
 
-VillageGateChief::VillageGateChief(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsbbg.cel") {
+VillageGateChiefScene::VillageGateChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsbbg.cel") {
     static raylib::Sound guard_talk(Voc::Load("sound/umaguma.voc"));
 
     entrance = new_entrance;
@@ -445,8 +432,8 @@ VillageGateChief::VillageGateChief(Panel *panel, const Entrance &new_entrance) :
     };
 }
 
-std::optional<Scene::Dialogue> VillageGateChief::talk(Player *player) {
-    const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsb2.cel").getTexture();
+std::optional<Scene::Dialogue> VillageGateChiefScene::talk(Player *player) {
+    static const raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsb2.cel").getTexture();
 
     if (pass)
         return Scene::talk(player);
@@ -468,12 +455,17 @@ std::optional<Scene::Dialogue> VillageGateChief::talk(Player *player) {
     return Scene::talk(player);
 }
 
-TempleEntrance::TempleEntrance(Panel *panel) : Scene(panel, "stillcel/room17.cel") {
+TempleEntranceScene::TempleEntranceScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room17.cel") {
+    entrance = new_entrance;
+
     layouts.emplace_back(raylib::Vector2(144, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHole1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336), true);
     layouts.emplace_back(raylib::Vector2(168, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHole2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336), true);
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
 }
 
-std::tuple<bool, std::string, DeathType> TempleEntrance::getItem(const Layout &layout) {
+std::tuple<bool, std::string, DeathType> TempleEntranceScene::getItem(const Layout &layout) {
     if (layout.item == Item::MedalHole1 || layout.item == Item::MedalHole2 || layout.item == Item::MedalHoleFilled1 || layout.item == Item::MedalHoleFilled2) {
         return std::make_tuple(false, "", DeathType::None);
     }
@@ -481,18 +473,137 @@ std::tuple<bool, std::string, DeathType> TempleEntrance::getItem(const Layout &l
     return Scene::getItem(layout);
 }
 
-std::tuple<bool, std::string, DeathType> TempleEntrance::useItemOnItem(Item source, Item destination) {
+std::tuple<bool, std::string, DeathType> TempleEntranceScene::useItemOnItem(Item source, Item destination) {
     if (source == Item::GoldMedal1 && destination == Item::MedalHole1) {
         layouts.emplace_back(raylib::Vector2(144, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHoleFilled1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
         return make_tuple(true, Strings::Lookup(425), DeathType::None);
     }
 
     if (source == Item::GoldMedal2 && destination == Item::MedalHole2) {
+        static const std::vector<raylib::TextureUnmanaged> left_eye = {
+             StillCel("stillcel/lefteye1.cel").getTexture(),
+             StillCel("stillcel/lefteye2.cel").getTexture(),
+             StillCel("stillcel/lefteye3.cel").getTexture(),
+             StillCel("stillcel/lefteye4.cel").getTexture(),
+        };
+
+        static const std::vector<raylib::TextureUnmanaged> right_eye = {
+             StillCel("stillcel/rteye1.cel").getTexture(),
+             StillCel("stillcel/rteye2.cel").getTexture(),
+             StillCel("stillcel/rteye3.cel").getTexture(),
+             StillCel("stillcel/rteye4.cel").getTexture(),
+        };
+
         layouts.emplace_back(raylib::Vector2(168, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHoleFilled2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+
+        animations[1] = Animation(raylib::Vector2(102.0f, 31.0f), left_eye, false);
+        animations[2] = Animation(raylib::Vector2(181.0f, 32.0f), right_eye, false);
+
         return make_tuple(true, Strings::Lookup(425), DeathType::None);
     }
 
     return Scene::useItemOnItem(source, destination);
 }
 
+void TempleEntranceScene::draw(Player *player, int scale) {
+    Scene::draw(player, scale);
+}
 
+void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_id) {
+    //Scene::animationCompleted(player, animation_id);
+
+    if (animation_id == 1) {
+        static const std::vector<raylib::TextureUnmanaged> doors = {
+            StillCel("stillcel/tmpdoor1.cel").getTexture(),
+            StillCel("stillcel/tmpdoor2.cel").getTexture(),
+            StillCel("stillcel/tmpdoor3.cel").getTexture(),
+            StillCel("stillcel/tmpdoor4.cel").getTexture(),
+            StillCel("stillcel/tmpdoor5.cel").getTexture(),
+            StillCel("stillcel/tmpdoor6.cel").getTexture(),
+            StillCel("stillcel/tmpdoor7.cel").getTexture(),
+            StillCel("stillcel/tmpdoor8.cel").getTexture(),
+        };
+
+        animations[3] = Animation(raylib::Vector2(101.0f, 86.0f), doors, false);
+    } else if (animation_id == 3) {
+        opened = true;
+
+        navigation[Input::StepForward] = State::Oracle;
+        navigation[Input::LookUp] = State::Oracle;
+
+        animations[4] = Animation(raylib::Vector2(101.0f, 86.0f), {StillCel("stillcel/tmpdoor8.cel").getTexture()});
+    }
+}
+
+OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/oraclebg.cel") {
+    static raylib::Sound oracle_chat1 = raylib::Sound(Voc::Load("sound/or1.voc"));
+    static raylib::Sound oracle_chat2 = raylib::Sound(Voc::Load("sound/or2.voc"));
+    static raylib::Sound oracle_chat3 = raylib::Sound(Voc::Load("sound/or3.voc"));
+    static raylib::Sound oracle_chat4 = raylib::Sound(Voc::Load("sound/or4.voc"));
+    static raylib::Sound oracle_chat5 = raylib::Sound(Voc::Load("sound/or5.voc"));
+    static raylib::Sound oracle_chat7 = raylib::Sound(Voc::Load("sound/or7.voc"));
+    static raylib::Sound oracle_chat8 = raylib::Sound(Voc::Load("sound/or8.voc"));
+    static raylib::Sound oracle_chat9 = raylib::Sound(Voc::Load("sound/or9.voc"));
+    static raylib::Sound oracle_chat10 = raylib::Sound(Voc::Load("sound/or10.voc"));
+    static raylib::Sound oracle_chat11 = raylib::Sound(Voc::Load("sound/or11.voc"));
+
+    layouts.emplace_back(raylib::Vector2(122, 10), StillCel("stillcel/flame1.cel").getTexture(), Item::Oracle, Strings::Lookup(417), Strings::Lookup(418), Strings::Lookup(336), true);
+
+    script = {
+        Dialogue(Strings::Lookup(89)),
+        Dialogue(Strings::Lookup(90), raylib::RAYWHITE, &oracle_chat1),
+        Dialogue(Strings::Lookup(92)),
+        Dialogue(Strings::Lookup(93), raylib::RAYWHITE, &oracle_chat2),
+        Dialogue(Strings::Lookup(95), raylib::RAYWHITE),
+        Dialogue(Strings::Lookup(96)),
+        Dialogue(Strings::Lookup(97), raylib::RAYWHITE, &oracle_chat3),
+        Dialogue(Strings::Lookup(99)),
+        Dialogue(Strings::Lookup(100), raylib::RAYWHITE, &oracle_chat4),
+        Dialogue(Strings::Lookup(102)),
+        Dialogue(Strings::Lookup(103), raylib::RAYWHITE, &oracle_chat5),
+        Dialogue(Strings::Lookup(106)),
+        Dialogue(Strings::Lookup(107), raylib::RAYWHITE, &oracle_chat7),
+        Dialogue(Strings::Lookup(109)),
+        Dialogue(Strings::Lookup(110), raylib::RAYWHITE, &oracle_chat8),
+        Dialogue(Strings::Lookup(112)),
+        Dialogue(Strings::Lookup(113), raylib::RAYWHITE, &oracle_chat9),
+        Dialogue(Strings::Lookup(115)),
+    };
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
+}
+
+std::tuple<bool, std::string, DeathType> OracleScene::useItemOnItem(Item source, Item destination) {
+    if (source == Item::DeadWolf && destination == Item::Oracle) {
+        sacrifice = true;
+        static const std::vector<raylib::TextureUnmanaged> oracle = {
+            StillCel("stillcel/flame1.cel").getTexture(),
+            StillCel("stillcel/flame2.cel").getTexture(),
+            StillCel("stillcel/flame3.cel").getTexture(),
+            StillCel("stillcel/flame4.cel").getTexture(),
+            StillCel("stillcel/flame5.cel").getTexture(),
+            StillCel("stillcel/flame6.cel").getTexture(),
+            StillCel("stillcel/flame7.cel").getTexture(),
+            StillCel("stillcel/flame8.cel").getTexture(),
+            StillCel("stillcel/flame9.cel").getTexture(),
+            StillCel("stillcel/flame10.cel").getTexture(),
+        };
+
+        animations[1] = Animation(raylib::Vector2(122, 10), oracle);
+
+        return std::make_tuple(false, Strings::Lookup(419), DeathType::None);
+    }
+
+    return Scene::useItemOnItem(source, destination);
+}
+
+std::optional<Scene::Dialogue> OracleScene::talk(Player *player) {
+    if (sacrifice) {
+        if (dialogueIndex < script.size()) {
+            return script[dialogueIndex++];
+        }
+    }
+
+    return Scene::talk(player);
+}

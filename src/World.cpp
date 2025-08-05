@@ -1209,6 +1209,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, temple_face_left));
             break;
         case 95:
+            std::cerr << "THE TEMPLE " << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 << "\n";
             entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, temple_face_mid, State::TempleEntrance));
             break;
         case 96:

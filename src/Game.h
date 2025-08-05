@@ -49,6 +49,7 @@ enum class State {
 
     // 22.MAP
     TempleEntrance,         // room17
+    Oracle,                 // oraclebg
 };
 
 enum class Collision {
@@ -142,6 +143,8 @@ enum class Item {
 
     MedalHoleFilled1,
     MedalHoleFilled2,
+
+    Oracle,
 };
 
 enum class DamageType {

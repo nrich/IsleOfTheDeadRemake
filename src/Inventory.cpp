@@ -156,6 +156,7 @@ void Inventory::draw(Player *player, int scale) {
                                 case Item::WireClipper:
                                 case Item::GoldMedal1:
                                 case Item::GoldMedal2:
+                                case Item::DeadWolf:
                                     player->setState(player->getInventoryReturnState());
                                     player->setHighlight(USE + layout.name + USE_ON);
                                     break;

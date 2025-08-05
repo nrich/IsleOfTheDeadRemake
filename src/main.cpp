@@ -294,9 +294,10 @@ int main(int argc, char *argv[]) {
     BunkerLeftScene bunker_left_scene(&panel);
     BunkerRightScene bunker_right_scene(&panel);
 
-    VillageGateChief village_gate_chief(&panel, world.getEntrance(83));
-    VillageGateShaman village_gate_shaman(&panel, world.getEntrance(100));
-    TempleEntrance temple_entrance(&panel);
+    VillageGateChiefScene village_gate_chief_scene(&panel, world.getEntrance(83));
+    VillageGateShamanScene village_gate_shaman_scene(&panel, world.getEntrance(100));
+    TempleEntranceScene temple_entrance_scene(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    OracleScene oracle_scene(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
 
     Player player(&world);
 
@@ -311,11 +312,12 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::Machete);
         player.addItem(Item::GoldMedal1);
         player.addItem(Item::GoldMedal2);
+        player.addItem(Item::DeadWolf);
     } else {
         player.setState(State::Title);
     }
 
-    player.setState(State::TempleEntrance);
+    player.setState(State::Oracle);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
@@ -424,28 +426,36 @@ int main(int argc, char *argv[]) {
                 break;
 
             case State::CrashedPlaneEntry:
+                music_player.stop();
                 crashed_plane_entry_scene.draw(&player, scale);
                 break;
             case State::CrashedPlaneLeft:
+                music_player.stop();
                 crashed_plane_left_scene.draw(&player, scale);
                 break;
             case State::CrashedPlaneCockpit:
+                music_player.stop();
                 crashed_plane_cockpit_scene.draw(&player, scale);
                 break;
             case State::CrashedPlaneRight:
+                music_player.stop();
                 crashed_plane_right_scene.draw(&player, scale);
                 break;
             case State::CrashedPlaneExit:
+                music_player.stop();
                 crashed_plane_exit_scene.draw(&player, scale);
                 break;
 
             case State::BunkerEntry:
+                music_player.stop();
                 bunker_entry_scene.draw(&player, scale);
                 break;
             case State::BunkerExit:
+                music_player.stop();
                 bunker_exit_scene.draw(&player, scale);
                 break;
             case State::BunkerLeft:
+                music_player.stop();
                 bunker_left_scene.draw(&player, scale);
                 break;
             case State::BunkerRight:
@@ -453,14 +463,21 @@ int main(int argc, char *argv[]) {
                 break;
 
             case State::VillageGate1:
-                village_gate_shaman.draw(&player, scale);
+                music_player.stop();
+                village_gate_shaman_scene.draw(&player, scale);
                 break;
             case State::VillageGate2:
-                village_gate_chief.draw(&player, scale);
+                music_player.stop();
+                village_gate_chief_scene.draw(&player, scale);
                 break;
 
             case State::TempleEntrance:
-                temple_entrance.draw(&player, scale);
+                music_player.stop();
+                temple_entrance_scene.draw(&player, scale);
+                break;
+            case State::Oracle:
+                music_player.stop();
+                oracle_scene.draw(&player, scale);
                 break;
 
             case State::Title:

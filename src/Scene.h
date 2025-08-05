@@ -42,6 +42,37 @@ protected:
         raylib::Sound *sound = nullptr;
     };
 
+    struct Animation {
+        raylib::Vector2 position;
+        std::vector<raylib::TextureUnmanaged> frames;
+        bool loop;
+        size_t frameRate;
+
+        bool draw(int scale) {
+            size_t next_frame = count / frameRate; 
+            count++;
+
+            if (next_frame >= frames.size()) {
+                if (!loop)
+                    return true;
+
+                count = 0;
+                next_frame = 0;
+            }
+
+            frames[next_frame].Draw(position * scale, 0.0f, scale);
+            return false;
+        }
+
+        Animation(const raylib::Vector2 &position, const std::vector<raylib::TextureUnmanaged> &frames, bool loop=true, size_t frame_rate=6) : position(position), frames(frames), loop(loop), frameRate(frame_rate), count(0) {}
+        Animation(const Animation &other) : position(other.position), frames(other.frames), loop(other.loop), frameRate(other.frameRate), count(other.count) {}
+        Animation() : loop(true), frameRate(6), count(0) {}
+private:
+        size_t count;
+    };
+
+    std::unordered_map<uint16_t, Animation> animations;
+
     struct Layout {
         raylib::Vector2 position;
         raylib::TextureUnmanaged image;
@@ -76,6 +107,8 @@ protected:
     virtual std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
     virtual std::optional<Dialogue> talk(Player *player);
 
+    virtual void animationCompleted(Player *player, uint16_t animation_id);
+
     std::optional<Entrance> entrance = std::nullopt;
 public:
     virtual void draw(Player *player, int scale);
@@ -85,13 +118,11 @@ public:
 class CrashedPlaneEntryScene : public Scene {
 public:
     CrashedPlaneEntryScene(Panel *panel, const Entrance &new_entrance);
-    ~CrashedPlaneEntryScene();
 };
 
 class CrashedPlaneLeftScene : public Scene {
 public:
     CrashedPlaneLeftScene(Panel *panel);
-    ~CrashedPlaneLeftScene();
 };
 
 class CrashedPlaneCockpitScene : public Scene {
@@ -100,19 +131,16 @@ protected:
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
 public:
     CrashedPlaneCockpitScene(Panel *panel);
-    ~CrashedPlaneCockpitScene();
 };
 
 class CrashedPlaneRightScene : public Scene {
 public:
     CrashedPlaneRightScene(Panel *panel);
-    ~CrashedPlaneRightScene();
 };
 
 class CrashedPlaneExitScene : public Scene {
 public:
     CrashedPlaneExitScene(Panel *panel, const Entrance &new_entrance);
-    ~CrashedPlaneExitScene();
 };
 
 class BunkerEntryScene : public Scene {
@@ -121,13 +149,11 @@ class BunkerEntryScene : public Scene {
     bool trapped = true;
 public:
     BunkerEntryScene(Panel *panel, const Entrance &new_entrance);
-    ~BunkerEntryScene();
 };
 
 class BunkerExitScene : public Scene {
 public:
     BunkerExitScene(Panel *panel, const Entrance &new_entrance);
-    ~BunkerExitScene();
 };
 
 class BunkerLeftScene : public Scene {
@@ -135,7 +161,6 @@ class BunkerLeftScene : public Scene {
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
 public:
     BunkerLeftScene(Panel *panel);
-    ~BunkerLeftScene();
 };
 
 class BunkerRightScene : public Scene {
@@ -143,32 +168,46 @@ class BunkerRightScene : public Scene {
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
 public:
     BunkerRightScene(Panel *panel);
-    ~BunkerRightScene();
 };
 
-class VillageGateShaman : public Scene {
+class VillageGateShamanScene : public Scene {
     std::vector<Dialogue> script;
     std::optional<Dialogue> talk(Player *player);
     size_t dialogueIndex = 0;
     bool pass = false;
 public:
-    VillageGateShaman(Panel *panel, const Entrance &new_entrance);
+    VillageGateShamanScene(Panel *panel, const Entrance &new_entrance);
 };
 
-class VillageGateChief : public Scene {
+class VillageGateChiefScene : public Scene {
     std::vector<Dialogue> script;
     std::optional<Dialogue> talk(Player *player);
     size_t dialogueIndex = 0;
     bool pass = false;
 public:
-    VillageGateChief(Panel *panel, const Entrance &new_entrance);
+    VillageGateChiefScene(Panel *panel, const Entrance &new_entrance);
 };
 
-class TempleEntrance : public Scene {
+class TempleEntranceScene : public Scene {
     std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
+
+    void animationCompleted(Player *player, uint16_t animation_id);
+    bool opened = false;
 public:
-    TempleEntrance(Panel *panel);
+    TempleEntranceScene(Panel *panel, const Entrance &new_entrance);
+    void draw(Player *player, int scale);
+};
+
+class OracleScene : public Scene {
+    std::vector<Dialogue> script;
+    size_t dialogueIndex = 0;
+    bool sacrifice = false;
+
+    std::optional<Dialogue> talk(Player *player);
+    std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
+public:
+    OracleScene(Panel *panel, const Entrance &new_entrance);
 };
 
 #endif //SCENE_H

@@ -283,26 +283,33 @@ int main(int argc, char *argv[]) {
 
     Inventory inventory(&panel);
 
-    CrashedPlaneEntryScene crashed_plane_entry_scene(&panel, world.getEntrance(5));
-    CrashedPlaneLeftScene crashed_plane_left_scene(&panel);
-    CrashedPlaneCockpitScene crashed_plane_cockpit_scene(&panel);
-    CrashedPlaneRightScene crashed_plane_right_scene(&panel);
-    CrashedPlaneExitScene crashed_plane_exit_scene(&panel, world.getEntrance(5));
+    std::unique_ptr<CrashedPlaneEntryScene> crashed_plane_entry_scene = std::make_unique<CrashedPlaneEntryScene>(&panel, world.getEntrance(5));
+    std::unique_ptr<CrashedPlaneLeftScene> crashed_plane_left_scene = std::make_unique<CrashedPlaneLeftScene>(&panel);
+    std::unique_ptr<CrashedPlaneCockpitScene> crashed_plane_cockpit_scene = std::make_unique<CrashedPlaneCockpitScene>(&panel);
+    std::unique_ptr<CrashedPlaneRightScene> crashed_plane_right_scene = std::make_unique<CrashedPlaneRightScene>(&panel);
+    std::unique_ptr<CrashedPlaneExitScene> crashed_plane_exit_scene = std::make_unique<CrashedPlaneExitScene>(&panel, world.getEntrance(5));
 
-    BunkerEntryScene bunker_entry_scene(&panel, world.getEntrance(11));
-    BunkerExitScene bunker_exit_scene(&panel, world.getEntrance(11));
-    BunkerLeftScene bunker_left_scene(&panel);
-    BunkerRightScene bunker_right_scene(&panel);
+    std::unique_ptr<BunkerEntryScene> bunker_entry_scene = std::make_unique<BunkerEntryScene>(&panel, world.getEntrance(11));
+    std::unique_ptr<BunkerExitScene> bunker_exit_scene = std::make_unique<BunkerExitScene>(&panel, world.getEntrance(11));
+    std::unique_ptr<BunkerLeftScene> bunker_left_scene = std::make_unique<BunkerLeftScene>(&panel);
+    std::unique_ptr<BunkerRightScene> bunker_right_scene = std::make_unique<BunkerRightScene>(&panel);
 
-    VillageGateChiefScene village_gate_chief_scene(&panel, world.getEntrance(83));
-    VillageGateShamanScene village_gate_shaman_scene(&panel, world.getEntrance(100));
-    VillageEyesScene village_eyes_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    ToiletScene toilet_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    ShowerScene shower_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    DevelopersScene developers_scene(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    std::unique_ptr<VillageGateChiefScene> village_gate_chief_scene = std::make_unique<VillageGateChiefScene>(&panel, world.getEntrance(83));
+    std::unique_ptr<VillageGateShamanScene> village_gate_shaman_scene = std::make_unique<VillageGateShamanScene>(&panel, world.getEntrance(100));
+    std::unique_ptr<VillageEyesScene> village_eyes_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    std::unique_ptr<ToiletScene> toilet_scene = std::make_unique<ToiletScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    std::unique_ptr<ShowerScene> shower_scene = std::make_unique<ShowerScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    std::unique_ptr<DevelopersScene> developers_scene = std::make_unique<DevelopersScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
 
-    TempleEntranceScene temple_entrance_scene(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    OracleScene oracle_scene(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    std::unique_ptr<TempleEntranceScene> temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    std::unique_ptr<OracleScene> oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+
+    std::unique_ptr<RocketLauncherScene> rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    std::unique_ptr<PlaneCockpitScene> plane_cockpit_scene = std::make_unique<PlaneCockpitScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    std::unique_ptr<PlaneGalleyScene> plane_galley_scene = std::make_unique<PlaneGalleyScene>(&panel);
+    std::unique_ptr<LabZombieScene> lab_zombie_scene = std::make_unique<LabZombieScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    std::unique_ptr<LabCompanionScene> lab_companion_scene = std::make_unique<LabCompanionScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    std::unique_ptr<MirrorScene> mirror_scene = std::make_unique<MirrorScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
 
     Player player(&world);
 
@@ -432,73 +439,99 @@ int main(int argc, char *argv[]) {
 
             case State::CrashedPlaneEntry:
                 music_player.stop();
-                crashed_plane_entry_scene.draw(&player, scale);
+                crashed_plane_entry_scene->draw(&player, scale);
                 break;
             case State::CrashedPlaneLeft:
                 music_player.stop();
-                crashed_plane_left_scene.draw(&player, scale);
+                crashed_plane_left_scene->draw(&player, scale);
                 break;
             case State::CrashedPlaneCockpit:
                 music_player.stop();
-                crashed_plane_cockpit_scene.draw(&player, scale);
+                crashed_plane_cockpit_scene->draw(&player, scale);
                 break;
             case State::CrashedPlaneRight:
                 music_player.stop();
-                crashed_plane_right_scene.draw(&player, scale);
+                crashed_plane_right_scene->draw(&player, scale);
                 break;
             case State::CrashedPlaneExit:
                 music_player.stop();
-                crashed_plane_exit_scene.draw(&player, scale);
+                crashed_plane_exit_scene->draw(&player, scale);
                 break;
 
             case State::BunkerEntry:
                 music_player.stop();
-                bunker_entry_scene.draw(&player, scale);
+                bunker_entry_scene->draw(&player, scale);
                 break;
             case State::BunkerExit:
                 music_player.stop();
-                bunker_exit_scene.draw(&player, scale);
+                bunker_exit_scene->draw(&player, scale);
                 break;
             case State::BunkerLeft:
                 music_player.stop();
-                bunker_left_scene.draw(&player, scale);
+                bunker_left_scene->draw(&player, scale);
                 break;
             case State::BunkerRight:
-                bunker_right_scene.draw(&player, scale);
+                bunker_right_scene->draw(&player, scale);
                 break;
 
             case State::VillageGate1:
                 music_player.stop();
-                village_gate_shaman_scene.draw(&player, scale);
+                village_gate_shaman_scene->draw(&player, scale);
                 break;
             case State::VillageGate2:
                 music_player.stop();
-                village_gate_chief_scene.draw(&player, scale);
+                village_gate_chief_scene->draw(&player, scale);
                 break;
             case State::VillageEyes:
                 music_player.stop();
-                village_eyes_scene.draw(&player, scale);
+                village_eyes_scene->draw(&player, scale);
                 break;
             case State::Toilet:
                 music_player.stop();
-                toilet_scene.draw(&player, scale);
+                toilet_scene->draw(&player, scale);
                 break;
             case State::Shower:
                 music_player.stop();
-                shower_scene.draw(&player, scale);
+                shower_scene->draw(&player, scale);
                 break;
             case State::Developers:
                 music_player.stop();
-                developers_scene.draw(&player, scale);
+                developers_scene->draw(&player, scale);
                 break;
 
             case State::TempleEntrance:
                 music_player.stop();
-                temple_entrance_scene.draw(&player, scale);
+                temple_entrance_scene->draw(&player, scale);
                 break;
             case State::Oracle:
                 music_player.stop();
-                oracle_scene.draw(&player, scale);
+                oracle_scene->draw(&player, scale);
+                break;
+
+            case State::RocketLauncher:
+                music_player.stop();
+                rocket_launcher_scene->draw(&player, scale);
+                break;
+            case State::PlaneCockpit:
+                music_player.stop();
+                plane_cockpit_scene->draw(&player, scale);
+                break;
+            case State::PlaneGalley:
+                music_player.stop();
+                plane_galley_scene->draw(&player, scale);
+                break;
+
+            case State::Lab1:
+                music_player.stop();
+                lab_zombie_scene->draw(&player, scale);
+                break;
+            case State::Lab2:
+                music_player.stop();
+                lab_companion_scene->draw(&player, scale);
+                break;
+            case State::Mirror:
+                music_player.stop();
+                mirror_scene->draw(&player, scale);
                 break;
 
             case State::Title:

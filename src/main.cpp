@@ -329,33 +329,33 @@ int main(int argc, char *argv[]) {
 
     Inventory inventory(&panel);
 
-    std::unique_ptr<CrashedPlaneEntryScene> crashed_plane_entry_scene = std::make_unique<CrashedPlaneEntryScene>(&panel, world.getEntrance(5));
-    std::unique_ptr<CrashedPlaneLeftScene> crashed_plane_left_scene = std::make_unique<CrashedPlaneLeftScene>(&panel);
-    std::unique_ptr<CrashedPlaneCockpitScene> crashed_plane_cockpit_scene = std::make_unique<CrashedPlaneCockpitScene>(&panel);
-    std::unique_ptr<CrashedPlaneRightScene> crashed_plane_right_scene = std::make_unique<CrashedPlaneRightScene>(&panel);
-    std::unique_ptr<CrashedPlaneExitScene> crashed_plane_exit_scene = std::make_unique<CrashedPlaneExitScene>(&panel, world.getEntrance(5));
+    auto crashed_plane_entry_scene = std::make_unique<CrashedPlaneEntryScene>(&panel, world.getEntrance(5));
+    auto crashed_plane_left_scene = std::make_unique<CrashedPlaneLeftScene>(&panel);
+    auto crashed_plane_cockpit_scene = std::make_unique<CrashedPlaneCockpitScene>(&panel);
+    auto crashed_plane_right_scene = std::make_unique<CrashedPlaneRightScene>(&panel);
+    auto crashed_plane_exit_scene = std::make_unique<CrashedPlaneExitScene>(&panel, world.getEntrance(5));
 
-    std::unique_ptr<BunkerEntryScene> bunker_entry_scene = std::make_unique<BunkerEntryScene>(&panel, world.getEntrance(11));
-    std::unique_ptr<BunkerExitScene> bunker_exit_scene = std::make_unique<BunkerExitScene>(&panel, world.getEntrance(11));
-    std::unique_ptr<BunkerLeftScene> bunker_left_scene = std::make_unique<BunkerLeftScene>(&panel);
-    std::unique_ptr<BunkerRightScene> bunker_right_scene = std::make_unique<BunkerRightScene>(&panel);
+    auto bunker_entry_scene = std::make_unique<BunkerEntryScene>(&panel, world.getEntrance(11));
+    auto bunker_exit_scene = std::make_unique<BunkerExitScene>(&panel, world.getEntrance(11));
+    auto bunker_left_scene = std::make_unique<BunkerLeftScene>(&panel);
+    auto bunker_right_scene = std::make_unique<BunkerRightScene>(&panel);
 
-    std::unique_ptr<VillageGateChiefScene> village_gate_chief_scene = std::make_unique<VillageGateChiefScene>(&panel, world.getEntrance(83));
-    std::unique_ptr<VillageGateShamanScene> village_gate_shaman_scene = std::make_unique<VillageGateShamanScene>(&panel, world.getEntrance(100));
-    std::unique_ptr<VillageEyesScene> village_eyes_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    std::unique_ptr<ToiletScene> toilet_scene = std::make_unique<ToiletScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    std::unique_ptr<ShowerScene> shower_scene = std::make_unique<ShowerScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    std::unique_ptr<DevelopersScene> developers_scene = std::make_unique<DevelopersScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    auto village_gate_chief_scene = std::make_unique<VillageGateChiefScene>(&panel, world.getEntrance(83));
+    auto village_gate_shaman_scene = std::make_unique<VillageGateShamanScene>(&panel, world.getEntrance(100));
+    auto village_eyes_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    auto toilet_scene = std::make_unique<ToiletScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    auto shower_scene = std::make_unique<ShowerScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+    auto developers_scene = std::make_unique<DevelopersScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
 
-    std::unique_ptr<TempleEntranceScene> temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    std::unique_ptr<OracleScene> oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
 
-    std::unique_ptr<RocketLauncherScene> rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    std::unique_ptr<PlaneCockpitScene> plane_cockpit_scene = std::make_unique<PlaneCockpitScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    std::unique_ptr<PlaneGalleyScene> plane_galley_scene = std::make_unique<PlaneGalleyScene>(&panel);
-    std::unique_ptr<LabZombieScene> lab_zombie_scene = std::make_unique<LabZombieScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    std::unique_ptr<LabCompanionScene> lab_companion_scene = std::make_unique<LabCompanionScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    std::unique_ptr<MirrorScene> mirror_scene = std::make_unique<MirrorScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto plane_cockpit_scene = std::make_unique<PlaneCockpitScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto plane_galley_scene = std::make_unique<PlaneGalleyScene>(&panel);
+    auto lab_zombie_scene = std::make_unique<LabZombieScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto lab_companion_scene = std::make_unique<LabCompanionScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto mirror_scene = std::make_unique<MirrorScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
 
     Player player(&world);
 

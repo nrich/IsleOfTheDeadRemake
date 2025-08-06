@@ -839,4 +839,141 @@ std::tuple<bool, std::string, DeathType> LabCompanionScene::getItem(const Layout
 
 MirrorScene::MirrorScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room16.cel") {
     entrance = new_entrance;
+
+    layouts.emplace_back(raylib::Vector2(226, 103), StillCel("stillcel/drug.cel").getTexture(), Item::Drug, Strings::Lookup(409), Strings::Lookup(410), Strings::Lookup(411));
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
 }
+
+ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/shaman1.cel") {
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> smoke = {
+        StillCel("stillcel/smoke1.cel").getTexture(),
+        StillCel("stillcel/smoke2.cel").getTexture(),
+        StillCel("stillcel/smoke3.cel").getTexture(),
+        StillCel("stillcel/smoke4.cel").getTexture(),
+    };
+
+    animations[1] = Animation(raylib::Vector2(230, 61), smoke, 12);
+
+    layouts.emplace_back(raylib::Vector2(145, 58), StillCel("stillcel/medallio.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
+    layouts.emplace_back(raylib::Vector2(275, 22), StillCel("stillcel/bolt.cel").getTexture(), Item::BoltCutters, Strings::Lookup(361), Strings::Lookup(338), Strings::Lookup(339));
+
+    static raylib::Sound shaman_talk(Voc::Load("sound/umaguma.voc"));
+    static raylib::Sound shaman_chat1 = raylib::Sound(Voc::Load("sound/sha1.voc"));
+    static raylib::Sound shaman_chat2 = raylib::Sound(Voc::Load("sound/sha2.voc"));
+    static raylib::Sound shaman_chat3 = raylib::Sound(Voc::Load("sound/sha3.voc"));
+    static raylib::Sound shaman_chat4 = raylib::Sound(Voc::Load("sound/sha4.voc"));
+    static raylib::Sound shaman_chat5 = raylib::Sound(Voc::Load("sound/sha5.voc"));
+    static raylib::Sound shaman_chat6 = raylib::Sound(Voc::Load("sound/sha6.voc"));
+    static raylib::Sound shaman_chat7 = raylib::Sound(Voc::Load("sound/sha7.voc"));
+    static raylib::Sound shaman_chat8 = raylib::Sound(Voc::Load("sound/sha8.voc"));
+    static raylib::Sound shaman_chat9 = raylib::Sound(Voc::Load("sound/sha9.voc"));
+    static raylib::Sound shaman_chat10 = raylib::Sound(Voc::Load("sound/sha10.voc"));
+    static raylib::Sound shaman_chat11 = raylib::Sound(Voc::Load("sound/sha11.voc"));
+    static raylib::Sound shaman_chat12 = raylib::Sound(Voc::Load("sound/sha12.voc"));
+    static raylib::Sound shaman_chat13 = raylib::Sound(Voc::Load("sound/sha13.voc"));
+    static raylib::Sound shaman_chat14 = raylib::Sound(Voc::Load("sound/sha14.voc"));
+    static raylib::Sound shaman_chat15 = raylib::Sound(Voc::Load("sound/sha15.voc"));
+    static raylib::Sound shaman_chat16 = raylib::Sound(Voc::Load("sound/sha16.voc"));
+    static raylib::Sound shaman_chat17 = raylib::Sound(Voc::Load("sound/sha17.voc"));
+    static raylib::Sound shaman_chat18 = raylib::Sound(Voc::Load("sound/sha18.voc"));
+
+    script = {
+        Dialogue(Strings::Lookup(0), raylib::RAYWHITE, &shaman_talk),
+        Dialogue(Strings::Lookup(2)),
+        Dialogue(Strings::Lookup(3), raylib::RAYWHITE, &shaman_chat1),
+        Dialogue(Strings::Lookup(5)),
+        Dialogue(Strings::Lookup(6), raylib::RAYWHITE, &shaman_chat2),
+        Dialogue(Strings::Lookup(8)),
+        Dialogue(Strings::Lookup(9), raylib::RAYWHITE, &shaman_chat3),
+        Dialogue(Strings::Lookup(12), raylib::RAYWHITE, &shaman_chat4),
+        Dialogue(Strings::Lookup(14)),
+        Dialogue(Strings::Lookup(15), raylib::RAYWHITE, &shaman_chat5),
+        Dialogue(Strings::Lookup(17), raylib::RAYWHITE, &shaman_chat6),
+        Dialogue(Strings::Lookup(19)),
+        Dialogue(Strings::Lookup(20), raylib::RAYWHITE, &shaman_chat7),
+        Dialogue(Strings::Lookup(22), raylib::RAYWHITE, &shaman_chat8),
+        Dialogue(Strings::Lookup(24)),
+        Dialogue(Strings::Lookup(25), raylib::RAYWHITE, &shaman_chat9),
+        Dialogue(Strings::Lookup(27)),
+        Dialogue(Strings::Lookup(28)),
+        Dialogue(Strings::Lookup(29), raylib::RAYWHITE, &shaman_chat10),
+        Dialogue(Strings::Lookup(31)),
+        Dialogue(Strings::Lookup(32), raylib::RAYWHITE, &shaman_chat11),
+        Dialogue(Strings::Lookup(34)),
+        Dialogue(Strings::Lookup(35), raylib::RAYWHITE, &shaman_chat12),
+        Dialogue(Strings::Lookup(38), raylib::RAYWHITE, &shaman_chat13),
+        Dialogue(Strings::Lookup(40), raylib::RAYWHITE, &shaman_chat14),
+        Dialogue(Strings::Lookup(42)),
+        Dialogue(Strings::Lookup(43), raylib::RAYWHITE, &shaman_chat14),
+    };
+}
+
+std::optional<Scene::Dialogue> ShamanScene::talk(Player *player) {
+    if (dialogueIndex < script.size()) {
+        return script[dialogueIndex++];
+    }
+
+    return Scene::talk(player);
+}
+
+ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/chiefbkg.cel") {
+    layouts.emplace_back(raylib::Vector2(137, 73), StillCel("stillcel/medal2.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes_left = {
+        StillCel("stillcel/eyesl1.cel").getTexture(),
+        StillCel("stillcel/eyesl2.cel").getTexture(),
+        StillCel("stillcel/eyesl3.cel").getTexture(),
+        StillCel("stillcel/eyesl4.cel").getTexture(),
+        StillCel("stillcel/eyesl5.cel").getTexture(),
+        StillCel("stillcel/eyesl6.cel").getTexture(),
+        StillCel("stillcel/eyesl7.cel").getTexture(),
+        StillCel("stillcel/eyesl8.cel").getTexture(),
+        StillCel("stillcel/eyesl9.cel").getTexture(),
+        StillCel("stillcel/eyesl10.cel").getTexture(),
+        StillCel("stillcel/eyesl11.cel").getTexture(),
+        StillCel("stillcel/eyesl11.cel").getTexture(),
+    };
+
+    animations[1] = Animation(raylib::Vector2(16, 55), eyes_left, 6);
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes_middle = {
+        StillCel("stillcel/eyesm1.cel").getTexture(),
+        StillCel("stillcel/eyesm2.cel").getTexture(),
+        StillCel("stillcel/eyesm3.cel").getTexture(),
+        StillCel("stillcel/eyesm4.cel").getTexture(),
+        StillCel("stillcel/eyesm5.cel").getTexture(),
+        StillCel("stillcel/eyesm6.cel").getTexture(),
+        StillCel("stillcel/eyesm7.cel").getTexture(),
+        StillCel("stillcel/eyesm8.cel").getTexture(),
+        StillCel("stillcel/eyesm9.cel").getTexture(),
+        StillCel("stillcel/eyesm10.cel").getTexture(),
+        StillCel("stillcel/eyesm11.cel").getTexture(),
+        StillCel("stillcel/eyesm11.cel").getTexture(),
+    };
+
+    animations[2] = Animation(raylib::Vector2(149, 23), eyes_middle, 6);
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> fan = {
+        StillCel("stillcel/fan1.cel").getTexture(),
+        StillCel("stillcel/fan2.cel").getTexture(),
+        StillCel("stillcel/fan3.cel").getTexture(),
+        StillCel("stillcel/fan4.cel").getTexture(),
+        StillCel("stillcel/fan5.cel").getTexture(),
+        StillCel("stillcel/fan6.cel").getTexture(),
+        StillCel("stillcel/fan7.cel").getTexture(),
+        StillCel("stillcel/fan8.cel").getTexture(),
+        StillCel("stillcel/fan9.cel").getTexture(),
+        StillCel("stillcel/fan10.cel").getTexture(),
+        StillCel("stillcel/fan11.cel").getTexture(),
+        StillCel("stillcel/fan12.cel").getTexture(),
+    };
+
+    animations[3] = Animation(raylib::Vector2(243, 3), fan, 6);
+}
+
+std::optional<Scene::Dialogue> ChiefScene::talk(Player *player) {
+    return Scene::talk(player);
+}
+

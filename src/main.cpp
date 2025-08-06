@@ -369,6 +369,9 @@ int main(int argc, char *argv[]) {
     auto bunker_left_scene = std::make_unique<BunkerLeftScene>(&panel);
     auto bunker_right_scene = std::make_unique<BunkerRightScene>(&panel);
 
+    auto shaman_scene = std::make_unique<ShamanScene>(&panel, world.getEntrance(83));
+    auto chief_scene = std::make_unique<ChiefScene>(&panel, world.getEntrance(83));
+
     auto village_gate_chief_scene = std::make_unique<VillageGateChiefScene>(&panel, world.getEntrance(83));
     auto village_gate_shaman_scene = std::make_unique<VillageGateShamanScene>(&panel, world.getEntrance(100));
     auto village_eyes_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
@@ -404,7 +407,7 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-    player.setState(State::Lab2);
+    player.setState(State::Chief);
     //player.setState(State::TempleEntrance);
 
     while (!window.ShouldClose()) {
@@ -573,6 +576,15 @@ int main(int argc, char *argv[]) {
             case State::Developers:
                 music_player.stop();
                 developers_scene->draw(&player, scale);
+                break;
+
+            case State::Shaman:
+                music_player.stop();
+                shaman_scene->draw(&player, scale);
+                break;
+            case State::Chief:
+                music_player.stop();
+                chief_scene->draw(&player, scale);
                 break;
 
             case State::TempleEntrance:

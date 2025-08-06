@@ -284,4 +284,22 @@ public:
     MirrorScene(Panel *panel, const Entrance &new_entrance);
 };
 
+class ShamanScene : public Scene {
+    std::vector<Dialogue> script;
+    std::optional<Dialogue> talk(Player *player);
+    size_t dialogueIndex = 0;
+    bool pass = false;
+public:
+    ShamanScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class ChiefScene : public Scene {
+    std::vector<Dialogue> script;
+    std::optional<Dialogue> talk(Player *player);
+    size_t dialogueIndex = 0;
+    bool pass = false;
+public:
+    ChiefScene(Panel *panel, const Entrance &new_entrance);
+};
+
 #endif //SCENE_H

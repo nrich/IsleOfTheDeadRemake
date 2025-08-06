@@ -139,7 +139,7 @@ static void draw_map(Player *player, raylib::Window &window, const int scale) {
     EndDrawing();
 }
 
-static void play_death_scene(Player *player, raylib::Window &window, const int scale) {
+static void play_death_anim(Player *player, raylib::Window &window, const int scale) {
     DeathType death_type = player->getDeathType();
 
     static auto acid_anim = Animation("fli/acid.fli");
@@ -179,7 +179,7 @@ static void play_death_scene(Player *player, raylib::Window &window, const int s
     EndDrawing();
 }
 
-static void play_laugh_scene(Player *player, raylib::Window &window, const int scale) {
+static void play_laugh_anim(Player *player, raylib::Window &window, const int scale) {
     static auto laugh_anim = Animation("fli/memnabha.fli", "sound/dielaugh.voc");
 
     BeginDrawing();
@@ -198,7 +198,7 @@ static void play_laugh_scene(Player *player, raylib::Window &window, const int s
     EndDrawing();
 }
 
-static void play_title_scene(Player *player, raylib::Window &window, const int scale, MusicPlayer *music_player) {
+static void play_title_anim(Player *player, raylib::Window &window, const int scale, MusicPlayer *music_player) {
     static auto intro_anim = Animation("fli/dead.fli", "sound/laugh.voc");
     music_player->play("music/out3fm.mid");
 
@@ -217,6 +217,52 @@ static void play_title_scene(Player *player, raylib::Window &window, const int s
     EndDrawing();
 }
 
+static void play_lab2_anim(Player *player, raylib::Window &window, const int scale, char anim_index) {
+    static auto lab2a_anim = Animation("fli/babea.fli");
+    static auto lab2b_anim = Animation("fli/babeb.fli");
+    static auto lab2c_anim = Animation("fli/babec.fli");
+    static auto lab2d_anim = Animation("fli/babed.fli");
+    static auto lab2e_anim = Animation("fli/babee.fli");
+    static auto lab2f_anim = Animation("fli/babef.fli");
+
+    BeginDrawing();
+    {
+        window.ClearBackground(raylib::BLACK);
+
+        bool anim_finished = false;
+        switch (anim_index) {
+            case 'A':
+            case 'a':
+                anim_finished = lab2a_anim.play(scale);
+                break;
+            case 'B':
+            case 'b':
+                anim_finished = lab2b_anim.play(scale);
+                break;
+            case 'C':
+            case 'c':
+                anim_finished = lab2c_anim.play(scale);
+                break;
+            case 'D':
+            case 'd':
+                anim_finished = lab2d_anim.play(scale);
+                break;
+            case 'E':
+            case 'e':
+                anim_finished = lab2e_anim.play(scale);
+                break;
+            case 'F':
+            case 'f':
+                anim_finished = lab2f_anim.play(scale);
+                break;
+        }
+
+        if (anim_finished) {
+            player->setState(State::Lab2);
+        }
+    }
+    EndDrawing();
+}
 
 int main(int argc, char *argv[]) {
     cmdline::parser argparser;
@@ -329,7 +375,8 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-    player.setState(State::Lab1);
+    player.setState(State::Lab2);
+    //player.setState(State::TempleEntrance);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
@@ -534,14 +581,33 @@ int main(int argc, char *argv[]) {
                 mirror_scene->draw(&player, scale);
                 break;
 
+            case State::Lab2A:
+                play_lab2_anim(&player, window, scale, 'A');
+                break;
+            case State::Lab2B:
+                play_lab2_anim(&player, window, scale, 'B');
+                break;
+            case State::Lab2C:
+                play_lab2_anim(&player, window, scale, 'C');
+                break;
+            case State::Lab2D:
+                play_lab2_anim(&player, window, scale, 'D');
+                break;
+            case State::Lab2E:
+                play_lab2_anim(&player, window, scale, 'E');
+                break;
+            case State::Lab2F:
+                play_lab2_anim(&player, window, scale, 'F');
+                break;
+
             case State::Title:
-                play_title_scene(&player, window, scale, &music_player);
+                play_title_anim(&player, window, scale, &music_player);
                 break;
             case State::Dead:
-                play_death_scene(&player, window, scale);
+                play_death_anim(&player, window, scale);
                 break;
             case State::Laugh:
-                play_laugh_scene(&player, window, scale);
+                play_laugh_anim(&player, window, scale);
                 break;
 
             case State::Map:

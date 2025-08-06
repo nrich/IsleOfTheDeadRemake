@@ -114,6 +114,7 @@ private:
     virtual std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     virtual std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
     virtual std::optional<Dialogue> talk(Player *player);
+    virtual std::string useItem(Player *player, Item item);
 
     virtual void animationCompleted(Player *player, uint16_t animation_id);
 
@@ -274,6 +275,7 @@ public:
 class LabCompanionScene : public Scene {
 public:
     LabCompanionScene(Panel *panel, const Entrance &new_entrance);
+    std::string useItem(Player *player, Item item);
 };
 
 class MirrorScene : public Scene {

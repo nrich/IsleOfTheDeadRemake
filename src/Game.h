@@ -69,6 +69,13 @@ enum class State {
     // 26.MAP
     Lab2,               // room18
     Mirror,             // room16
+
+    Lab2A,
+    Lab2B,
+    Lab2C,
+    Lab2D,
+    Lab2E,
+    Lab2F,
 };
 
 enum class Collision {
@@ -170,6 +177,13 @@ enum class Item {
     WiresGreenRedBlue,
     WiresRedBlue,
     WiresBlue,
+
+    LabButtonA,
+    LabButtonB,
+    LabButtonC,
+    LabButtonD,
+    LabButtonE,
+    LabButtonF,
 };
 
 enum class DamageType {

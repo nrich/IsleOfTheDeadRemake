@@ -36,6 +36,12 @@ std::tuple<bool, std::string, DeathType> Scene::getItem(const Layout &layout) {
     return std::make_tuple(true, layout.pickup, DeathType::None);
 }
 
+std::string Scene::useItem(Player *player, Item item) {
+    const static std::string HUH = Strings::Lookup(439);
+
+    return HUH;
+}
+
 std::optional<Scene::Dialogue> Scene::talk(Player *player) {
     return std::nullopt;
 }
@@ -172,6 +178,15 @@ void Scene::draw(Player *player, int scale) {
                             }
 
                             player->setHighlight(highlight);
+                        } else {
+                            if (selected) {
+                                auto highlight = useItem(player, selected->item);
+
+                                player->setHighlight(highlight);
+                            } else {
+                                const static std::string HUH = Strings::Lookup(439);
+                                player->setHighlight(HUH);
+                            }
                         }
                         break;
                     case Action::Talk:
@@ -767,6 +782,43 @@ LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Sce
 
 LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room18.cel") {
     entrance = new_entrance;
+
+    layouts.emplace_back(raylib::Vector2(171, 78), raylib::Vector2(11, 7), Item::LabButtonA, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
+    layouts.emplace_back(raylib::Vector2(196, 73), raylib::Vector2(14, 5), Item::LabButtonB, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
+    layouts.emplace_back(raylib::Vector2(221, 68), raylib::Vector2(13, 5), Item::LabButtonC, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
+    layouts.emplace_back(raylib::Vector2(199, 88), raylib::Vector2(9, 5), Item::LabButtonD, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
+    layouts.emplace_back(raylib::Vector2(222, 82), raylib::Vector2(12, 5), Item::LabButtonE, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
+    layouts.emplace_back(raylib::Vector2(241, 77), raylib::Vector2(8, 4), Item::LabButtonF, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
+}
+
+std::string LabCompanionScene::useItem(Player *player, Item item) {
+    const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/room24.cel").getTexture();
+
+    switch (item) {
+        case Item::LabButtonA:
+            player->setState(State::Lab2A);
+            break;
+        case Item::LabButtonB:
+            player->setState(State::Lab2B);
+            break;
+        case Item::LabButtonC:
+            player->setState(State::Lab2C);
+            break;
+        case Item::LabButtonD:
+            player->setState(State::Lab2D);
+            break;
+        case Item::LabButtonE:
+            player->setState(State::Lab2E);
+            break;
+        case Item::LabButtonF:
+            background = alt_background;
+            player->setState(State::Lab2F);
+            break;
+        default:
+            return Scene::useItem(player, item);
+    }
+
+    return "";
 }
 
 MirrorScene::MirrorScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room16.cel") {

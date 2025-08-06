@@ -813,6 +813,18 @@ std::string LabCompanionScene::useItem(Player *player, Item item) {
         case Item::LabButtonF:
             background = alt_background;
             player->setState(State::Lab2F);
+
+            removeItemLayout(Item::LabButtonA);
+            removeItemLayout(Item::LabButtonB);
+            removeItemLayout(Item::LabButtonC);
+            removeItemLayout(Item::LabButtonD);
+            removeItemLayout(Item::LabButtonE);
+            removeItemLayout(Item::LabButtonF);
+
+            navigation[Input::StepBack] = State::World;
+            navigation[Input::LookDown] = State::World;
+
+            player->addItem(Item::Companion);
             break;
         default:
             return Scene::useItem(player, item);

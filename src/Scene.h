@@ -275,6 +275,7 @@ public:
 class LabCompanionScene : public Scene {
 public:
     LabCompanionScene(Panel *panel, const Entrance &new_entrance);
+    std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     std::string useItem(Player *player, Item item);
 };
 

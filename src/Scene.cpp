@@ -789,6 +789,9 @@ LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance)
     layouts.emplace_back(raylib::Vector2(199, 88), raylib::Vector2(9, 5), Item::LabButtonD, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
     layouts.emplace_back(raylib::Vector2(222, 82), raylib::Vector2(12, 5), Item::LabButtonE, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
     layouts.emplace_back(raylib::Vector2(241, 77), raylib::Vector2(8, 4), Item::LabButtonF, Strings::Lookup(438), Strings::Lookup(438), Strings::Lookup(438));
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
 }
 
 std::string LabCompanionScene::useItem(Player *player, Item item) {
@@ -821,9 +824,6 @@ std::string LabCompanionScene::useItem(Player *player, Item item) {
             removeItemLayout(Item::LabButtonE);
             removeItemLayout(Item::LabButtonF);
 
-            navigation[Input::StepBack] = State::World;
-            navigation[Input::LookDown] = State::World;
-
             player->addItem(Item::Companion);
             break;
         default:
@@ -831,6 +831,10 @@ std::string LabCompanionScene::useItem(Player *player, Item item) {
     }
 
     return "";
+}
+
+std::tuple<bool, std::string, DeathType> LabCompanionScene::getItem(const Layout &layout) {
+    return std::make_tuple(false, "", DeathType::None);
 }
 
 MirrorScene::MirrorScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room16.cel") {

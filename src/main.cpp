@@ -264,6 +264,35 @@ static void play_lab2_anim(Player *player, raylib::Window &window, const int sca
     EndDrawing();
 }
 
+static void play_ending_anim(Player *player, raylib::Window &window, const int scale, int ending_index) {
+    static auto the_end0_anim = Animation("fli/theend.fli");
+    static auto the_end1_anim = Animation("fli/theend1.fli");
+    static auto the_end2_anim = Animation("fli/theend2.fli");
+
+    BeginDrawing();
+    {
+        window.ClearBackground(raylib::BLACK);
+
+        bool anim_finished = false;
+        switch (ending_index) {
+            case 0:
+                anim_finished = the_end0_anim.play(scale);
+                break;
+            case 1:
+                anim_finished = the_end1_anim.play(scale);
+                break;
+            case 2:
+                anim_finished = the_end2_anim.play(scale);
+                break;
+        }
+
+        if (anim_finished) {
+            player->setState(State::Title);
+        }
+    }
+    EndDrawing();
+}
+
 int main(int argc, char *argv[]) {
     cmdline::parser argparser;
     argparser.add<std::string>("datadir", 'd', "Data directory", false, "./");
@@ -608,6 +637,16 @@ int main(int argc, char *argv[]) {
                 break;
             case State::Laugh:
                 play_laugh_anim(&player, window, scale);
+                break;
+
+            case State::Ending:
+                play_ending_anim(&player, window, scale, 0);
+                break;
+            case State::Ending1:
+                play_ending_anim(&player, window, scale, 1);
+                break;
+            case State::Ending2:
+                play_ending_anim(&player, window, scale, 2);
                 break;
 
             case State::Map:

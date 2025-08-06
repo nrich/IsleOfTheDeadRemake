@@ -76,6 +76,10 @@ enum class State {
     Lab2D,
     Lab2E,
     Lab2F,
+
+    Ending,
+    Ending1,
+    Ending2,
 };
 
 enum class Collision {

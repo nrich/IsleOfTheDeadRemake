@@ -26,6 +26,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <unordered_map>
 #include <utility>
 #include <optional>
+#include <variant>
 
 #include <raylib-cpp.hpp>
 
@@ -76,24 +77,30 @@ private:
 
     struct Layout {
         raylib::Vector2 position;
-        raylib::TextureUnmanaged image;
+        std::variant<raylib::TextureUnmanaged, raylib::Vector2> data;
         Item item;
 
         std::string name;
         std::string description;
         std::string pickup;
 
-        bool invisible = false;
-
         raylib::Rectangle Border() const {
-            return raylib::Rectangle(position.GetX(), position.GetY(), image.GetWidth(), image.GetHeight());
+            if (std::holds_alternative<raylib::TextureUnmanaged>(data)) {
+                auto image = std::get<raylib::TextureUnmanaged>(data);
+
+                return raylib::Rectangle(position.GetX(), position.GetY(), image.GetWidth(), image.GetHeight());
+            } else {
+                auto bounds = std::get<raylib::Vector2>(data);
+                return raylib::Rectangle(position.GetX(), position.GetY(), bounds.GetX(), bounds.GetY());
+            }
         }
 
         void draw(int scale) const {
-            if (invisible)
-                return;
+            if (std::holds_alternative<raylib::TextureUnmanaged>(data)) {
+                auto image = std::get<raylib::TextureUnmanaged>(data);
 
-            image.Draw(position * scale, 0.0f, scale);
+                image.Draw(position * scale, 0.0f, scale);
+            }
         }
     };
 

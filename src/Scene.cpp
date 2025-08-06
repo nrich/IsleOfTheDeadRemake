@@ -451,8 +451,8 @@ std::optional<Scene::Dialogue> VillageGateChiefScene::talk(Player *player) {
 TempleEntranceScene::TempleEntranceScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room17.cel") {
     entrance = new_entrance;
 
-    layouts.emplace_back(raylib::Vector2(144, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHole1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336), true);
-    layouts.emplace_back(raylib::Vector2(168, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHole2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336), true);
+    layouts.emplace_back(raylib::Vector2(144, 97), raylib::Vector2(8, 8), Item::MedalHole1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+    layouts.emplace_back(raylib::Vector2(168, 97), raylib::Vector2(8, 8), Item::MedalHole2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
 
     navigation[Input::StepBack] = State::World;
     navigation[Input::LookDown] = State::World;
@@ -540,7 +540,7 @@ OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
     static raylib::Sound oracle_chat10 = raylib::Sound(Voc::Load("sound/or10.voc"));
     static raylib::Sound oracle_chat11 = raylib::Sound(Voc::Load("sound/or11.voc"));
 
-    layouts.emplace_back(raylib::Vector2(122, 10), StillCel("stillcel/flame1.cel").getTexture(), Item::Oracle, Strings::Lookup(417), Strings::Lookup(418), Strings::Lookup(336), true);
+    layouts.emplace_back(raylib::Vector2(122, 10), raylib::Vector2(73, 83), Item::Oracle, Strings::Lookup(417), Strings::Lookup(418), Strings::Lookup(336));
 
     script = {
         Dialogue(Strings::Lookup(89)),
@@ -731,7 +731,7 @@ LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Sce
 
     animations[1] = Animation(raylib::Vector2(260, 6), monitor);
 
-    static const std::vector<std::optional<raylib::TextureUnmanaged>> spark = {
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> arc = {
         StillCel("stillcel/labb1.cel").getTexture(),
         StillCel("stillcel/labb2.cel").getTexture(),
         StillCel("stillcel/labb3.cel").getTexture(),
@@ -739,7 +739,7 @@ LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Sce
         StillCel("stillcel/labb5.cel").getTexture(),
     };
 
-    animations[2] = Animation(raylib::Vector2(174, 0), spark);
+    animations[2] = Animation(raylib::Vector2(174, 0), arc);
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> test_tubes = {
         StillCel("stillcel/laba1.cel").getTexture(),

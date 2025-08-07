@@ -403,11 +403,13 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::GoldMedal1);
         player.addItem(Item::GoldMedal2);
         player.addItem(Item::DeadWolf);
+        player.addItem(Item::Book);
+        player.addItem(Item::Smokes);
     } else {
         player.setState(State::Title);
     }
 
-    player.setState(State::Chief);
+    player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
 
     while (!window.ShouldClose()) {

@@ -62,10 +62,12 @@ protected:
     float stepSize;
     DeathType deathType;
     int attackDamage;
+    virtual void onDeath(Player *player) {
+    }
 public:
     Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage);
 
-    void damage(const DamageType damage_type, int amount);
+    void damage(Player *player, const DamageType damage_type, int amount);
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
 
     std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
@@ -143,6 +145,7 @@ public:
 };
 
 class Drummer : public Base {
+    void onDeath(Player *player);
 public:
     Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
     void update(Player *player, uint64_t frame_count);

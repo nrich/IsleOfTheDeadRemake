@@ -856,9 +856,6 @@ ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
 
     animations[1] = Animation(raylib::Vector2(230, 61), smoke, 12);
 
-    layouts.emplace_back(raylib::Vector2(145, 58), StillCel("stillcel/medallio.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
-    layouts.emplace_back(raylib::Vector2(275, 22), StillCel("stillcel/bolt.cel").getTexture(), Item::BoltCutters, Strings::Lookup(361), Strings::Lookup(338), Strings::Lookup(339));
-
     static raylib::Sound shaman_talk(Voc::Load("sound/umaguma.voc"));
     static raylib::Sound shaman_chat1 = raylib::Sound(Voc::Load("sound/sha1.voc"));
     static raylib::Sound shaman_chat2 = raylib::Sound(Voc::Load("sound/sha2.voc"));
@@ -879,9 +876,12 @@ ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
     static raylib::Sound shaman_chat17 = raylib::Sound(Voc::Load("sound/sha17.voc"));
     static raylib::Sound shaman_chat18 = raylib::Sound(Voc::Load("sound/sha18.voc"));
 
-    script = {
+    scripts[0] = {
         Dialogue(Strings::Lookup(0), raylib::RAYWHITE, &shaman_talk),
         Dialogue(Strings::Lookup(2)),
+    };
+
+    scripts[1] = {
         Dialogue(Strings::Lookup(3), raylib::RAYWHITE, &shaman_chat1),
         Dialogue(Strings::Lookup(5)),
         Dialogue(Strings::Lookup(6), raylib::RAYWHITE, &shaman_chat2),
@@ -906,17 +906,104 @@ ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
         Dialogue(Strings::Lookup(38), raylib::RAYWHITE, &shaman_chat13),
         Dialogue(Strings::Lookup(40), raylib::RAYWHITE, &shaman_chat14),
         Dialogue(Strings::Lookup(42)),
-        Dialogue(Strings::Lookup(43), raylib::RAYWHITE, &shaman_chat14),
+        Dialogue(Strings::Lookup(43), raylib::RAYWHITE, &shaman_chat15),
     };
+
+    scripts[2] = {
+        Dialogue(Strings::Lookup(45), raylib::RAYWHITE, &shaman_chat16),
+        Dialogue(Strings::Lookup(47), raylib::RAYWHITE, &shaman_chat17),
+        Dialogue(Strings::Lookup(49)),
+        Dialogue(Strings::Lookup(50), raylib::RAYWHITE, &shaman_chat18),
+        Dialogue(Strings::Lookup(52)),
+    };
+
+    layouts.emplace_back(raylib::Vector2(145, 58), StillCel("stillcel/medallio.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
+    layouts.emplace_back(raylib::Vector2(275, 22), StillCel("stillcel/bolt.cel").getTexture(), Item::BoltCutters, Strings::Lookup(361), Strings::Lookup(338), Strings::Lookup(339));
+
+    layouts.emplace_back(raylib::Vector2(131, 7), raylib::Vector2(40, 36), Item::Shaman, Strings::Lookup(346), Strings::Lookup(347), "");
+    layouts.emplace_back(raylib::Vector2(67, 93), raylib::Vector2(28, 40), Item::Bong, Strings::Lookup(341), Strings::Lookup(342), "");
+    layouts.emplace_back(raylib::Vector2(230, 61), raylib::Vector2(19, 50), Item::Bong, Strings::Lookup(352), Strings::Lookup(353), "");
+    layouts.emplace_back(raylib::Vector2(189, 0), raylib::Vector2(30, 30), Item::Mask, Strings::Lookup(357), Strings::Lookup(358), "");
+    layouts.emplace_back(raylib::Vector2(83, 0), raylib::Vector2(30, 30), Item::Mask, Strings::Lookup(357), Strings::Lookup(358), "");
 }
 
 std::optional<Scene::Dialogue> ShamanScene::talk(Player *player) {
-    if (dialogueIndex < script.size()) {
-        return script[dialogueIndex++];
+    if (script == 0) {
+        if (dialogueIndex >= scripts[script].size()) {
+            dialogueIndex = 0;
+        }
+
+        return scripts[script][dialogueIndex++];
+    } else if (script == 1) {
+        if (dialogueIndex < scripts[script].size()) {
+            return scripts[script][dialogueIndex++];
+        }
+
+        if (gaveSmokes) {
+            script = 2;
+        }
+    } else if (script == 2) {
+        if (dialogueIndex < scripts[script].size()) {
+            return scripts[script][dialogueIndex++];
+        }
+        script = 3;
     }
 
     return Scene::talk(player);
 }
+
+std::tuple<bool, std::string, DeathType> ShamanScene::useItemOnItem(Item source, Item destination) {
+    if (source == Item::Book && destination == Item::Shaman) {
+        if (script == 0) {
+            script = 1;
+            dialogueIndex = 0;
+        }
+
+        return std::make_tuple(true, "", DeathType::None);
+    }
+
+    if (source == Item::Smokes && destination == Item::Shaman) {
+        if (script == 1) {
+            script = 2;
+            dialogueIndex = 0;
+        }
+
+        return std::make_tuple(true, Strings::Lookup(349), DeathType::None);
+    }
+
+    return Scene::useItemOnItem(source, destination);
+}
+
+std::string ShamanScene::useItem(Player *player, Item item) {
+    if (item == Item::Bong) {
+        return Strings::Lookup(344);
+    }
+
+    if (item == Item::Shaman) {
+        return Strings::Lookup(351);
+    }
+
+    return Scene::useItem(player, item);
+}
+
+std::tuple<bool, std::string, DeathType> ShamanScene::getItem(const Layout &layout) {
+    if (layout.item == Item::Bong || layout.item == Item::Mask) {
+        return std::make_tuple(false, Strings::Lookup(360), DeathType::None);
+    }
+
+    if (layout.item == Item::Cig) {
+        return std::make_tuple(false, Strings::Lookup(354), DeathType::None);
+    }
+
+    if (layout.item == Item::GoldMedal1 || layout.item == Item::BoltCutters) {
+        if (script != 3) {
+            return std::make_tuple(false, Strings::Lookup(360), DeathType::None);
+        }
+    }
+
+    return Scene::getItem(layout);
+}
+
 
 ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/chiefbkg.cel") {
     layouts.emplace_back(raylib::Vector2(137, 73), StillCel("stillcel/medal2.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
@@ -971,9 +1058,101 @@ ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel
     };
 
     animations[3] = Animation(raylib::Vector2(243, 3), fan, 6);
+
+    static raylib::Sound chief_talk(Voc::Load("sound/umaguma.voc"));
+    static raylib::Sound chief_chat1 = raylib::Sound(Voc::Load("sound/chf1.voc"));
+    static raylib::Sound chief_chat2a = raylib::Sound(Voc::Load("sound/chf2a.voc"));
+    static raylib::Sound chief_chat3a = raylib::Sound(Voc::Load("sound/chf3a.voc"));
+    static raylib::Sound chief_chat3b = raylib::Sound(Voc::Load("sound/chf3b.voc"));
+    static raylib::Sound chief_chat3c = raylib::Sound(Voc::Load("sound/chf3c.voc"));
+    static raylib::Sound chief_chat4a = raylib::Sound(Voc::Load("sound/chf4a.voc"));
+    static raylib::Sound chief_chat4b = raylib::Sound(Voc::Load("sound/chf4b.voc"));
+    static raylib::Sound chief_chat4c = raylib::Sound(Voc::Load("sound/chf4c.voc"));
+    static raylib::Sound chief_chat4d = raylib::Sound(Voc::Load("sound/chf4d.voc"));
+    static raylib::Sound chief_chat4e = raylib::Sound(Voc::Load("sound/chf4e.voc"));
+    static raylib::Sound chief_chat4f = raylib::Sound(Voc::Load("sound/chf4f.voc"));
+    static raylib::Sound chief_chat5 = raylib::Sound(Voc::Load("sound/chf5.voc"));
+    static raylib::Sound chief_chat6a = raylib::Sound(Voc::Load("sound/chf6a.voc"));
+    static raylib::Sound chief_chat6b = raylib::Sound(Voc::Load("sound/chf6b.voc"));
+    static raylib::Sound chief_chat7b = raylib::Sound(Voc::Load("sound/chf7b.voc"));
+    static raylib::Sound chief_chattake = raylib::Sound(Voc::Load("sound/chftake.voc"));
+    static raylib::Sound chief_chat8 = raylib::Sound(Voc::Load("sound/chf8.voc"));
+    static raylib::Sound chief_chat9 = raylib::Sound(Voc::Load("sound/chf9.voc"));
+
+    scripts[0] = {
+        Dialogue(Strings::Lookup(120), raylib::RAYWHITE, &chief_talk),
+        Dialogue(Strings::Lookup(122)),
+    };
+
+    scripts[1] = {
+        Dialogue(Strings::Lookup(124), raylib::RAYWHITE, &chief_chat1),
+        Dialogue(Strings::Lookup(126)),
+        Dialogue(Strings::Lookup(127)),
+        Dialogue(Strings::Lookup(128), raylib::RAYWHITE, &chief_chat2a),
+        Dialogue(Strings::Lookup(130)),
+        Dialogue(Strings::Lookup(131), raylib::RAYWHITE, &chief_chat3a),
+        Dialogue(Strings::Lookup(133), raylib::RAYWHITE, &chief_chat3b),
+        Dialogue(Strings::Lookup(135), raylib::RAYWHITE, &chief_chat3c),
+        Dialogue(Strings::Lookup(137)),
+        Dialogue(Strings::Lookup(138)),
+        Dialogue(Strings::Lookup(139)),
+        Dialogue(Strings::Lookup(141), raylib::RAYWHITE, &chief_chat4a),
+        Dialogue(Strings::Lookup(143), raylib::RAYWHITE, &chief_chat4b),
+        Dialogue(Strings::Lookup(145), raylib::RAYWHITE, &chief_chat4c),
+        Dialogue(Strings::Lookup(147), raylib::RAYWHITE, &chief_chat4d),
+        Dialogue(Strings::Lookup(149), raylib::RAYWHITE, &chief_chat4e),
+        Dialogue(Strings::Lookup(151), raylib::RAYWHITE, &chief_chat4f),
+        Dialogue(Strings::Lookup(153)),
+        Dialogue(Strings::Lookup(154), raylib::RAYWHITE, &chief_chat5),
+        Dialogue(Strings::Lookup(156)),
+    };
+
+    scripts[2] = {
+        Dialogue(Strings::Lookup(157), raylib::RAYWHITE, &chief_chat6a),
+        Dialogue(Strings::Lookup(160), raylib::RAYWHITE, &chief_chat6b),
+        Dialogue(Strings::Lookup(162)),
+        Dialogue(Strings::Lookup(163), raylib::RAYWHITE, &chief_chat7b),
+        Dialogue(Strings::Lookup(165), raylib::RAYWHITE, &chief_chattake),
+        Dialogue(Strings::Lookup(167)),
+        Dialogue(Strings::Lookup(168), raylib::RAYWHITE, &chief_chat8),
+        Dialogue(Strings::Lookup(170)),
+        Dialogue(Strings::Lookup(171), raylib::RAYWHITE, &chief_chat9),
+        Dialogue(Strings::Lookup(173)),
+    };
 }
 
 std::optional<Scene::Dialogue> ChiefScene::talk(Player *player) {
+    if (script == 0) {
+        if (dialogueIndex >= scripts[script].size()) {
+            dialogueIndex = 0;
+        }
+
+        return scripts[script][dialogueIndex++];
+    } else if (script == 1) {
+        if (dialogueIndex < scripts[script].size()) {
+            return scripts[script][dialogueIndex++];
+        }
+
+        if (player->testGameFlag(PlayerGameFlag::NoiseStopped)) {
+            script = 2;
+        }
+    } else if (script == 2) {
+        if (dialogueIndex < scripts[script].size()) {
+            return scripts[script][dialogueIndex++];
+        }
+        script = 3;
+    }
+
     return Scene::talk(player);
+}
+
+std::tuple<bool, std::string, DeathType> ChiefScene::getItem(const Layout &layout) {
+    if (layout.item == Item::GoldMedal2) {
+        if (script == 3) {
+            return std::make_tuple(true, Strings::Lookup(339), DeathType::None);
+        }
+    }
+
+    return Scene::getItem(layout);
 }
 

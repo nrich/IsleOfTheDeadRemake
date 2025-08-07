@@ -285,19 +285,27 @@ public:
 };
 
 class ShamanScene : public Scene {
-    std::vector<Dialogue> script;
+    std::array<std::vector<Dialogue>, 3> scripts;
     std::optional<Dialogue> talk(Player *player);
     size_t dialogueIndex = 0;
     bool pass = false;
+    size_t script = 0;
+    bool gaveSmokes = false;
+
+    std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
+    std::string useItem(Player *player, Item item);
+    std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
 public:
     ShamanScene(Panel *panel, const Entrance &new_entrance);
 };
 
 class ChiefScene : public Scene {
-    std::vector<Dialogue> script;
+    std::array<std::vector<Dialogue>, 3> scripts;
     std::optional<Dialogue> talk(Player *player);
     size_t dialogueIndex = 0;
-    bool pass = false;
+    size_t script = 0;
+
+    std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
 public:
     ChiefScene(Panel *panel, const Entrance &new_entrance);
 };

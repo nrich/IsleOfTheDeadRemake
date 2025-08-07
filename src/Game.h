@@ -188,6 +188,11 @@ enum class Item {
     LabButtonD,
     LabButtonE,
     LabButtonF,
+
+    Shaman,
+    Bong,
+    Cig,
+    Mask,
 };
 
 enum class DamageType {
@@ -234,6 +239,7 @@ enum class SegmentType {
 
 enum PlayerGameFlag : uint64_t {
     VisitedVillage      = 1<<0,
+    NoiseStopped        = 1<<1,
 };
 
 #endif //GAME_H

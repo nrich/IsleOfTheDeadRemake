@@ -153,7 +153,7 @@ void Base::update(Player *player, uint64_t frame_count) {
     }
 }
 
-void Base::damage(const DamageType damage_type, int amount) {
+void Base::damage(Player *player, const DamageType damage_type, int amount) {
     if (state == MonsterState::Standing || state == MonsterState::Walking || state == MonsterState::Attacking) {
         health -= amount;
 
@@ -162,6 +162,8 @@ void Base::damage(const DamageType damage_type, int amount) {
             currentFrame = std::get<0>(stateFrames[state]);
             if (sounds[MonsterSound::Hurt])
                 sounds[MonsterSound::Hurt]->Play();
+
+            onDeath(player);
         } else {
             state = MonsterState::Dying;
             currentFrame = std::get<0>(stateFrames[state]);
@@ -537,6 +539,10 @@ void Drummer::update(Player *player, uint64_t frame_count) {
             state = next_state;
         }
     }
+}
+
+void Drummer::onDeath(Player *player) {
+    player->addGameFlag(PlayerGameFlag::NoiseStopped);
 }
 
 Drummer::~Drummer() {

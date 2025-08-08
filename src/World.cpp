@@ -559,7 +559,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     const auto bookshelf_damaged = load_cel3_texture("cels3/frnture3.cel");
 
     const auto tv = load_cel3_texture("cels3/frnture7.cel");
-    const auto tv_damaged = load_cel3_texture("cels3/frnture7.cel");
+    const auto tv_damaged = load_cel3_texture("cels3/frnture8.cel");
 
     const auto portrait = load_cel3_texture("cels3/frnture5.cel");
     const auto portrait_damaged = load_cel3_texture("cels3/frnture6.cel");

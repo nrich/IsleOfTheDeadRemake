@@ -97,6 +97,35 @@ void DamageableWall::draw(const raylib::Camera3D *camera, uint64_t frame_count) 
         draw_wall(x1, y1, x2, y2, texture);
 }
 
+std::optional<raylib::RayCollision> DamageableWall::collide(const raylib::Ray &ray) {
+    if (isDamaged)
+        return std::nullopt;
+
+    const float height = 12.0f;
+
+    if (y1 == y2) {
+        auto a = raylib::Vector3(x1, 0, y1);
+        auto b = raylib::Vector3(x2, 0, y1);
+        auto c = raylib::Vector3(x2, height, y1);
+        auto d = raylib::Vector3(x1, height, y1);
+
+        auto collision = ray.GetCollision(a, b, c, d);
+        if (collision.GetDistance())
+            return collision;
+    } else {
+        auto a = raylib::Vector3(x1, 0, y1);
+        auto b = raylib::Vector3(x1, 0, y2);
+        auto c = raylib::Vector3(x1, height, y2);
+        auto d = raylib::Vector3(x1, height, y1);
+
+        auto collision = ray.GetCollision(a, b, c, d);
+        if (collision.GetDistance())
+            return collision;
+    }
+
+    return std::nullopt;
+}
+
 void RoomEntry::touch(Player *player) {
     player->setState(scene);
 }
@@ -221,6 +250,19 @@ std::optional<std::pair<raylib::Vector2, float>> Prop::getBounds() const {
 
 void DamageableProp::damage(Player *player, const DamageType damage_type, int amount) {
     isDamaged = true;
+}
+
+std::optional<raylib::RayCollision> DamageableProp::collide(const raylib::Ray &ray) {
+    if (isDamaged)
+        return std::nullopt;
+
+    const float height = 6.0f;
+
+    auto collision = ray.GetCollision(raylib::Vector3(position.GetX(), height, position.GetY()), height);
+    if (collision.GetDistance())
+        return collision;
+
+    return std::nullopt;
 }
 
 void DamageableProp::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {

@@ -239,6 +239,7 @@ enum class Ground {
     Cave,
     Basement,
     Carpet,
+    Sea,
 };
 
 enum class SegmentType {

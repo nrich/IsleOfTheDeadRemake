@@ -70,6 +70,9 @@ Level::Level(const LevelSettings &level_settings) : map(level_settings.filename)
         case Ground::Carpet:
             ground = raylib::Color(0x38, 0x04, 0x04, 0xFF);
             break;
+        case Ground::Sea:
+            ground = raylib::Color(0x14, 0x2C, 0x95, 0xFF);
+            break;
     }
 }
 

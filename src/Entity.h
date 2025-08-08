@@ -106,6 +106,7 @@ public:
     DamageableWall(const Segment *segment, const raylib::TextureUnmanaged &texture, const raylib::TextureUnmanaged &damaged) : Entity(segment), texture(texture), damaged(damaged) {
     }
 
+    std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
     void damage(Player *player, const DamageType damage_type, int amount);
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
 
@@ -290,17 +291,47 @@ class DamageableProp : public Entity {
     Collision collision;
 
     bool isDamaged = false;
+
+    raylib::Vector2 position;
+    float radius;
 public:
     DamageableProp(const Segment *segment, const raylib::TextureUnmanaged &texture, const raylib::TextureUnmanaged &damaged, Collision collision) : Entity(segment), texture(texture), damaged(damaged), collision(collision) {
+        int x = 0;
+        int y = 0;
+
+        if (x1 == x2) {
+            float min_y = std::min(y1, y2);
+            float max_y = std::max(y1, y2);
+
+            radius = (max_y - min_y) / 2.0f;
+
+            x = x1;
+            y = min_y + (int)radius;
+        } else {
+            float min_x = std::min(x1, x2);
+            float max_x = std::max(x1, x2);
+
+            radius = (max_x - min_x) / 2.0f;
+
+            x = min_x + (int)radius;
+            y = y1;
+        }
+
+        position.SetX(x);
+        position.SetY(y);
     }
 
     Collision collide() const {
+        if (isDamaged)
+            return Collision::Pass;
+
         return collision;
     }
 
     void damage(Player *player, const DamageType damage_type, int amount);
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
+    std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
 
     SegmentType getType() const {
         return SegmentType::Prop;

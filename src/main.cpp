@@ -350,11 +350,11 @@ int main(int argc, char *argv[]) {
         LevelSettings("maps/23.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/24.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/25.map", Sky::Mansion, Ground::Carpet, "music/out4fm.mid"),
-        LevelSettings("maps/26.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
+        LevelSettings("maps/26.map", Sky::Mansion, Ground::Carpet, "music/out4fm.mid"),
         LevelSettings("maps/27.map", Sky::Basement, Ground::Basement, "music/out4fm.mid"),
         LevelSettings("maps/28.map", Sky::Cave, Ground::Cave, "music/out4fm.mid"),
         LevelSettings("maps/29.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
-        LevelSettings("maps/30.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
+        LevelSettings("maps/30.map", Sky::Day, Ground::Sea, "music/out4fm.mid"),
         LevelSettings("maps/31.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
     }, "entrance.tbl");
 

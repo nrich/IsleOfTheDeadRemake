@@ -26,9 +26,9 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 enum Direction : uint32_t {
     NORTH = 0,
-    WEST = 90,
+    WEST = 270,
     SOUTH = 180,
-    EAST = 270,
+    EAST = 90,
 };
 
 class Entrance {

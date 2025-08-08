@@ -635,12 +635,11 @@ ShowerScene::ShowerScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
     entrance = new_entrance;
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes = {
-        std::nullopt,
         StillCel("stillcel/shower2.cel").getTexture(),
         StillCel("stillcel/shower3.cel").getTexture(),
     };
 
-    animations[1] = Animation(raylib::Vector2(82, 0), eyes, true, 12);
+    animations[1] = Animation(raylib::Vector2(82, 0), eyes, true, 6);
 
     navigation[Input::StepBack] = State::World;
     navigation[Input::LookDown] = State::World;

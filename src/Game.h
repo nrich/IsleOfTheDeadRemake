@@ -56,13 +56,23 @@ enum class State {
     TempleEntrance,         // room17
     Oracle,                 // oraclebg
 
-    // 23.MAP
-    Toilet,
-    Shower,
-    Shaman,
+    // 19.MAP
     Chief,
-    VillageEyes,
+    Village2EyesLU,
+    Village2EyesL,
+    Shower,
+    Village2EyesRU,
     Developers,
+    Village2EyesRD,
+
+    // 23.MAP
+    Village1EyesLU,
+    Toilet,
+    Village1EyesLD,
+    Village1EyesRU,
+    Village1EyesR,
+    Village1EyesRD,
+    Shaman,
 
     Lab1,               // labbkg
 

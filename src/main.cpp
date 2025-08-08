@@ -369,15 +369,24 @@ int main(int argc, char *argv[]) {
     auto bunker_left_scene = std::make_unique<BunkerLeftScene>(&panel);
     auto bunker_right_scene = std::make_unique<BunkerRightScene>(&panel);
 
-    auto shaman_scene = std::make_unique<ShamanScene>(&panel, world.getEntrance(83));
-    auto chief_scene = std::make_unique<ChiefScene>(&panel, world.getEntrance(83));
-
     auto village_gate_chief_scene = std::make_unique<VillageGateChiefScene>(&panel, world.getEntrance(83));
     auto village_gate_shaman_scene = std::make_unique<VillageGateShamanScene>(&panel, world.getEntrance(100));
-    auto village_eyes_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    auto toilet_scene = std::make_unique<ToiletScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    auto shower_scene = std::make_unique<ShowerScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
-    auto developers_scene = std::make_unique<DevelopersScene>(&panel, Entrance("maps/23.map", 200, 330, Direction::WEST));
+
+    auto village1_eyes_lu_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 220, 170, Direction::WEST));
+    auto toilet_scene = std::make_unique<ToiletScene>(&panel, Entrance("maps/23.map", 220, 250, Direction::WEST));
+    auto village1_eyes_ld_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 220, 330, Direction::WEST));
+    auto village1_eyes_ru_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 300, 170, Direction::EAST));
+    auto village1_eyes_r_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 300, 250, Direction::EAST));
+    auto village1_eyes_rd_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/23.map", 300, 330, Direction::EAST));
+    auto shaman_scene = std::make_unique<ShamanScene>(&panel, Entrance("maps/23.map", 250, 280, Direction::NORTH));
+
+    auto village2_eyes_lu_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/19.map", 150, 190, Direction::WEST));
+    auto village2_eyes_l_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/19.map", 130, 280, Direction::WEST));
+    auto shower_scene = std::make_unique<ShowerScene>(&panel, Entrance("maps/19.map", 110, 320, Direction::NORTH));
+    auto village2_eyes_ru_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/19.map", 220, 160, Direction::EAST));
+    auto developers_scene = std::make_unique<DevelopersScene>(&panel, Entrance("maps/19.map", 230, 240, Direction::EAST));
+    auto village2_eyes_rd_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/19.map", 260, 320, Direction::EAST));
+    auto chief_scene = std::make_unique<ChiefScene>(&panel, Entrance("maps/19.map", 180, 150, Direction::SOUTH));
 
     auto temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
     auto oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
@@ -409,7 +418,7 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-    player.setState(State::Shaman);
+//    player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
 
     while (!window.ShouldClose()) {
@@ -511,6 +520,10 @@ int main(int argc, char *argv[]) {
             player_input &= ~Input::EquipUzi;
         }
 
+        if (IsKeyPressed(KEY_Q)) {
+            std::cerr << "POSITION " << player.getPosition().ToString() << "\n";
+        }
+
         player.setInput(player_input);
 
         switch (player.getState()) {
@@ -563,21 +576,55 @@ int main(int argc, char *argv[]) {
                 music_player.stop();
                 village_gate_chief_scene->draw(&player, scale);
                 break;
-            case State::VillageEyes:
+
+            case State::Village1EyesLU:
                 music_player.stop();
-                village_eyes_scene->draw(&player, scale);
+                village1_eyes_lu_scene->draw(&player, scale);
                 break;
             case State::Toilet:
                 music_player.stop();
                 toilet_scene->draw(&player, scale);
                 break;
+            case State::Village1EyesLD:
+                music_player.stop();
+                village1_eyes_ld_scene->draw(&player, scale);
+                break;
+            case State::Village1EyesRU:
+                music_player.stop();
+                village1_eyes_ru_scene->draw(&player, scale);
+                break;
+            case State::Village1EyesR:
+                music_player.stop();
+                village1_eyes_r_scene->draw(&player, scale);
+                break;
+            case State::Village1EyesRD:
+                music_player.stop();
+                village1_eyes_rd_scene->draw(&player, scale);
+                break;
+
+            case State::Village2EyesLU:
+                music_player.stop();
+                village2_eyes_lu_scene->draw(&player, scale);
+                break;
+            case State::Village2EyesL:
+                music_player.stop();
+                village2_eyes_l_scene->draw(&player, scale);
+                break;
             case State::Shower:
                 music_player.stop();
                 shower_scene->draw(&player, scale);
                 break;
+            case State::Village2EyesRU:
+                music_player.stop();
+                village2_eyes_ru_scene->draw(&player, scale);
+                break;
             case State::Developers:
                 music_player.stop();
                 developers_scene->draw(&player, scale);
+                break;
+            case State::Village2EyesRD:
+                music_player.stop();
+                village2_eyes_rd_scene->draw(&player, scale);
                 break;
 
             case State::Shaman:

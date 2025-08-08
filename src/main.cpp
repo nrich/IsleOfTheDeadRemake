@@ -341,7 +341,7 @@ int main(int argc, char *argv[]) {
         LevelSettings("maps/16.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/17.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/18.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
-        LevelSettings("maps/19.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
+        LevelSettings("maps/19.map", Sky::Day, Ground::Dirt, "music/drum.mid"),
         LevelSettings("maps/20.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/21.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/22.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
@@ -414,6 +414,7 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::DeadWolf);
         player.addItem(Item::Book);
         player.addItem(Item::Smokes);
+        player.addItem(Item::Shotgun);
     } else {
         player.setState(State::Title);
     }

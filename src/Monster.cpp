@@ -162,13 +162,12 @@ void Base::damage(Player *player, const DamageType damage_type, int amount) {
             currentFrame = std::get<0>(stateFrames[state]);
             if (sounds[MonsterSound::Hurt])
                 sounds[MonsterSound::Hurt]->Play();
-
-            onDeath(player);
         } else {
             state = MonsterState::Dying;
             currentFrame = std::get<0>(stateFrames[state]);
             if (sounds[MonsterSound::Death])
                 sounds[MonsterSound::Death]->Play();
+            onDeath(player);
         }
     }
 }

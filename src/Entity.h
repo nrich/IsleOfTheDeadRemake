@@ -55,7 +55,7 @@ public:
     virtual void touch(Player *player) {
     }
 
-    virtual void damage(const DamageType damage_type, int amount) {
+    virtual void damage(Player *player, const DamageType damage_type, int amount) {
     }
 
     virtual std::optional<raylib::RayCollision> collide(const raylib::Ray &ray) {
@@ -106,7 +106,7 @@ public:
     DamageableWall(const Segment *segment, const raylib::TextureUnmanaged &texture, const raylib::TextureUnmanaged &damaged) : Entity(segment), texture(texture), damaged(damaged) {
     }
 
-    void damage(const DamageType damage_type, int amount);
+    void damage(Player *player, const DamageType damage_type, int amount);
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
 
     SegmentType getType() const {
@@ -188,7 +188,7 @@ public:
 
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
 
-    void damage(const DamageType damage_type, int amount) {
+    void damage(Player *player, const DamageType damage_type, int amount) {
         if (damage_type == expected) {
             open = true;
         }
@@ -241,7 +241,7 @@ public:
     BarricadedRoomEntry(const Segment *segment, const raylib::TextureUnmanaged &closed_texture, const raylib::TextureUnmanaged &opened_texture, DamageType expected, State scene) : Entity(segment), closedTexture(closed_texture), openedTexture(opened_texture), expected(expected), scene(scene) {
     }
 
-    void damage(const DamageType damage_type, int amount) {
+    void damage(Player *player, const DamageType damage_type, int amount) {
         std::cerr << "HERE\n";
 
         if (damage_type == expected) {
@@ -298,7 +298,7 @@ public:
         return collision;
     }
 
-    void damage(const DamageType damage_type, int amount);
+    void damage(Player *player, const DamageType damage_type, int amount);
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     std::optional<std::pair<raylib::Vector2, float>> getBounds() const;
 

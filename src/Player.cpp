@@ -79,7 +79,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                     auto collision = *if_collision;
 
                     if (collision.GetDistance() < 1000) {
-                        entity->damage(DamageType::Bullet, 20);
+                        entity->damage(player, DamageType::Bullet, 20);
                         break;
                     }
                 }
@@ -114,7 +114,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                     auto collision = *if_collision;
 
                     if (collision.GetDistance() < 1000) {
-                        entity->damage(DamageType::Bullet, 25);
+                        entity->damage(player, DamageType::Bullet, 25);
                     }
                 }
             }
@@ -148,7 +148,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                     auto collision = *if_collision;
 
                     if (collision.GetDistance() < 1000) {
-                        entity->damage(DamageType::Bullet, 5);
+                        entity->damage(player, DamageType::Bullet, 5);
                         break;
                     }
                 }
@@ -183,7 +183,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                     auto collision = *if_collision;
 
                     if (collision.GetDistance() < 15) {
-                        entity->damage(DamageType::Machete, 10);
+                        entity->damage(player, DamageType::Machete, 10);
                         break;
                     }
                 }

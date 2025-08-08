@@ -86,7 +86,7 @@ void Wall::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
     draw_wall(x1, y1, x2, y2, texture);
 }
 
-void DamageableWall::damage(const DamageType damage_type, int amount) {
+void DamageableWall::damage(Player *player, const DamageType damage_type, int amount) {
     isDamaged = true;
 }
 
@@ -219,7 +219,7 @@ std::optional<std::pair<raylib::Vector2, float>> Prop::getBounds() const {
     return std::make_pair(raylib::Vector2(x1, centre_y), radius);
 }
 
-void DamageableProp::damage(const DamageType damage_type, int amount) {
+void DamageableProp::damage(Player *player, const DamageType damage_type, int amount) {
     isDamaged = true;
 }
 

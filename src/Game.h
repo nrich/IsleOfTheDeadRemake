@@ -230,11 +230,15 @@ enum class DeathType {
 enum class Sky {
     Day,
     Cave,
+    Basement,
+    Mansion,
 };
 
 enum class Ground {
     Dirt,
     Cave,
+    Basement,
+    Carpet,
 };
 
 enum class SegmentType {

@@ -48,6 +48,13 @@ Level::Level(const LevelSettings &level_settings) : map(level_settings.filename)
         case Sky::Cave:
             sky = raylib::Color(0x30, 0x20, 0x20, 0xFF);
             break;
+        case Sky::Basement:
+            sky = raylib::Color(0x94, 0x94, 0x94, 0xFF);
+            break;
+        case Sky::Mansion:
+            sky = raylib::Color(0x59, 0x48, 0x2C, 0xFF);
+            break;
+
     }
 
     switch (level_settings.ground) {
@@ -56,6 +63,12 @@ Level::Level(const LevelSettings &level_settings) : map(level_settings.filename)
             break;
         case Ground::Cave:
             ground = raylib::Color(0x49, 0x30, 0x30, 0xFF);
+            break;
+        case Ground::Basement:
+            ground = raylib::Color(0x55, 0x55, 0x55, 0xFF);
+            break;
+        case Ground::Carpet:
+            ground = raylib::Color(0x38, 0x04, 0x04, 0xFF);
             break;
     }
 }

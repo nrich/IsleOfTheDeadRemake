@@ -143,6 +143,7 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
     DeathType death_type = player->getDeathType();
 
     static auto acid_anim = Animation("fli/acid.fli");
+    static auto nurse_anim = Animation("fli/bzap.fli", "sound/zap.voc");
     static auto rifle_anim = Animation("fli/rflekill.fli", "sound/rifle.voc");
     static auto snare_anim = Animation("fli/snare.fli");
     static auto wire_anim = Animation("fli/wirekill.fli", "sound/explode.voc");
@@ -152,29 +153,30 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
     {
         window.ClearBackground(raylib::BLACK);
 
+        bool anim_finished = false;
         switch (death_type) {
             case DeathType::Acid:
-                if (acid_anim.play(scale))
-                    player->setState(State::Laugh);
+                anim_finished = acid_anim.play(scale);
+                break;
+            case DeathType::Nurse:
+                anim_finished = nurse_anim.play(scale);
                 break;
             case DeathType::Rifle:
-                if (rifle_anim.play(scale))
-                    player->setState(State::Laugh);
+                anim_finished = rifle_anim.play(scale);
                 break;
             case DeathType::Snare:
-                if (snare_anim.play(scale))
-                    player->setState(State::Laugh);
+                anim_finished = snare_anim.play(scale);
                 break;
             case DeathType::Wire:
-                if (wire_anim.play(scale))
-                    player->setState(State::Laugh);
+                anim_finished = wire_anim.play(scale);
                 break;
             case DeathType::Zombie:
             default:
-                if (zombie_anim.play(scale))
-                    player->setState(State::Laugh);
-                break;
+                anim_finished = zombie_anim.play(scale);
         }
+
+        if (anim_finished)
+            player->setState(State::Laugh);
     }
     EndDrawing();
 }
@@ -347,10 +349,10 @@ int main(int argc, char *argv[]) {
         LevelSettings("maps/22.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/23.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/24.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
-        LevelSettings("maps/25.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
+        LevelSettings("maps/25.map", Sky::Mansion, Ground::Carpet, "music/out4fm.mid"),
         LevelSettings("maps/26.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
-        LevelSettings("maps/27.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
-        LevelSettings("maps/28.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
+        LevelSettings("maps/27.map", Sky::Basement, Ground::Basement, "music/out4fm.mid"),
+        LevelSettings("maps/28.map", Sky::Cave, Ground::Cave, "music/out4fm.mid"),
         LevelSettings("maps/29.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/30.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/31.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
@@ -421,6 +423,7 @@ int main(int argc, char *argv[]) {
 
 //    player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
+    //player.setState(State::Mirror);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();

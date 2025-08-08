@@ -143,9 +143,13 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
     DeathType death_type = player->getDeathType();
 
     static auto acid_anim = Animation("fli/acid.fli");
+    static auto bat_anim = Animation("fli/batkill.fli");
+    static auto doc_anim = Animation("fli/memkill.fli");
+    static auto fence_anim = Animation("fli/zap.fli", "sound/zap.voc");
     static auto nurse_anim = Animation("fli/bzap.fli", "sound/zap.voc");
     static auto rifle_anim = Animation("fli/rflekill.fli", "sound/rifle.voc");
     static auto snare_anim = Animation("fli/snare.fli");
+    static auto suicide_anim = Animation("fli/suicide.fli");
     static auto wire_anim = Animation("fli/wirekill.fli", "sound/explode.voc");
     static auto zombie_anim = Animation("fli/death.fli", "sound/aarh4.voc");
 
@@ -158,6 +162,15 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
             case DeathType::Acid:
                 anim_finished = acid_anim.play(scale);
                 break;
+            case DeathType::Bat:
+                anim_finished = bat_anim.play(scale);
+                break;
+            case DeathType::Doc:
+                anim_finished = doc_anim.play(scale);
+                break;
+            case DeathType::Fence:
+                anim_finished = fence_anim.play(scale);
+                break;
             case DeathType::Nurse:
                 anim_finished = nurse_anim.play(scale);
                 break;
@@ -166,6 +179,9 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
                 break;
             case DeathType::Snare:
                 anim_finished = snare_anim.play(scale);
+                break;
+            case DeathType::Suicide:
+                anim_finished = suicide_anim.play(scale);
                 break;
             case DeathType::Wire:
                 anim_finished = wire_anim.play(scale);

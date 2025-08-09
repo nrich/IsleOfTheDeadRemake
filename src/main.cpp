@@ -144,9 +144,12 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
 
     static auto acid_anim = Animation("fli/acid.fli");
     static auto bat_anim = Animation("fli/batkill.fli");
+    static auto companion_anim = Animation("fli/zombabe.fli");
     static auto doc_anim = Animation("fli/memkill.fli");
     static auto fence_anim = Animation("fli/zap.fli", "sound/zap.voc");
+    static auto missile_anim = Animation("fli/mslekill.fli");
     static auto nurse_anim = Animation("fli/bzap.fli", "sound/zap.voc");
+    static auto plane_anim = Animation("fli/launch.fli");
     static auto rifle_anim = Animation("fli/rflekill.fli", "sound/rifle.voc");
     static auto snare_anim = Animation("fli/snare.fli");
     static auto suicide_anim = Animation("fli/suicide.fli");
@@ -165,14 +168,23 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
             case DeathType::Bat:
                 anim_finished = bat_anim.play(scale);
                 break;
+            case DeathType::Companion:
+                anim_finished = companion_anim.play(scale);
+                break;
             case DeathType::Doc:
                 anim_finished = doc_anim.play(scale);
                 break;
             case DeathType::Fence:
                 anim_finished = fence_anim.play(scale);
                 break;
+            case DeathType::Missile:
+                anim_finished = missile_anim.play(scale);
+                break;
             case DeathType::Nurse:
                 anim_finished = nurse_anim.play(scale);
+                break;
+            case DeathType::Plane:
+                anim_finished = plane_anim.play(scale);
                 break;
             case DeathType::Rifle:
                 anim_finished = rifle_anim.play(scale);

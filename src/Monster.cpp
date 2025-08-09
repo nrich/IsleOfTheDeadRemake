@@ -31,7 +31,7 @@ static void draw_entity(const raylib::Camera3D *camera, const raylib::Vector2 &p
     camera->DrawBillboard(texture, Vector3(position.GetX(), y_offset, position.GetY()), scale);
 }
 
-Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage) : Entity(segment), textures(textures), stepSize(step_size), deathType(death_type), attackDamage(attack_damage) {
+Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage, float notice_distance, float attack_distance, float walk_distance) : Entity(segment), textures(textures), stepSize(step_size), deathType(death_type), attackDamage(attack_damage), noticeDistance(notice_distance), attackDistance(attack_distance), walkDistance(walk_distance) {
     int x = 0;
     int y = 0;
 
@@ -85,7 +85,7 @@ void Base::update(Player *player, uint64_t frame_count) {
     float distance = position.Distance(player_position);
 
     if (state == MonsterState::Asleep) {
-        if (distance < 50.0f) {
+        if (distance < noticeDistance) {
             if (sounds[MonsterSound::Wake])
                 sounds[MonsterSound::Wake]->Play();
             state = MonsterState::Waking;
@@ -94,7 +94,7 @@ void Base::update(Player *player, uint64_t frame_count) {
     }
 
     if (state == MonsterState::Standing || state == MonsterState::Walking) {
-        if (distance < 20.0f) {
+        if (distance < attackDistance) {
             state = MonsterState::Attacking;
             currentFrame = std::get<0>(stateFrames[state]);
             if (sounds[MonsterSound::Attack])
@@ -105,14 +105,14 @@ void Base::update(Player *player, uint64_t frame_count) {
     }
 
     if (state == MonsterState::Standing) {
-        if (distance < 200.0f) {
+        if (distance < walkDistance) {
             state = MonsterState::Walking;
             currentFrame = std::get<0>(stateFrames[state]);
         }
     }
 
     if (state == MonsterState::Walking) {
-        if (distance >= 200.0f) {
+        if (distance >= walkDistance) {
             state = MonsterState::Standing;
             currentFrame = std::get<0>(stateFrames[state]);
         } else {
@@ -125,13 +125,11 @@ void Base::update(Player *player, uint64_t frame_count) {
                 if (path.size() > 1) {
                     auto next_target = path[1];
 
-                    position = position.MoveTowards(next_target, 75.0 * GetFrameTime());
+                    position = position.MoveTowards(next_target, stepSize * GetFrameTime());
                 } else if (path.size() == 1) {
-                    std::cerr << "ONE STEP\n";
                     state = MonsterState::Standing;
                     currentFrame = std::get<0>(stateFrames[state]);
                 } else {
-                    std::cerr << "NO PATH\n";
                     state = MonsterState::Standing;
                     currentFrame = std::get<0>(stateFrames[state]);
                 }
@@ -189,7 +187,7 @@ Base::~Base() {
 
 }
 
-Bat::Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Bat, 2) {
+Bat::Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Bat, 2, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/batwake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -210,11 +208,7 @@ Bat::Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Bat::~Bat() {
-
-}
-
-CJ::CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
+CJ::CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/fgrowl.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -247,11 +241,7 @@ CJ::CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &text
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-CJ::~CJ() {
-
-}
-
-Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Doc, 4) {
+Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Doc, 4, 50.f, 20.0f, 200.0f) {
     health = 30;
     state = MonsterState::Standing;
 
@@ -265,11 +255,7 @@ Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Doc::~Doc() {
-
-}
-
-Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
+Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -302,11 +288,7 @@ Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Dude::~Dude() {
-
-}
-
-Harry::Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
+Harry::Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -339,11 +321,7 @@ Harry::Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged>
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Harry::~Harry() {
-
-}
-
-Kid::Kid(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 1) {
+Kid::Kid(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 1, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/daddy.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -376,12 +354,7 @@ Kid::Kid(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Kid::~Kid() {
-
-}
-
-
-Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Nurse, 3) {
+Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Nurse, 3, 50.f, 20.0f, 200.0f) {
     health = 30;
     state = MonsterState::Standing;
 
@@ -395,12 +368,7 @@ Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged>
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Nurse::~Nurse() {
-
-}
-
-
-Roy::Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
+Roy::Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -433,11 +401,7 @@ Roy::Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Roy::~Roy() {
-
-}
-
-Tor::Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
+Tor::Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -470,11 +434,7 @@ Tor::Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Tor::~Tor() {
-
-}
-
-Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2) {
+Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
     static const raylib::Wave wake_wav = Voc::Load("sound/wolfw.voc");
     static raylib::Sound wake_sound(wake_wav);
 
@@ -507,11 +467,7 @@ Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-Wolf::~Wolf() {
-
-}
-
-Drummer::Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 0) {
+Drummer::Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 0, 50.f, 20.0f, 200.0f) {
     health = 1;
     state = MonsterState::Standing;
 
@@ -544,6 +500,23 @@ void Drummer::onDeath(Player *player) {
     player->addGameFlag(PlayerGameFlag::NoiseStopped);
 }
 
-Drummer::~Drummer() {
+Tank::Tank(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 0.0f, DeathType::Zombie, 0, 50.f, 20.0f, 200.0f) {
+    health = 20;
+    state = MonsterState::Standing;
 
+    static const raylib::Wave death_wav = Voc::Load("sound/explode.voc");
+    static raylib::Sound death_sound(death_wav);
+
+    sounds[MonsterSound::Death] = &death_sound;
+
+    stateFrames[MonsterState::Standing] = std::make_tuple(0, 0, MonsterState::Repeat);
+    stateFrames[MonsterState::Dying] = std::make_tuple(1, 8, MonsterState::Dead);
+    stateFrames[MonsterState::Dead] = std::make_tuple(9, 9, MonsterState::Repeat);
+
+    currentFrame = std::get<0>(stateFrames[state]);
 }
+
+void Tank::onDeath(Player *player) {
+    player->addGameFlag(PlayerGameFlag::TankExploded);
+}
+

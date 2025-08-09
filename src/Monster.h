@@ -62,10 +62,15 @@ protected:
     float stepSize;
     DeathType deathType;
     int attackDamage;
+
+    float noticeDistance;
+    float attackDistance;
+    float walkDistance; 
+
     virtual void onDeath(Player *player) {
     }
 public:
-    Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage);
+    Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage, float notice_distance, float attack_distance, float walk_distance);
 
     void damage(Player *player, const DamageType damage_type, int amount);
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
@@ -87,61 +92,51 @@ public:
 class Bat : public Base {
 public:
     Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Bat();
 };
 
 class CJ : public Base {
 public:
     CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~CJ();
 };
 
 class Doc : public Base {
 public:
     Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Doc();
 };
 
 class Dude : public Base {
 public:
     Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Dude();
 };
 
 class Harry : public Base {
 public:
     Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Harry();
 };
 
 class Kid : public Base {
 public:
     Kid(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Kid();
 };
 
 class Nurse : public Base {
 public:
     Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Nurse();
 };
 
 class Roy : public Base {
 public:
     Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Roy();
 };
 
 class Tor : public Base {
 public:
     Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Tor();
 };
 
 class Wolf : public Base {
 public:
     Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    ~Wolf();
 };
 
 class Drummer : public Base {
@@ -149,7 +144,12 @@ class Drummer : public Base {
 public:
     Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
     void update(Player *player, uint64_t frame_count);
-    ~Drummer();
+};
+
+class Tank : public Base {
+    void onDeath(Player *player);
+public:
+    Tank(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
 };
 
 };

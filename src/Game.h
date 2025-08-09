@@ -255,6 +255,7 @@ enum class SegmentType {
 enum PlayerGameFlag : uint64_t {
     VisitedVillage      = 1<<0,
     NoiseStopped        = 1<<1,
+    TankExploded        = 1<<2,
 };
 
 #endif //GAME_H

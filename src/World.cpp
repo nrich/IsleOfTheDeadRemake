@@ -1101,6 +1101,20 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/drumr07.cel",
     });
 
+    static const auto tank = load_cel3_texture({
+        "cels3/tnk01.cel",
+        "cels3/tnk02.cel",
+        "cels3/tnk03.cel",
+        "cels3/tnk04.cel",
+        "cels3/tnk05.cel",
+        "cels3/tnk06.cel",
+        "cels3/tnk07.cel",
+        "cels3/tnk08.cel",
+        "cels3/tnk09.cel",
+        "cels3/tnk10.cel",
+    });
+
+
     static const auto hut_door = load_cel3_texture("cels3/hutdoor1.cel");
     static const auto camp_gate = load_cel3_texture("cels3/cmpgate1.cel");
     static const auto unknown = load_cel3_texture("cels3/unknown.cel");
@@ -1350,6 +1364,10 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             break;
         case 135:
             entities.emplace(segment.id, std::make_unique<AnimatedProp>(&segment, tiki, 6, Collision::Pass));
+            break;
+        case 136:
+            std::cout << "\t TANK " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            entities.emplace(segment.id, std::make_unique<Monster::Tank>(&segment, tank));
             break;
         case 138:
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, bed, Collision::Block));

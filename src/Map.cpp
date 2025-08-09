@@ -91,11 +91,14 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
         auto camera_position = camera->GetPosition();
         camera_position.y = 0;
 
-        if (l.texture < 100 && r.texture >= 100)
-            return true;
 
-        if (r.texture < 100 && l.texture >= 100)
-            return false;
+        if (l.texture != 63 && r.texture != 63) {
+            if (l.texture < 100 && r.texture >= 100)
+                return true;
+
+            if (r.texture < 100 && l.texture >= 100)
+                return false;
+        }
 
         Entity *le = world->getEntity(l.id);
         Entity *re = world->getEntity(r.id);

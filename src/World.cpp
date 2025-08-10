@@ -1170,10 +1170,17 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/tnk10.cel",
     });
 
+    static const auto hanger_door = load_cel3_texture({
+        "cels3/hngar03.cel",
+        "cels3/hngar04.cel",
+        "cels3/hngar05.cel",
+    });
 
-    static const auto hut_door = load_cel3_texture("cels3/hutdoor1.cel");
     static const auto camp_gate = load_cel3_texture("cels3/cmpgate1.cel");
     static const auto unknown = load_cel3_texture("cels3/unknown.cel");
+
+    static const auto missile_left = load_cel3_texture("cels3/misslec1.cel");
+    static const auto missile_right = load_cel3_texture("cels3/misslec2.cel");
 
     switch (segment.texture) {
         case 0:
@@ -1460,17 +1467,31 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 146:
             entities.emplace(segment.id, std::make_unique<Trap>(&segment, trapdoor, DeathType::Acid));
             break;
+
+       case 147:
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, missile_left, State::RocketLauncher));
+            break;
+        case 148:
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, missile_right, State::RocketLauncher));
+            break;
+
         case 150:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_bullets, Item::Ammo2, 20));
             break;
         case 151:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_clips, Item::Ammo3, 25));
             break;
+        case 159:
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, camp_gate_open, entrances[121]));
+            break;
         case 160:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, hanger_dark));
             break;
         case 161:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, hanger_light));
+            break;
+        case 162:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, hanger_door[0]));
             break;
         case 166:
             entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, plane_fence_left, State::PlaneCockpit));
@@ -1506,7 +1527,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, shotgun, Item::Shotgun, -1));
             break;
         default:
-            std::cerr << "UNKNOWN " << segment.id << " " << segment.texture << "\n";
+            std::cout << "UNKNOWN " << segment.id << " " << segment.texture << "\n";
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, unknown));
             break;
     }

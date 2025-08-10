@@ -682,6 +682,9 @@ RocketLauncherScene::RocketLauncherScene(Panel *panel, const Entrance &new_entra
     entrance = new_entrance;
 
     layouts.emplace_back(raylib::Vector2(29, 57), StillCel("stillcel/panel.cel").getTexture(), Item::Panel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
 }
 
 std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layout &layout) {

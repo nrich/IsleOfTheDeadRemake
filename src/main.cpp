@@ -433,7 +433,7 @@ int main(int argc, char *argv[]) {
     auto temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
     auto oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
 
-    auto rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/18.map", 140, 380, Direction::NORTH));
+    auto rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/18.map", 140, 390, Direction::EAST));
     auto plane_cockpit_scene = std::make_unique<PlaneCockpitScene>(&panel, Entrance("maps/18.map", 140, 130, Direction::NORTH));
     auto plane_galley_scene = std::make_unique<PlaneGalleyScene>(&panel);
     auto lab_zombie_scene = std::make_unique<LabZombieScene>(&panel, world.getEntrance(104));

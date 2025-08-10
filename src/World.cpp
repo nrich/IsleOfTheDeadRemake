@@ -611,14 +611,14 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/firepl2c.cel",
     });
 
-    const auto bookshelf = load_cel3_texture("cels3/frnture4.cel");
-    const auto bookshelf_damaged = load_cel3_texture("cels3/frnture3.cel");
+    static const auto bookshelf = load_cel3_texture("cels3/frnture4.cel");
+    static const auto bookshelf_damaged = load_cel3_texture("cels3/frnture3.cel");
 
-    const auto tv = load_cel3_texture("cels3/frnture7.cel");
-    const auto tv_damaged = load_cel3_texture("cels3/frnture8.cel");
+    static const auto tv = load_cel3_texture("cels3/frnture7.cel");
+    static const auto tv_damaged = load_cel3_texture("cels3/frnture8.cel");
 
-    const auto portrait = load_cel3_texture("cels3/frnture5.cel");
-    const auto portrait_damaged = load_cel3_texture("cels3/frnture6.cel");
+    static const auto portrait = load_cel3_texture("cels3/frnture5.cel");
+    static const auto portrait_damaged = load_cel3_texture("cels3/frnture6.cel");
 
     // Doors,passages,entries
     static const auto bunker_entry_closed = load_cel3_texture("cels3/bunkent1.cel");
@@ -649,7 +649,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/fire3c.cel",
     });
 
-    const auto camp_gate_open = load_cel3_texture("cels3/cmpgate3.cel");
+    static const auto camp_gate_open = load_cel3_texture("cels3/cmpgate3.cel");
 
     static const auto plane_fence_left = load_cel3_texture("cels3/fencepl1.cel");
     static const auto plane_fence_right = load_cel3_texture("cels3/fencepl2.cel");
@@ -685,8 +685,8 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/tiki6.cel",
     });
 
-    const auto red_chair = load_cel3_texture("cels3/frnture2.cel");
-    const auto red_chair_damaged = load_cel3_texture("cels3/frnture1.cel");
+    static const auto red_chair = load_cel3_texture("cels3/frnture2.cel");
+    static const auto red_chair_damaged = load_cel3_texture("cels3/frnture1.cel");
 
     // Traps
     static const auto pit = load_cel3_texture("cels3/pit.cel");

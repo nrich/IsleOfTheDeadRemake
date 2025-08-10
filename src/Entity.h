@@ -81,7 +81,7 @@ public:
 };
 
 class Wall : public Entity {
-    raylib::TextureUnmanaged texture; 
+    const raylib::TextureUnmanaged &texture;
 public:
     Wall(const Segment *segment, const raylib::TextureUnmanaged &texture) : Entity(segment), texture(texture) {
     }
@@ -98,12 +98,16 @@ public:
 };
 
 class DamageableWall : public Entity {
-    raylib::TextureUnmanaged texture;
-    raylib::TextureUnmanaged damaged;
+    const raylib::TextureUnmanaged &texture;
+    const raylib::TextureUnmanaged &damaged;
     Collision collision;
     bool isDamaged = false;
 public:
     DamageableWall(const Segment *segment, const raylib::TextureUnmanaged &texture, const raylib::TextureUnmanaged &damaged) : Entity(segment), texture(texture), damaged(damaged) {
+    }
+
+    Collision collide() const {
+        return Collision::Block;
     }
 
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
@@ -115,9 +119,8 @@ public:
     }
 };
 
-
 class AnimatedWall : public Entity {
-    std::vector<raylib::TextureUnmanaged> textures;
+    const std::vector<raylib::TextureUnmanaged> &textures;
     uint32_t frameRate;
 
 public:
@@ -154,7 +157,7 @@ public:
 };
 
 class Passage : public Portal {
-    raylib::TextureUnmanaged texture;
+    const raylib::TextureUnmanaged &texture;
 public:
     Passage(const Segment *segment, const raylib::TextureUnmanaged &texture, const Entrance &entrance) : Portal(segment, entrance), texture(texture) {
     }
@@ -165,8 +168,8 @@ public:
 class Door : public Portal {
 protected:
     bool open = false;
-    raylib::TextureUnmanaged closedTexture;
-    raylib::TextureUnmanaged openedTexture;
+    const raylib::TextureUnmanaged &closedTexture;
+    const raylib::TextureUnmanaged &openedTexture;
 public:
     Door(const Segment *segment, const raylib::TextureUnmanaged &closed_texture, const raylib::TextureUnmanaged &opened_texture, const Entrance &entrance) : Portal(segment, entrance), closedTexture(closed_texture), openedTexture(opened_texture) {
     }
@@ -234,8 +237,8 @@ public:
 class BarricadedRoomEntry : public Entity {
     bool open = false;
 
-    raylib::TextureUnmanaged closedTexture;
-    raylib::TextureUnmanaged openedTexture;
+    const raylib::TextureUnmanaged &closedTexture;
+    const raylib::TextureUnmanaged &openedTexture;
     DamageType expected;
     State scene;
 public:
@@ -267,7 +270,7 @@ public:
 };
 
 class Prop : public Entity {
-    raylib::TextureUnmanaged texture;
+    const raylib::TextureUnmanaged &texture;
     Collision collision;
 public:
     Prop(const Segment *segment, const raylib::TextureUnmanaged &texture, Collision collision) : Entity(segment), texture(texture), collision(collision) {
@@ -286,8 +289,8 @@ public:
 };
 
 class DamageableProp : public Entity {
-    raylib::TextureUnmanaged texture;
-    raylib::TextureUnmanaged damaged;
+    const raylib::TextureUnmanaged &texture;
+    const raylib::TextureUnmanaged &damaged;
     Collision collision;
 
     bool isDamaged = false;
@@ -339,7 +342,7 @@ public:
 };
 
 class AnimatedProp : public Entity {
-    std::vector<raylib::TextureUnmanaged> textures;
+    const std::vector<raylib::TextureUnmanaged> &textures;
     uint32_t frameRate;
     Collision collision;
 public:
@@ -359,7 +362,7 @@ public:
 };
 
 class Trap : public Entity {
-    raylib::TextureUnmanaged texture;
+    const raylib::TextureUnmanaged &texture;
     DeathType deathType;
     bool triggered = false;
 public:
@@ -383,7 +386,7 @@ public:
 };
 
 class ItemPickup : public Entity {
-    raylib::TextureUnmanaged texture;
+    const raylib::TextureUnmanaged &texture;
 
     Item item;
     int count;

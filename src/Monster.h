@@ -54,7 +54,7 @@ protected:
     uint64_t currentFrame = 0;
     raylib::Vector2 position;
     float radius;
-    std::vector<raylib::TextureUnmanaged> textures;
+    const std::vector<raylib::TextureUnmanaged> &textures;
     MonsterState state;
     std::unordered_map<MonsterState, std::tuple<size_t, size_t, MonsterState>> stateFrames;
     std::unordered_map<MonsterSound, raylib::Sound*> sounds;

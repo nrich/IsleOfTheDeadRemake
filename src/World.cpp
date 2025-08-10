@@ -1382,7 +1382,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, trees, Collision::Block));
             break;
         case 108:
-            entities.emplace(segment.id, std::make_unique<Prop>(&segment, vine, Collision::Pass));
+            entities.emplace(segment.id, std::make_unique<WallProp>(&segment, vine, Collision::Pass));
             break;
         case 109:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, crystal, Item::Crystal, -1));

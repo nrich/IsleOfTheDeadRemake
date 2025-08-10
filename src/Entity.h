@@ -288,6 +288,24 @@ public:
     }
 };
 
+class WallProp : public Entity {
+    const raylib::TextureUnmanaged &texture;
+    Collision collision;
+public:
+    WallProp(const Segment *segment, const raylib::TextureUnmanaged &texture, Collision collision) : Entity(segment), texture(texture), collision(collision) {
+    }
+
+    Collision collide() const {
+        return collision;
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+
+    SegmentType getType() const {
+        return SegmentType::Prop;
+    }
+};
+
 class DamageableProp : public Entity {
     const raylib::TextureUnmanaged &texture;
     const raylib::TextureUnmanaged &damaged;

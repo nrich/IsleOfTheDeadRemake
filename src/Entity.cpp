@@ -87,6 +87,10 @@ void Wall::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
     draw_wall(x1, y1, x2, y2, texture);
 }
 
+void WallProp::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
+    draw_wall(x1, y1, x2, y2, texture);
+}
+
 void DamageableWall::damage(Player *player, const DamageType damage_type, int amount) {
     isDamaged = true;
 }

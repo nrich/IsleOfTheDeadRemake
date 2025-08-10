@@ -248,6 +248,9 @@ static void play_title_anim(Player *player, raylib::Window &window, const int sc
 }
 
 static void play_lab2_anim(Player *player, raylib::Window &window, const int scale, char anim_index) {
+    static raylib::Sound way_out_basement = raylib::Sound(Voc::Load("sound/wayout.voc"));
+    static raylib::Sound help = raylib::Sound(Voc::Load("sound/helpbabe.voc"));
+
     static auto lab2a_anim = Animation("fli/babea.fli");
     static auto lab2b_anim = Animation("fli/babeb.fli");
     static auto lab2c_anim = Animation("fli/babec.fli");
@@ -288,14 +291,13 @@ static void play_lab2_anim(Player *player, raylib::Window &window, const int sca
         }
 
         if (anim_finished) {
-            static raylib::Sound way_out_basement = raylib::Sound(Voc::Load("sound/wayout.voc"));
-
             switch (anim_index) {
                 case 'F':
                 case 'f':
                     way_out_basement.Play();
                     break;
                 default:
+                    help.Play();
                     break;
             }
             player->setState(State::Lab2);

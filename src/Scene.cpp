@@ -798,7 +798,6 @@ LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance)
 
 std::string LabCompanionScene::useItem(Player *player, Item item) {
     const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/room24.cel").getTexture();
-    static raylib::Sound way_out_basement = raylib::Sound(Voc::Load("sound/wayout.voc"));
 
     switch (item) {
         case Item::LabButtonA:
@@ -828,8 +827,6 @@ std::string LabCompanionScene::useItem(Player *player, Item item) {
             removeItemLayout(Item::LabButtonF);
 
             player->addItem(Item::Companion);
-
-            way_out_basement.Play();
             break;
         default:
             return Scene::useItem(player, item);

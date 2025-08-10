@@ -288,6 +288,16 @@ static void play_lab2_anim(Player *player, raylib::Window &window, const int sca
         }
 
         if (anim_finished) {
+            static raylib::Sound way_out_basement = raylib::Sound(Voc::Load("sound/wayout.voc"));
+
+            switch (anim_index) {
+                case 'F':
+                case 'f':
+                    way_out_basement.Play();
+                    break;
+                default:
+                    break;
+            }
             player->setState(State::Lab2);
         }
     }

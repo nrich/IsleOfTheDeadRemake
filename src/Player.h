@@ -73,6 +73,8 @@ class Player {
 
     DeathType deathType;
     uint64_t flags = 0;
+
+    int radius = 3;
 public:
     Player(World *world);
 

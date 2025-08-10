@@ -20,6 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "Entity.h"
 #include "Player.h"
+#include "Voc.h"
 
 static void draw_wall(const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2, const raylib::TextureUnmanaged &texture) {
     const float height = 12.0f;
@@ -386,6 +387,9 @@ void ItemPickup::draw(const raylib::Camera3D *camera, uint64_t frame_count) cons
 }
 
 void ItemPickup::touch(Player *player) {
+    static raylib::Sound pickup_sound(Voc::Load("sound/tap.voc"));
+    pickup_sound.Play();
+
     player->addItem(item, count);
     taken = true;
 }

@@ -464,7 +464,7 @@ void Player::tryMove(const raylib::Vector3 &movement, const raylib::Vector3 &rot
                     auto bounds = *bounds_if;
 
                     float distance = bounds.first.Distance(new_position);
-                    if (bounds.second + 4.0f > distance) {
+                    if (bounds.second + radius > distance) {
                         auto collision = entity->collide();
 
                         if (collision == Collision::Block) {
@@ -489,8 +489,8 @@ void Player::tryMove(const raylib::Vector3 &movement, const raylib::Vector3 &rot
                     }
 
                     if (new_position.x >= x1 && new_position.x <= x2) {
-                        int north = new_position.y - 5;
-                        int south = new_position.y + 5;
+                        int north = new_position.y - radius;
+                        int south = new_position.y + radius;
 
                         if (y1 < new_position.y && y1 > north) {
                             auto collision = entity->collide();
@@ -528,8 +528,8 @@ void Player::tryMove(const raylib::Vector3 &movement, const raylib::Vector3 &rot
                     }
 
                     if (new_position.y >= y1 && new_position.y <= y2) {
-                        int west = new_position.x - 5;
-                        int east = new_position.x + 5;
+                        int west = new_position.x - radius;
+                        int east = new_position.x + radius;
 
                         if (x1 < new_position.x && x1 > west) {
                             auto collision = entity->collide();

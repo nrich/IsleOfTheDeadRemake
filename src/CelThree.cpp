@@ -46,7 +46,6 @@ CelThree::CelThree(const std::string &filename, const Palette &palette) : filena
     std::memcpy(bytes, pixels.data(), pixels.size());
 
     auto image = raylib::Image(bytes, 64, 64, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
-    //image = image.Copy();
     image = image.RotateCW();
     image = image.FlipHorizontal();
 

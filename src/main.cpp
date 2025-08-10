@@ -377,8 +377,8 @@ int main(int argc, char *argv[]) {
         LevelSettings("maps/22.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/23.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/24.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
-        LevelSettings("maps/25.map", Sky::Mansion, Ground::Carpet, "music/out4fm.mid"),
-        LevelSettings("maps/26.map", Sky::Mansion, Ground::Carpet, "music/out4fm.mid"),
+        LevelSettings("maps/25.map", Sky::Mansion, Ground::Carpet, "music/out1fm.mid"),
+        LevelSettings("maps/26.map", Sky::Mansion, Ground::Carpet, "music/out1fm.mid"),
         LevelSettings("maps/27.map", Sky::Basement, Ground::Basement, "music/out4fm.mid"),
         LevelSettings("maps/28.map", Sky::Cave, Ground::Cave, "music/out4fm.mid"),
         LevelSettings("maps/29.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
@@ -421,12 +421,12 @@ int main(int argc, char *argv[]) {
     auto temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
     auto oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
 
-    auto rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    auto plane_cockpit_scene = std::make_unique<PlaneCockpitScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/18.map", 140, 380, Direction::NORTH));
+    auto plane_cockpit_scene = std::make_unique<PlaneCockpitScene>(&panel, Entrance("maps/18.map", 140, 130, Direction::NORTH));
     auto plane_galley_scene = std::make_unique<PlaneGalleyScene>(&panel);
-    auto lab_zombie_scene = std::make_unique<LabZombieScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    auto lab_companion_scene = std::make_unique<LabCompanionScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    auto mirror_scene = std::make_unique<MirrorScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto lab_zombie_scene = std::make_unique<LabZombieScene>(&panel, world.getEntrance(104));
+    auto lab_companion_scene = std::make_unique<LabCompanionScene>(&panel, world.getEntrance(112));
+    auto mirror_scene = std::make_unique<MirrorScene>(&panel, Entrance("maps/26.map", 250, 160, Direction::WEST));
 
     Player player(&world);
 

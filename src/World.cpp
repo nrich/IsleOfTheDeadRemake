@@ -78,11 +78,12 @@ void World::spawnPassage(const Segment &segment) {
     static const auto tree_closed_entry = load_cel3_texture("cels3/rent1.cel");
     static const auto tree_opened_entry = load_cel3_texture("cels3/jtocave.cel");
 
+    static const auto big_door = load_cel3_texture("cels3/bigdoor1.cel");
+    static const auto temple_door = load_cel3_texture("cels3/tmpdoor1.cel");
+
     static const auto cave_entry = load_cel3_texture("cels3/cav2cave.cel");
     static const auto jungle_entry = load_cel3_texture("cels3/cavetoj.cel");
     static const auto unknown = load_cel3_texture("cels3/unknown.cel");
-
-//    static const auto temple_door = load_cel3_texture("cels3/tmpdoor1.cel");
 
     switch (segment.id) {
         // 01.map
@@ -353,6 +354,10 @@ void World::spawnPassage(const Segment &segment) {
             // 17.map
             entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[76], DamageType::Machete));
             break;
+        case 0xdfc05ceb3e26434c:
+            // 28.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[119]));
+            break;
 
         // 19.map
         case 0xe902a21ddb690d8a:
@@ -398,14 +403,56 @@ void World::spawnPassage(const Segment &segment) {
             entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[96], DamageType::Machete));
             break;
 
-        // 28.map
-        //case 0xc9fff127332d2490:
-            // 18.map
-            //entities.emplace(segment.id, std::make_unique<Barricade>(&segment, jungle_entry, cave_entry, entrances[81], DamageType::Machete));
+        // 25.map
+        case 0xa82f043beae7c2f8:
+            // 24.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[106]));
             break;
+        case 0xa8eb0409ea3fc2ca:
+            // 24.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[105]));
+            break;
+        case 0xa82f05f7eaf1c2ca:
+            // 26.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[112]));
+            break;
+
+        // 26.map
+        case 0x7a9961e99dd21e81:
+            // 25.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[110]));
+            break;
+        case 0x7a99601d9dd21e9d:
+            // 27.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[114]));
+            break;
+        case 0x7a9960319dd21ea9:
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, big_door, State::Lab2));
+            break;
+        case 0x7be5607b9cae1edb:
+            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, big_door, State::Mirror));
+            break;
+
+        // 27.map
+        case 0x54c98e8402e1156c:
+            // 26.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[112]));
+            break;
+        case 0x55378f0c031f1500:
+            // 28.map
+            // TEMPLE DOOR
+            // LOCKED WITHOUT COMPANION
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, temple_door, entrances[117]));
+            break;
+
+        // 28.map
         case 0xc9fff127332d2490:
             // 27.map
             entities.emplace(segment.id, std::make_unique<Barricade>(&segment, jungle_entry, cave_entry, entrances[115], DamageType::Machete));
+            break;
+        case 0xc8abf067327325de:
+            // 18.map
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, big_door, entrances[81]));
             break;
 
         // 29.map
@@ -413,6 +460,7 @@ void World::spawnPassage(const Segment &segment) {
             // 16.map
             entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[72], DamageType::Machete));
             break;
+
         default:
             std::cout << "UNKNOWN PASSAGE " << std::hex << segment.id << " " << std::dec << segment.texture << "\n";
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, unknown));
@@ -422,6 +470,9 @@ void World::spawnPassage(const Segment &segment) {
 void World::spawnRoomEntry(const Segment &segment) {
     static const auto boogate = load_cel3_texture("cels3/boogate.cel");
     static const auto hut_door = load_cel3_texture("cels3/hutdoor1.cel");
+
+    static const auto mansion_door = load_cel3_texture("cels3/mansext3.cel");
+    static const auto mansion_door_broken = load_cel3_texture("cels3/mansext5.cel");
 
     switch (segment.id) {
         case 0x65331b55c15848b5:
@@ -480,6 +531,18 @@ void World::spawnRoomEntry(const Segment &segment) {
             entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Chief));
             break;
 
+        // 24.map
+        case 0x6e9adb95e1c12ac6:
+            entities.emplace(segment.id, std::make_unique<BarricadedRoomEntry>(&segment, mansion_door, mansion_door_broken, DamageType::Machete, State::Lab1));
+            break;
+        case 0x6ee6da31e1a52b62:
+            // 25.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, mansion_door, mansion_door_broken, entrances[109], DamageType::Machete));
+            break;
+        case 0x6ededa47e1992b14:
+            // 25.map
+            entities.emplace(segment.id, std::make_unique<Barricade>(&segment, mansion_door, mansion_door_broken, entrances[108], DamageType::Machete));
+            break;
     }
 }
 
@@ -1247,8 +1310,16 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, compound_window_dark));
             break;
         case 59:
-            entities.emplace(segment.id, std::make_unique<AnimatedWall>(&segment, temple_door, 6));
+            std::cout << "\t TEMPLE DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //entities.emplace(segment.id, std::make_unique<AnimatedWall>(&segment, temple_door, 6));
+            spawnPassage(segment);
             break;
+
+        case 60:
+            std::cout << "\t BIG DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            spawnPassage(segment);
+            break;
+
         case 63:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, fence));
             break;
@@ -1270,6 +1341,12 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 82:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, mansion_window_dark));
             break;
+
+        case 83:
+            std::cout << "\t MANSION DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            spawnRoomEntry(segment);
+            break;
+
         case 85:
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, mansion_wall_light));
             break;

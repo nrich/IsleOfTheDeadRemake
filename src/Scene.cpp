@@ -777,6 +777,9 @@ LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Sce
 
     layouts.emplace_back(raylib::Vector2(87, 46), StillCel("stillcel/beaker.cel").getTexture(), Item::Beaker, Strings::Lookup(403), Strings::Lookup(404), Strings::Lookup(405));
     layouts.emplace_back(raylib::Vector2(163, 128), StillCel("stillcel/syringe.cel").getTexture(), Item::Syringe, Strings::Lookup(409), Strings::Lookup(410), Strings::Lookup(411));
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
 }
 
 LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room18.cel") {
@@ -795,6 +798,7 @@ LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance)
 
 std::string LabCompanionScene::useItem(Player *player, Item item) {
     const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/room24.cel").getTexture();
+    static raylib::Sound way_out_basement = raylib::Sound(Voc::Load("sound/wayout.voc"));
 
     switch (item) {
         case Item::LabButtonA:
@@ -824,6 +828,8 @@ std::string LabCompanionScene::useItem(Player *player, Item item) {
             removeItemLayout(Item::LabButtonF);
 
             player->addItem(Item::Companion);
+
+            way_out_basement.Play();
             break;
         default:
             return Scene::useItem(player, item);

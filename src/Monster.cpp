@@ -358,6 +358,9 @@ Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged>
     health = 30;
     state = MonsterState::Standing;
 
+    static const raylib::Wave attack_wav = Voc::Load("sound/shock.voc");
+    static raylib::Sound attack_sound(attack_wav);
+
     stateFrames[MonsterState::Standing] = std::make_tuple(9, 9, MonsterState::Repeat);
     stateFrames[MonsterState::Walking] = std::make_tuple(0, 8, MonsterState::Repeat);
     stateFrames[MonsterState::Attacking] = std::make_tuple(10, 16, MonsterState::Standing);

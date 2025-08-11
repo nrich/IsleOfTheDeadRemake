@@ -77,6 +77,9 @@ public:
         return SegmentType::Unknown;
     }
 
+    virtual void use(Player *player, std::optional<Item> item_if) {
+    }
+
     virtual ~Entity();
 };
 
@@ -198,6 +201,35 @@ public:
         }
     }
 };
+
+class ClosedDoor : public Portal {
+    enum class State {
+        Closed,
+        Opening,
+        Opened
+    };
+
+    const std::vector<raylib::TextureUnmanaged> &textures;
+    uint32_t frameRate;
+
+    State state = State::Closed;
+    size_t frame = 0;
+public:
+    ClosedDoor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const Entrance &entrance) : Portal(segment, entrance), textures(textures), frameRate(frame_rate) {
+    }
+
+    std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
+
+    void use(Player *player, std::optional<Item> item_if) {
+        if (state == State::Closed) {
+            state = State::Opening;
+        }
+    }
+
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    void update(Player *player, uint64_t frame_count);
+};
+
 
 class RoomEntry : public Wall {
     State scene;

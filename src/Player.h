@@ -163,6 +163,7 @@ public:
 
     void drawWeapon(uint64_t frame_count, int scale) const;
     void useWeapon(uint64_t frame_count);
+    void use(uint64_t frame_count);
 
     void update(const uint64_t frame_count);
 

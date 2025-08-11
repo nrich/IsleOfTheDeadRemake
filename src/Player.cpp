@@ -312,6 +312,31 @@ void Player::useWeapon(uint64_t frame_count) {
     }
 }
 
+
+void Player::use(uint64_t frame_count) {
+    Level *level = world->getCurrentLevel();
+    Map *map = level->getMap();
+
+    auto ray = camera.GetScreenToWorldRay(raylib::Vector2(160, 100), 320, 200);
+
+    for (const auto &segment : map->getSegments()) {
+        Entity *entity = world->getEntity(segment.id);
+
+        if (entity) {
+            auto if_collision = entity->collide(ray);
+
+            if (if_collision) {
+                auto collision = *if_collision;
+
+                if (collision.GetDistance() < 20) {
+                    entity->use(this, selected);
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void Player::useItem(const Item item) {
     switch (item) {
         case Item::Coconut:
@@ -392,6 +417,10 @@ std::pair<raylib::Vector3, raylib::Vector3> Player::processInput(const uint64_t 
 
     if (player_input & Input::PrimaryAction) {
         this->useWeapon(frame_count);
+    }
+
+    if (player_input & Input::Use) {
+        this->use(frame_count);
     }
 
     if (player_input & Input::EquipMachete) {

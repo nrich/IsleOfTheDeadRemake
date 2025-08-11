@@ -474,6 +474,12 @@ int main(int argc, char *argv[]) {
             player_input &= ~Input::PrimaryAction;
         }
 
+        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+            player_input |= Input::Use;
+        } else if (IsMouseButtonReleased(MOUSE_RIGHT_BUTTON)) {
+            player_input &= ~Input::Use;
+        }
+
         if (IsKeyPressed(KEY_SPACE)) {
             player_input |= Input::PrimaryAction;
         } else if (IsKeyReleased(KEY_SPACE)) {
@@ -562,6 +568,12 @@ int main(int argc, char *argv[]) {
             player_input |= Input::EquipUzi;
         } else if (IsKeyReleased(KEY_FOUR)) {
             player_input &= ~Input::EquipUzi;
+        }
+
+        if (IsKeyPressed(KEY_E)) {
+            player_input |= Input::Use;
+        } else if (IsKeyReleased(KEY_E)) {
+            player_input &= ~Input::Use;
         }
 
         if (IsKeyPressed(KEY_Q)) {

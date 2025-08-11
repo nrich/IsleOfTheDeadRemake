@@ -123,6 +123,7 @@ enum Input : uint64_t {
     EquipRifle      = 1 << 12,
     EquipShotgun    = 1 << 13,
     EquipUzi        = 1 << 14,
+    Use             = 1 << 15,
 };
 
 enum class Item {

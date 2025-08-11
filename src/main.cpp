@@ -360,7 +360,7 @@ static void play_doc_die_anim(Player *player, raylib::Window &window, const int 
         if (die_anim.play(scale)) {
             countdown_sound.Play();
             player->setState(State::World);
-            player->addGameFlag(PlayerGameFlag::BombCountdown);
+            player->setFlag(Flag::BombCountdown);
         }
     }
     EndDrawing();
@@ -489,6 +489,9 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::Book);
         player.addItem(Item::Smokes);
         player.addItem(Item::Shotgun);
+        player.addItem(Item::Companion);
+        player.addItem(Item::Drug);
+        player.addItem(Item::Antidote);
     } else {
         player.setState(State::Title);
     }

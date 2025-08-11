@@ -260,6 +260,20 @@ std::pair<bool, std::string> Player::useItemOnItem(Item source, Item destination
         return std::make_pair(true, Strings::Lookup(189));
     }
 
+    if (source == Item::Drug && destination == Item::Companion) {
+        this->setFlag(Flag::CompanionCalmed);
+        items[Item::Drug] = 0;
+
+        return std::make_pair(true, Strings::Lookup(192));
+    }
+
+    if (source == Item::Antidote && destination == Item::Companion) {
+        this->setFlag(Flag::CompanionCured);
+        items[Item::Antidote] = 0;
+
+        return std::make_pair(true, Strings::Lookup(190));
+    }
+
     return std::make_pair(false, Strings::Lookup(375));
 }
 

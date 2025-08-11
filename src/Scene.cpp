@@ -241,7 +241,6 @@ CrashedPlaneLeftScene::CrashedPlaneLeftScene(Panel *panel) : Scene(panel, "still
 }
 
 CrashedPlaneCockpitScene::CrashedPlaneCockpitScene(Panel *panel) : Scene(panel, "stillcel/room2.cel") {
-    //layouts.emplace_back(raylib::Vector2(166, 48), StillCel("stillcel/compass.cel").getTexture(), Item::Compass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
     layouts.emplace_back(raylib::Vector2(166, 48), StillCel("stillcel/compass.cel").getTexture(), Item::StuckCompass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
     layouts.emplace_back(raylib::Vector2(98, 92), StillCel("stillcel/flaregun.cel").getTexture(), Item::FlareGun, Strings::Lookup(327), Strings::Lookup(328), Strings::Lookup(329));
 
@@ -410,7 +409,7 @@ std::optional<Scene::Dialogue> VillageGateShamanScene::talk(Player *player) {
     navigation[Input::StepForward] = State::World;
     navigation[Input::LookUp] = State::World;
 
-    player->addGameFlag(PlayerGameFlag::VisitedVillage);
+    player->setFlag(Flag::VisitedVillage);
 
     pass = true;
     return Scene::talk(player);
@@ -446,7 +445,7 @@ std::optional<Scene::Dialogue> VillageGateChiefScene::talk(Player *player) {
     if (pass)
         return Scene::talk(player);
 
-    if (!player->testGameFlag(PlayerGameFlag::VisitedVillage)) {
+    if (!player->testFlag(Flag::VisitedVillage)) {
         return Dialogue(Strings::Lookup(223), raylib::RAYWHITE);
     }
 
@@ -732,8 +731,25 @@ PlaneCockpitScene::PlaneCockpitScene(Panel *panel, const Entrance &new_entrance)
 
 std::string PlaneCockpitScene::useItem(Player *player, Item item) {
     if (item == Item::Throttle) {
-        if (!player->testGameFlag(PlayerGameFlag::RocketsDisabled)) {
+        if (!player->getItemCount(Item::Companion) && !player->testFlag(BombCountdown)) {
+            return Strings::Lookup(227);
+        }
+
+        if (player->getItemCount(Item::Companion) && !player->testFlag(Flag::CompanionCalmed)) {
+            static raylib::Sound afraid(Voc::Load("sound/afraid.voc"));
+            afraid.Play();
+
+            return Strings::Lookup(228);
+        }
+
+        if (player->getItemCount(Item::Companion) && !player->testFlag(Flag::CompanionCured)) {
+            player->takeDamage(999, DeathType::Companion);
+            return "";
+        }
+
+        if (!player->testFlag(Flag::RocketsDisabled)) {
             player->takeDamage(999, DeathType::Launch);
+            return "";
         }
         player->setState(State::Ending2);
         return Strings::Lookup(230);
@@ -1152,7 +1168,7 @@ std::optional<Scene::Dialogue> ChiefScene::talk(Player *player) {
             return scripts[script][dialogueIndex++];
         }
 
-        if (player->testGameFlag(PlayerGameFlag::NoiseStopped)) {
+        if (player->testFlag(Flag::NoiseStopped)) {
             script = 2;
         }
     } else if (script == 2) {

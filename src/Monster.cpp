@@ -506,7 +506,7 @@ void Drummer::update(Player *player, uint64_t frame_count) {
 }
 
 void Drummer::onDeath(Player *player) {
-    player->addGameFlag(PlayerGameFlag::NoiseStopped);
+    player->setFlag(Flag::NoiseStopped);
 }
 
 Tank::Tank(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 0.0f, DeathType::Zombie, 0, 50.f, 20.0f, 200.0f) {
@@ -526,6 +526,6 @@ Tank::Tank(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
 }
 
 void Tank::onDeath(Player *player) {
-    player->addGameFlag(PlayerGameFlag::TankExploded);
+    player->setFlag(Flag::TankExploded);
 }
 

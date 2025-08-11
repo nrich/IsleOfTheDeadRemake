@@ -265,12 +265,14 @@ enum class DoorState {
     Opened,
 };
 
-enum PlayerGameFlag : uint64_t {
+enum Flag : uint64_t {
     VisitedVillage      = (1<<0),
     NoiseStopped        = (1<<1),
     TankExploded        = (1<<2),
     BombCountdown       = (1<<3),
     RocketsDisabled     = (1<<4),
+    CompanionCalmed     = (1<<5),
+    CompanionCured      = (1<<6),
 };
 
 #endif //GAME_H

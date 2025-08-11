@@ -197,15 +197,15 @@ public:
 
     void respawn(const raylib::Vector2 &new_position, const bool reset_inventory=false);
 
-    void addGameFlag(const PlayerGameFlag flag) {
+    void setFlag(const Flag flag) {
         flags |= flag;
     }
 
-    void removeGameFlag(const PlayerGameFlag flag) {
+    void deleteFlag(const Flag flag) {
         flags &= ~flag;
     }
 
-    bool testGameFlag(const PlayerGameFlag flag) const {
+    bool testFlag(const Flag flag) const {
         return flags & flag;
     }
 

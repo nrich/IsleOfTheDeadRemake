@@ -32,6 +32,13 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class Player;
 
+enum class DoorState {
+    Closed,
+    Opening,
+    Opened
+};
+
+
 class Entity {
 protected:
     uint16_t x1;
@@ -203,16 +210,10 @@ public:
 };
 
 class ClosedDoor : public Portal {
-    enum class State {
-        Closed,
-        Opening,
-        Opened
-    };
-
     const std::vector<raylib::TextureUnmanaged> &textures;
     uint32_t frameRate;
 
-    State state = State::Closed;
+    DoorState state = DoorState::Closed;
     size_t frame = 0;
 public:
     ClosedDoor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const Entrance &entrance) : Portal(segment, entrance), textures(textures), frameRate(frame_rate) {
@@ -220,14 +221,25 @@ public:
 
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
 
+    Collision collide() const {
+        if (state == DoorState::Opened)
+            return Collision::Touch;
+
+        return Collision::Block;
+    }
+
     void use(Player *player, std::optional<Item> item_if) {
-        if (state == State::Closed) {
-            state = State::Opening;
+        if (state == DoorState::Closed) {
+            state = DoorState::Opening;
         }
     }
 
     void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     void update(Player *player, uint64_t frame_count);
+
+    SegmentType getType() const {
+        return SegmentType::Door;
+    }
 };
 
 
@@ -241,6 +253,40 @@ public:
         return Collision::Touch;
     }
 
+    void touch(Player *player);
+
+    SegmentType getType() const {
+        return SegmentType::Door;
+    }
+};
+
+class ClosedRoomEntry : public Entity {
+    const std::vector<raylib::TextureUnmanaged> &textures;
+    uint32_t frameRate;
+    State scene;
+
+    DoorState state = DoorState::Closed;
+    size_t frame = 0;
+public:
+    ClosedRoomEntry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const State scene) : Entity(segment), textures(textures), frameRate(frame_rate), scene(scene) {
+    }
+
+    Collision collide() const {
+        if (state == DoorState::Opened)
+            return Collision::Touch;
+
+        return Collision::Block;
+    }
+
+    void use(Player *player, std::optional<Item> item_if) {
+        if (state == DoorState::Closed) {
+            state = DoorState::Opening;
+        }
+    }
+
+    std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
+    void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
+    void update(Player *player, uint64_t frame_count);
     void touch(Player *player);
 
     SegmentType getType() const {

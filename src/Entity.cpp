@@ -199,9 +199,9 @@ void ClosedDoor::draw(const raylib::Camera3D *camera, uint64_t frame_count) cons
         draw_wall(x1, y1, x2, y2, closedTexture);
 */
 
-    if (state == ClosedDoor::State::Closed) {
+    if (state == DoorState::Closed) {
         draw_wall(x1, y1, x2, y2, textures[0]);
-    } else if (state == ClosedDoor::State::Opened) {
+    } else if (state == DoorState::Opened) {
         draw_wall(x1, y1, x2, y2, textures[textures.size()-1]);
     } else {
         draw_wall(x1, y1, x2, y2, textures[frame]);
@@ -209,16 +209,15 @@ void ClosedDoor::draw(const raylib::Camera3D *camera, uint64_t frame_count) cons
 }
 
 void ClosedDoor::update(Player *player, uint64_t frame_count) {
-    if (state == ClosedDoor::State::Opening) {
+    if (state == DoorState::Opening) {
         size_t anim = frame_count / frameRate;
         frame = anim % textures.size();
 
         if (frame == textures.size()-1) {
-            state = ClosedDoor::State::Opened;
+            state = DoorState::Opened;
         }
     }
 }
-
 
 std::optional<raylib::RayCollision> Barricade::collide(const raylib::Ray &ray) {
     const float height = 12.0f;
@@ -245,7 +244,6 @@ std::optional<raylib::RayCollision> Barricade::collide(const raylib::Ray &ray) {
 
     return std::nullopt;
 }
-
 
 void BarricadedRoomEntry::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
     if (open)
@@ -282,6 +280,57 @@ std::optional<raylib::RayCollision> BarricadedRoomEntry::collide(const raylib::R
     }
 
     return std::nullopt;
+}
+
+std::optional<raylib::RayCollision> ClosedRoomEntry::collide(const raylib::Ray &ray) {
+    const float height = 12.0f;
+
+    if (y1 == y2) {
+        auto a = raylib::Vector3(x1, 0, y1);
+        auto b = raylib::Vector3(x2, 0, y1);
+        auto c = raylib::Vector3(x2, height, y1);
+        auto d = raylib::Vector3(x1, height, y1);
+
+        auto collision = ray.GetCollision(a, b, c, d);
+        if (collision.GetDistance())
+            return collision;
+    } else {
+        auto a = raylib::Vector3(x1, 0, y1);
+        auto b = raylib::Vector3(x1, 0, y2);
+        auto c = raylib::Vector3(x1, height, y2);
+        auto d = raylib::Vector3(x1, height, y1);
+
+        auto collision = ray.GetCollision(a, b, c, d);
+        if (collision.GetDistance())
+            return collision;
+    }
+
+    return std::nullopt;
+}
+
+void ClosedRoomEntry::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
+    if (state == DoorState::Closed) {
+        draw_wall(x1, y1, x2, y2, textures[0]);
+    } else if (state == DoorState::Opened) {
+        draw_wall(x1, y1, x2, y2, textures[textures.size()-1]);
+    } else {
+        draw_wall(x1, y1, x2, y2, textures[frame]);
+    }
+}
+
+void ClosedRoomEntry::update(Player *player, uint64_t frame_count) {
+    if (state == DoorState::Opening) {
+        size_t anim = frame_count / frameRate;
+        frame = anim % textures.size();
+
+        if (frame == textures.size()-1) {
+            state = DoorState::Opened;
+        }
+    }
+}
+
+void ClosedRoomEntry::touch(Player *player) {
+    player->setState(scene);
 }
 
 void Prop::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {

@@ -78,9 +78,6 @@ void World::spawnPassage(const Segment &segment) {
     static const auto tree_closed_entry = load_cel3_texture("cels3/rent1.cel");
     static const auto tree_opened_entry = load_cel3_texture("cels3/jtocave.cel");
 
-    static const auto big_door = load_cel3_texture("cels3/bigdoor1.cel");
-    static const auto big_door_opened = load_cel3_texture("cels3/bigdoor4.cel");
-
     static const auto big_door_anim = load_cel3_texture({
         "cels3/bigdoor1.cel",
         "cels3/bigdoor2.cel",
@@ -508,10 +505,10 @@ void World::spawnPassage(const Segment &segment) {
             entities.emplace(segment.id, std::make_unique<ClosedDoor>(&segment, big_door_anim, 6, entrances[114]));
             break;
         case 0x7a9960319dd21ea9:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, big_door, State::Lab2));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, big_door_anim, 6, State::Lab2));
             break;
         case 0x7be5607b9cae1edb:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, big_door, State::Mirror));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, big_door_anim, 6, State::Mirror));
             break;
 
         // 27.map

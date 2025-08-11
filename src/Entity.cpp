@@ -192,13 +192,6 @@ std::optional<raylib::RayCollision> ClosedDoor::collide(const raylib::Ray &ray) 
 }
 
 void ClosedDoor::draw(const raylib::Camera3D *camera, uint64_t frame_count) const {
-/*
-    if (open)
-        draw_wall(x1, y1, x2, y2, openedTexture);
-    else
-        draw_wall(x1, y1, x2, y2, closedTexture);
-*/
-
     if (state == DoorState::Closed) {
         draw_wall(x1, y1, x2, y2, textures[0]);
     } else if (state == DoorState::Opened) {

@@ -210,11 +210,12 @@ public:
 };
 
 class ClosedDoor : public Portal {
+protected:
     const std::vector<raylib::TextureUnmanaged> &textures;
     uint32_t frameRate;
 
-    DoorState state = DoorState::Closed;
     size_t frame = 0;
+    DoorState state = DoorState::Closed;
 public:
     ClosedDoor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const Entrance &entrance) : Portal(segment, entrance), textures(textures), frameRate(frame_rate) {
     }
@@ -240,6 +241,15 @@ public:
     SegmentType getType() const {
         return SegmentType::Door;
     }
+};
+
+class ElectrifiedFence : public ClosedDoor {
+public:
+    ElectrifiedFence(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const Entrance &entrance) : ClosedDoor(segment, textures, frame_rate, entrance) {
+    }
+
+    void use(Player *player, std::optional<Item> item_if);
+    void update(Player *player, uint64_t frame_count);
 };
 
 

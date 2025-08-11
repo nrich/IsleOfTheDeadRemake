@@ -1182,7 +1182,10 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/hngar05.cel",
     });
 
-    static const auto camp_gate = load_cel3_texture("cels3/cmpgate1.cel");
+    static const auto camp_gate = load_cel3_texture(std::vector<std::string>({
+        "cels3/cmpgate1.cel",
+        "cels3/cmpgate2.cel"
+        }));
     static const auto unknown = load_cel3_texture("cels3/unknown.cel");
 
     static const auto missile_left = load_cel3_texture("cels3/misslec1.cel");
@@ -1264,7 +1267,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             break;
 
         case 33:
-            entities.emplace(segment.id, std::make_unique<Wall>(&segment, camp_gate));
+            entities.emplace(segment.id, std::make_unique<ElectrifiedFence>(&segment, camp_gate, 6, entrances[103]));
             break;
 
         case 34:

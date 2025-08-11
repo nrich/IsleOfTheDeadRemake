@@ -721,6 +721,8 @@ std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item
 PlaneCockpitScene::PlaneCockpitScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room22.cel") {
     entrance = new_entrance;
 
+    layouts.emplace_back(raylib::Vector2(135, 68), raylib::Vector2(50, 38), Item::Throttle, Strings::Lookup(396), Strings::Lookup(396), "");
+
     navigation[Input::StepLeft] = State::World;
     navigation[Input::TurnLeft] = State::World;
 
@@ -728,11 +730,23 @@ PlaneCockpitScene::PlaneCockpitScene(Panel *panel, const Entrance &new_entrance)
     navigation[Input::LookDown] = State::PlaneGalley;
 }
 
+std::string PlaneCockpitScene::useItem(Player *player, Item item) {
+    if (item == Item::Throttle) {
+        if (!player->testGameFlag(PlayerGameFlag::RocketsDisabled)) {
+            player->takeDamage(999, DeathType::Launch);
+        }
+        player->setState(State::Ending2);
+        return Strings::Lookup(230);
+    }
+
+    return Scene::useItem(player, item);
+}
+
 PlaneGalleyScene::PlaneGalleyScene(Panel *panel) : Scene(panel, "stillcel/room21.cel"){
     navigation[Input::StepForward] = State::PlaneCockpit;
     navigation[Input::LookUp] = State::PlaneCockpit;
 
-    layouts.emplace_back(raylib::Vector2(247, 80), StillCel("stillcel/raft.cel").getTexture(), Item::Rifle, Strings::Lookup(432), Strings::Lookup(433), Strings::Lookup(434));
+    layouts.emplace_back(raylib::Vector2(247, 80), StillCel("stillcel/raft.cel").getTexture(), Item::Raft, Strings::Lookup(432), Strings::Lookup(433), Strings::Lookup(434));
 }
 
 LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/labbkg.cel") {

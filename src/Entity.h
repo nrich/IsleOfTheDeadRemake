@@ -32,13 +32,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class Player;
 
-enum class DoorState {
-    Closed,
-    Opening,
-    Opened
-};
-
-
 class Entity {
 protected:
     uint16_t x1;

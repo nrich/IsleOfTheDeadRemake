@@ -258,6 +258,7 @@ public:
 };
 
 class PlaneCockpitScene : public Scene {
+    std::string useItem(Player *player, Item item);
 public:
     PlaneCockpitScene(Panel *panel, const Entrance &new_entrance);
 };

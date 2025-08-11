@@ -147,6 +147,7 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
     static auto companion_anim = Animation("fli/zombabe.fli");
     static auto doc_anim = Animation("fli/memkill.fli");
     static auto fence_anim = Animation("fli/zap.fli", "sound/zap.voc");
+    static auto launch_anim = Animation("fli/launch.fli");
     static auto missile_anim = Animation("fli/mslekill.fli");
     static auto nurse_anim = Animation("fli/bzap.fli", "sound/zap.voc");
     static auto plane_anim = Animation("fli/launch.fli");
@@ -176,6 +177,9 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
                 break;
             case DeathType::Fence:
                 anim_finished = fence_anim.play(scale);
+                break;
+            case DeathType::Launch:
+                anim_finished = launch_anim.play(scale);
                 break;
             case DeathType::Missile:
                 anim_finished = missile_anim.play(scale);
@@ -335,6 +339,34 @@ static void play_ending_anim(Player *player, raylib::Window &window, const int s
     EndDrawing();
 }
 
+static void play_doc_transform_anim(Player *player, raylib::Window &window, const int scale) {
+    static auto transform_anim = Animation("fli/memgro.fli");
+
+    BeginDrawing();
+    {
+        if (transform_anim.play(scale)) {
+            player->setState(State::World);
+        }
+    }
+    EndDrawing();
+}
+
+static void play_doc_die_anim(Player *player, raylib::Window &window, const int scale) {
+    static auto die_anim = Animation("fli/membom.fli");
+    static raylib::Sound countdown_sound = raylib::Sound(Voc::Load("sound/15min.voc"));
+
+    BeginDrawing();
+    {
+        if (die_anim.play(scale)) {
+            countdown_sound.Play();
+            player->setState(State::World);
+            player->addGameFlag(PlayerGameFlag::BombCountdown);
+        }
+    }
+    EndDrawing();
+}
+
+
 int main(int argc, char *argv[]) {
     cmdline::parser argparser;
     argparser.add<std::string>("datadir", 'd', "Data directory", false, "./");
@@ -463,7 +495,7 @@ int main(int argc, char *argv[]) {
 
 //    player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
-    //player.setState(State::Mirror);
+    player.setState(State::PlaneCockpit);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
@@ -744,6 +776,14 @@ int main(int argc, char *argv[]) {
                 break;
             case State::Lab2F:
                 play_lab2_anim(&player, window, scale, 'F');
+                break;
+
+            case State::DocTransform:
+                play_doc_transform_anim(&player, window, scale);
+                break;
+
+            case State::DocDie:
+                play_doc_die_anim(&player, window, scale);
                 break;
 
             case State::Title:

@@ -242,7 +242,7 @@ CJ::CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &text
 }
 
 Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Doc, 4, 50.f, 20.0f, 200.0f) {
-    health = 30;
+    health = 100;
     state = MonsterState::Standing;
 
     stateFrames[MonsterState::Standing] = std::make_tuple(0, 0, MonsterState::Repeat);
@@ -253,6 +253,10 @@ Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
     stateFrames[MonsterState::Dead] = std::make_tuple(40, 40, MonsterState::Repeat);
 
     currentFrame = std::get<0>(stateFrames[state]);
+}
+
+void Doc::onDeath(Player *player) {
+    player->setState(State::DocDie);
 }
 
 Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {

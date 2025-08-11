@@ -87,6 +87,9 @@ enum class State {
     Lab2E,
     Lab2F,
 
+    DocTransform,
+    DocDie,
+
     Ending,
     Ending1,
     Ending2,
@@ -204,6 +207,8 @@ enum class Item {
     Bong,
     Cig,
     Mask,
+
+    Throttle,
 };
 
 enum class DamageType {
@@ -218,6 +223,7 @@ enum class DeathType {
     Companion,
     Doc,
     Fence,
+    Launch,
     Missile,
     Nurse,
     Plane,
@@ -253,10 +259,18 @@ enum class SegmentType {
     Monster,
 };
 
+enum class DoorState {
+    Closed,
+    Opening,
+    Opened,
+};
+
 enum PlayerGameFlag : uint64_t {
-    VisitedVillage      = 1<<0,
-    NoiseStopped        = 1<<1,
-    TankExploded        = 1<<2,
+    VisitedVillage      = (1<<0),
+    NoiseStopped        = (1<<1),
+    TankExploded        = (1<<2),
+    BombCountdown       = (1<<3),
+    RocketsDisabled     = (1<<4),
 };
 
 #endif //GAME_H

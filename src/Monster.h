@@ -102,6 +102,7 @@ public:
 class Doc : public Base {
 public:
     Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
+    void onDeath(Player *player);
 };
 
 class Dude : public Base {

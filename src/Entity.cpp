@@ -220,10 +220,8 @@ void ClosedDoor::update(Player *player, uint64_t frame_count) {
 }
 
 void ElectrifiedFence::use(Player *player, std::optional<Item> item_if) {
-    if (item_if) {
+    if (item_if || *item_if == Item::BoltCutters) {
         state = DoorState::Opened;
-    } else {
-        player->takeDamage(999, DeathType::Fence);
     }
 }
 
@@ -236,6 +234,20 @@ void ElectrifiedFence::update(Player *player, uint64_t frame_count) {
 
     ClosedDoor::update(player, frame_count);
 }
+
+Collision ElectrifiedFence::collide() const {
+    return Collision::Touch;
+}
+
+void ElectrifiedFence::touch(Player *player) {
+    if (state == DoorState::Closed) {
+        player->takeDamage(999, DeathType::Fence);
+        return;
+    }
+
+    ClosedDoor::touch(player);
+}
+
 
 std::optional<raylib::RayCollision> Barricade::collide(const raylib::Ray &ray) {
     const float height = 12.0f;

@@ -165,7 +165,7 @@ void Scene::draw(Player *player, int scale) {
 
                     case Action::Use:
                         if (auto player_selected = player->getSelectedItem()) {
-                            auto [use_result, highlight, death_type] = useItemOnItem(*player_selected, selected->item); 
+                            auto [use_result, highlight, death_type] = useItemOnItem(*player_selected, selected->item, player);
 
                             if (death_type != DeathType::None) {
                                 player->death(death_type);
@@ -715,7 +715,7 @@ std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layo
     return Scene::getItem(layout);
 }
 
-std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item source, Item destination) {
+std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item source, Item destination, Player *player) {
     static const std::vector<std::optional<raylib::TextureUnmanaged>> wires2_anim = {
         StillCel("stillcel/wires2.cel").getTexture(),
     };
@@ -764,6 +764,8 @@ std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item
         }
 
         animations.erase(3);
+
+        player->setFlag(Flag::RocketsDisabled);
 
         return std::make_tuple(true, Strings::Lookup(455), DeathType::None);
     }

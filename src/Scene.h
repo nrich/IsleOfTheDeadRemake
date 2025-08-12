@@ -113,6 +113,10 @@ private:
 
     virtual std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     virtual std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
+    virtual std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination, Player *player) {
+        return useItemOnItem(source, destination);
+    }
+
     virtual std::optional<Dialogue> talk(Player *player);
     virtual std::string useItem(Player *player, Item item);
 
@@ -260,7 +264,7 @@ class RocketLauncherScene : public Scene {
     WireCut cut = WireCut::Green;
 
     std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
-    std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
+    std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination, Player *player);
 public:
     RocketLauncherScene(Panel *panel, const Entrance &new_entrance);
 };

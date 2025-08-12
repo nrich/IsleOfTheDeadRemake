@@ -251,6 +251,14 @@ public:
 };
 
 class RocketLauncherScene : public Scene {
+    enum class WireCut {
+        Green,
+        Red,
+        Blue,
+    };
+
+    WireCut cut = WireCut::Green;
+
     std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
 public:

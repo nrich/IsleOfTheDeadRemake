@@ -78,7 +78,6 @@ void Scene::draw(Player *player, int scale) {
 
             if (animation.draw(scale)) {
                 animationCompleted(player, animation_id);
-                animations.erase(it++);
             } else {
                 ++it;
             }
@@ -687,6 +686,11 @@ RocketLauncherScene::RocketLauncherScene(Panel *panel, const Entrance &new_entra
 }
 
 std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layout &layout) {
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> wires1_anim = {
+        StillCel("stillcel/wires1.cel").getTexture(),
+    };
+
+
     if (layout.item == Item::Panel) {
         return std::make_tuple(false, Strings::Lookup(443), DeathType::None);
     }
@@ -695,23 +699,73 @@ std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layo
         //WiresGreenRedBlue,
         //WiresRedBlue,
         //WiresBlue,
-        layouts.emplace_back(raylib::Vector2(83, 57), StillCel("stillcel/wires1.cel").getTexture(), Item::WiresGreenRedBlue, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442)); 
-    }
+        //layouts.emplace_back(raylib::Vector2(83, 57), StillCel("stillcel/wires1.cel").getTexture(), Item::WiresGreenRedBlue, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
 
-    if (layout.item == Item::WiresGreenRedBlue) {
 
+        animations[1] = Animation(raylib::Vector2(83, 57), wires1_anim);
+
+        layouts.emplace_back(raylib::Vector2(100, 81), raylib::Vector2(20, 6), Item::GreenWire, Strings::Lookup(450), Strings::Lookup(451), "");
+        layouts.emplace_back(raylib::Vector2(80, 70), raylib::Vector2(20, 8), Item::BlueWire, Strings::Lookup(453), Strings::Lookup(453), "");
+        layouts.emplace_back(raylib::Vector2(100, 70), raylib::Vector2(18, 5), Item::RedWire, Strings::Lookup(447), Strings::Lookup(448), "");
+
+        removeItemLayout(Item::OpenPanel);
+        return std::make_tuple(false, Strings::Lookup(444), DeathType::None);
     }
 
     return Scene::getItem(layout);
 }
 
 std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item source, Item destination) {
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> wires2_anim = {
+        StillCel("stillcel/wires2.cel").getTexture(),
+    };
+
+    static const std::vector<std::optional<raylib::TextureUnmanaged>> wires3_anim = {
+        StillCel("stillcel/wires3.cel").getTexture(),
+    };
+
+
     if (source == Item::Machete && destination == Item::Panel) {
         layouts.emplace_back(raylib::Vector2(29, 57), StillCel("stillcel/panel.cel").getTexture(), Item::OpenPanel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
 
         removeItemLayout(Item::Panel);
 
         return std::make_tuple(true, Strings::Lookup(444), DeathType::None);
+    }
+
+    // GRB
+    if (source == Item::WireClipper && destination == Item::GreenWire) {
+        if (cut != RocketLauncherScene::WireCut::Green) {
+            return std::make_tuple(false, "", DeathType::Missile);
+        }
+
+        animations.erase(1);
+        animations[2] = Animation(raylib::Vector2(83, 57), wires2_anim);
+
+        cut = RocketLauncherScene::WireCut::Red;
+        return std::make_tuple(true, Strings::Lookup(452), DeathType::None);
+    }
+
+    if (source == Item::WireClipper && destination == Item::RedWire) {
+        if (cut != RocketLauncherScene::WireCut::Red) {
+            return std::make_tuple(false, "", DeathType::Missile);
+        }
+
+        animations.erase(2);
+        animations[3] = Animation(raylib::Vector2(83, 57), wires3_anim);
+
+        cut = RocketLauncherScene::WireCut::Blue;
+        return std::make_tuple(true, Strings::Lookup(449), DeathType::None);
+    }
+
+    if (source == Item::WireClipper && destination == Item::BlueWire) {
+        if (cut != RocketLauncherScene::WireCut::Blue) {
+            return std::make_tuple(false, "", DeathType::Missile);
+        }
+
+        animations.erase(3);
+
+        return std::make_tuple(true, Strings::Lookup(455), DeathType::None);
     }
 
     return Scene::useItemOnItem(source, destination);

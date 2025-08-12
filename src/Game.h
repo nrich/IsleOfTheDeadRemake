@@ -192,9 +192,10 @@ enum class Item {
 
     Panel,
     OpenPanel,
-    WiresGreenRedBlue,
-    WiresRedBlue,
-    WiresBlue,
+
+    RedWire,
+    GreenWire,
+    BlueWire,
 
     LabButtonA,
     LabButtonB,

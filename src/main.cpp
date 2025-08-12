@@ -492,13 +492,15 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::Companion);
         player.addItem(Item::Drug);
         player.addItem(Item::Antidote);
+        player.addItem(Item::WireClipper);
     } else {
         player.setState(State::Title);
     }
 
 //    player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
-    player.setState(State::PlaneCockpit);
+    //player.setState(State::PlaneCockpit);
+    player.setState(State::RocketLauncher);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();

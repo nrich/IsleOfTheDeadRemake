@@ -69,18 +69,19 @@ void Scene::draw(Player *player, int scale) {
 
         background.Draw(Vector2(0, 0), 0.0f, scale);
 
-        for (const auto &layout : layouts) {
-            layout.draw(scale);
-        }
-
         for (auto it = animations.begin(); it != animations.end();) {
             auto &[animation_id, animation] = *it;
 
             if (animation.draw(scale)) {
                 animationCompleted(player, animation_id);
+                animations.erase(it++);
             } else {
                 ++it;
             }
+        }
+
+        for (const auto &layout : layouts) {
+            layout.draw(scale);
         }
 
         if (player_input) {
@@ -212,7 +213,6 @@ void Scene::draw(Player *player, int scale) {
 }
 
 void Scene::animationCompleted(Player *player, uint16_t animation_id) {
-    animations.erase(animation_id);
 }
 
 Scene::~Scene() {
@@ -516,8 +516,6 @@ void TempleEntranceScene::draw(Player *player, int scale) {
 }
 
 void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_id) {
-    //Scene::animationCompleted(player, animation_id);
-
     if (animation_id == 1) {
         static const std::vector<std::optional<raylib::TextureUnmanaged>> doors = {
             StillCel("stillcel/tmpdoor1.cel").getTexture(),
@@ -529,6 +527,9 @@ void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_
             StillCel("stillcel/tmpdoor7.cel").getTexture(),
             StillCel("stillcel/tmpdoor8.cel").getTexture(),
         };
+
+        removeItemLayout(Item::MedalHoleFilled1);
+        removeItemLayout(Item::MedalHoleFilled2);
 
         animations[3] = Animation(raylib::Vector2(101.0f, 86.0f), doors, false);
     } else if (animation_id == 3) {
@@ -542,6 +543,8 @@ void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_
 }
 
 OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/oraclebg.cel") {
+    entrance = new_entrance;
+
     static raylib::Sound oracle_chat1 = raylib::Sound(Voc::Load("sound/or1.voc"));
     static raylib::Sound oracle_chat2 = raylib::Sound(Voc::Load("sound/or2.voc"));
     static raylib::Sound oracle_chat3 = raylib::Sound(Voc::Load("sound/or3.voc"));
@@ -555,7 +558,7 @@ OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
 
     layouts.emplace_back(raylib::Vector2(122, 10), raylib::Vector2(73, 83), Item::Oracle, Strings::Lookup(417), Strings::Lookup(418), Strings::Lookup(336));
 
-    script = {
+    scripts[0] = {
         Dialogue(Strings::Lookup(89)),
         Dialogue(Strings::Lookup(90), raylib::RAYWHITE, &oracle_chat1),
         Dialogue(Strings::Lookup(92)),
@@ -574,6 +577,14 @@ OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
         Dialogue(Strings::Lookup(112)),
         Dialogue(Strings::Lookup(113), raylib::RAYWHITE, &oracle_chat9),
         Dialogue(Strings::Lookup(115)),
+    };
+
+    scripts[1] = {
+        Dialogue(Strings::Lookup(116), raylib::RAYWHITE, &oracle_chat10),
+    };
+
+    scripts[2] = {
+        Dialogue(Strings::Lookup(118), raylib::RAYWHITE, &oracle_chat11),
     };
 
     navigation[Input::StepBack] = State::World;
@@ -606,8 +617,37 @@ std::tuple<bool, std::string, DeathType> OracleScene::useItemOnItem(Item source,
 
 std::optional<Scene::Dialogue> OracleScene::talk(Player *player) {
     if (sacrifice) {
-        if (dialogueIndex < script.size()) {
-            return script[dialogueIndex++];
+        if (!player->getItemCount(Item::Uzi)) {
+            script = 0;
+        } else if (player->getItemCount(Item::Companion)) {
+            if (player->testFlag(Flag::CompanionCured)) {
+                dialogueIndex = 0;
+                script = 2;
+            } else {
+                dialogueIndex = 0;
+                script = 1;
+            }
+        }
+
+        if (script == 0) {
+            if (dialogueIndex < scripts[script].size()) {
+                return scripts[script][dialogueIndex++];
+            }
+
+            if (!giveUzi) {
+                static const auto uzi_item_texture = StillCel("stillcel/rcluzi.cel").getTexture();
+
+                layouts.emplace_back(raylib::Vector2(134, 63), uzi_item_texture, Item::Uzi, Strings::Lookup(262), Strings::Lookup(263), "");
+                giveUzi = true;
+            }
+        } else if (script == 1) {
+            if (dialogueIndex < scripts[script].size()) {
+                return scripts[script][dialogueIndex++];
+            }
+        } else if (script == 2) {
+            if (dialogueIndex < scripts[script].size()) {
+                return scripts[script][dialogueIndex++];
+            }
         }
     }
 
@@ -690,18 +730,11 @@ std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layo
         StillCel("stillcel/wires1.cel").getTexture(),
     };
 
-
     if (layout.item == Item::Panel) {
         return std::make_tuple(false, Strings::Lookup(443), DeathType::None);
     }
 
     if (layout.item == Item::OpenPanel) {
-        //WiresGreenRedBlue,
-        //WiresRedBlue,
-        //WiresBlue,
-        //layouts.emplace_back(raylib::Vector2(83, 57), StillCel("stillcel/wires1.cel").getTexture(), Item::WiresGreenRedBlue, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
-
-
         animations[1] = Animation(raylib::Vector2(83, 57), wires1_anim);
 
         layouts.emplace_back(raylib::Vector2(100, 81), raylib::Vector2(20, 6), Item::GreenWire, Strings::Lookup(450), Strings::Lookup(451), "");

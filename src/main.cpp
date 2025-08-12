@@ -462,8 +462,8 @@ int main(int argc, char *argv[]) {
     auto village2_eyes_rd_scene = std::make_unique<VillageEyesScene>(&panel, Entrance("maps/19.map", 260, 320, Direction::EAST));
     auto chief_scene = std::make_unique<ChiefScene>(&panel, Entrance("maps/19.map", 180, 150, Direction::SOUTH));
 
-    auto temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
-    auto oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::WEST));
+    auto temple_entrance_scene = std::make_unique<TempleEntranceScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::EAST));
+    auto oracle_scene = std::make_unique<OracleScene>(&panel, Entrance("maps/22.map", 200, 330, Direction::EAST));
 
     auto rocket_launcher_scene = std::make_unique<RocketLauncherScene>(&panel, Entrance("maps/18.map", 140, 390, Direction::EAST));
     auto plane_cockpit_scene = std::make_unique<PlaneCockpitScene>(&panel, Entrance("maps/18.map", 140, 130, Direction::NORTH));
@@ -500,7 +500,8 @@ int main(int argc, char *argv[]) {
 //    player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
     //player.setState(State::PlaneCockpit);
-    player.setState(State::RocketLauncher);
+    //player.setState(State::RocketLauncher);
+    player.setState(State::Oracle);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();

@@ -219,9 +219,11 @@ public:
 };
 
 class OracleScene : public Scene {
-    std::vector<Dialogue> script;
+    std::array<std::vector<Dialogue>, 3> scripts;
     size_t dialogueIndex = 0;
     bool sacrifice = false;
+    size_t script = 0;
+    bool giveUzi = false;
 
     std::optional<Dialogue> talk(Player *player);
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);

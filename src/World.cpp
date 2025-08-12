@@ -219,6 +219,10 @@ void World::spawnPassage(const Segment &segment) {
             // 21.map
             entities.emplace(segment.id, std::make_unique<Barricade>(&segment, tree_closed_entry, tree_opened_entry, entrances[94], DamageType::Machete));
             break;
+        case 0xe0afa4fc1194d603:
+            // not really a passage
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, tree_opened_entry));
+            break;
 
         // 08.map
         case 0xe69efdb1ef0bbd7a:
@@ -541,7 +545,7 @@ void World::spawnPassage(const Segment &segment) {
             break;
 
         default:
-            std::cout << "UNKNOWN PASSAGE " << std::hex << segment.id << " " << std::dec << segment.texture << "\n";
+            std::cout << "\t UNKNOWN PASSAGE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, unknown));
     }
 }

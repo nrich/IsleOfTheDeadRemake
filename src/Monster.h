@@ -136,6 +136,7 @@ public:
 };
 
 class Wolf : public Base {
+    void onDeath(Player *player);
 public:
     Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
 };

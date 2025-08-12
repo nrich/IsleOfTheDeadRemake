@@ -231,7 +231,7 @@ CrashedPlaneEntryScene::CrashedPlaneEntryScene(Panel *panel, const Entrance &new
 }
 
 CrashedPlaneLeftScene::CrashedPlaneLeftScene(Panel *panel) : Scene(panel, "stillcel/room1.cel") {
-    layouts.emplace_back(raylib::Vector2(36, 127), StillCel("stillcel/phbook.cel").getTexture(), Item::Machete, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+    layouts.emplace_back(raylib::Vector2(36, 127), StillCel("stillcel/phbook.cel").getTexture(), Item::Book, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
 
     navigation[Input::StepForward] = State::CrashedPlaneCockpit;
     navigation[Input::LookUp] = State::CrashedPlaneCockpit;
@@ -556,7 +556,7 @@ OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
     static raylib::Sound oracle_chat10 = raylib::Sound(Voc::Load("sound/or10.voc"));
     static raylib::Sound oracle_chat11 = raylib::Sound(Voc::Load("sound/or11.voc"));
 
-    layouts.emplace_back(raylib::Vector2(122, 10), raylib::Vector2(73, 83), Item::Oracle, Strings::Lookup(417), Strings::Lookup(418), Strings::Lookup(336));
+    layouts.emplace_back(raylib::Vector2(122, 10), raylib::Vector2(73, 83), Item::Oracle, Strings::Lookup(417), Strings::Lookup(418), "");
 
     scripts[0] = {
         Dialogue(Strings::Lookup(89)),

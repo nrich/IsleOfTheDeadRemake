@@ -188,8 +188,7 @@ Base::~Base() {
 }
 
 Bat::Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Bat, 2, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/batwake.voc");
-    static raylib::Sound wake_sound(wake_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/batwake.voc"));
 
     health = 5;
     state = MonsterState::Asleep;
@@ -209,17 +208,10 @@ Bat::Bat(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
 }
 
 CJ::CJ(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/fgrowl.voc");
-    static raylib::Sound wake_sound(wake_wav);
-
-    static const raylib::Wave attack_wav = Voc::Load("sound/chomp.voc");
-    static raylib::Sound attack_sound(attack_wav);
-
-    static const raylib::Wave hurt_wav = Voc::Load("sound/tap.voc");
-    static raylib::Sound hurt_sound(hurt_wav);
-
-    static const raylib::Wave death_wav = Voc::Load("sound/cjdie.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/fgrowl.voc"));
+    static raylib::Sound attack_sound(Voc::Load("sound/chomp.voc"));
+    static raylib::Sound hurt_sound(Voc::Load("sound/tap.voc"));
+    static raylib::Sound death_sound(Voc::Load("sound/cjdie.voc"));
 
     health = 30;
     state = MonsterState::Asleep;
@@ -256,21 +248,18 @@ Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
 }
 
 void Doc::onDeath(Player *player) {
+    if (!player->getItemCount(Item::Chemicals)) {
+        player->addItem(Item::Chemicals);
+    }
+
     player->setState(State::DocDie);
 }
 
 Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
-    static raylib::Sound wake_sound(wake_wav);
-
-    static const raylib::Wave attack_wav = Voc::Load("sound/chomp.voc");
-    static raylib::Sound attack_sound(attack_wav);
-
-    static const raylib::Wave hurt_wav = Voc::Load("sound/dude.voc");
-    static raylib::Sound hurt_sound(hurt_wav);
-
-    static const raylib::Wave death_wav = Voc::Load("sound/dudekill.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/wake.voc"));
+    static raylib::Sound attack_sound(Voc::Load("sound/chomp.voc"));
+    static raylib::Sound hurt_sound(Voc::Load("sound/dude.voc"));
+    static raylib::Sound death_sound(Voc::Load("sound/dudekill.voc"));
 
     health = 30;
     state = MonsterState::Asleep;
@@ -293,17 +282,10 @@ Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
 }
 
 Harry::Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
-    static raylib::Sound wake_sound(wake_wav);
-
-    static const raylib::Wave attack_wav = Voc::Load("sound/chomp.voc");
-    static raylib::Sound attack_sound(attack_wav);
-
-    static const raylib::Wave hurt_wav = Voc::Load("sound/errhaa.voc");
-    static raylib::Sound hurt_sound(hurt_wav);
-
-    static const raylib::Wave death_wav = Voc::Load("sound/harrydie.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/wake.voc"));
+    static raylib::Sound attack_sound(Voc::Load("sound/chomp.voc"));
+    static raylib::Sound hurt_sound(Voc::Load("sound/errhaa.voc"));
+    static raylib::Sound death_sound(Voc::Load("sound/harrydie.voc"));
 
     health = 30;
     state = MonsterState::Asleep;
@@ -326,17 +308,10 @@ Harry::Harry(const Segment *segment, const std::vector<raylib::TextureUnmanaged>
 }
 
 Kid::Kid(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 1, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/daddy.voc");
-    static raylib::Sound wake_sound(wake_wav);
-
-    static const raylib::Wave attack_wav = Voc::Load("sound/chomp.voc");
-    static raylib::Sound attack_sound(attack_wav);
-
-    static const raylib::Wave hurt_wav = Voc::Load("sound/errhaa.voc");
-    static raylib::Sound hurt_sound(hurt_wav);
-
-    static const raylib::Wave death_wav = Voc::Load("sound/kidkill.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/daddy.voc"));
+    static raylib::Sound attack_sound(Voc::Load("sound/chomp.voc"));
+    static raylib::Sound hurt_sound(Voc::Load("sound/errhaa.voc"));
+    static raylib::Sound death_sound(Voc::Load("sound/kidkill.voc"));
 
     health = 5;
     state = MonsterState::Asleep;
@@ -362,8 +337,7 @@ Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged>
     health = 30;
     state = MonsterState::Standing;
 
-    static const raylib::Wave attack_wav = Voc::Load("sound/shock.voc");
-    static raylib::Sound attack_sound(attack_wav);
+    static raylib::Sound attack_sound(Voc::Load("sound/shock.voc"));
 
     sounds[MonsterSound::Attack] = &attack_sound;
 
@@ -378,17 +352,10 @@ Nurse::Nurse(const Segment *segment, const std::vector<raylib::TextureUnmanaged>
 }
 
 Roy::Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
-    static raylib::Sound wake_sound(wake_wav);
-
-    static const raylib::Wave attack_wav = Voc::Load("sound/chomp.voc");
-    static raylib::Sound attack_sound(attack_wav);
-
-    static const raylib::Wave hurt_wav = Voc::Load("sound/errhaa.voc");
-    static raylib::Sound hurt_sound(hurt_wav);
-
-    static const raylib::Wave death_wav = Voc::Load("sound/roykill.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/wake.voc"));
+    static raylib::Sound attack_sound(Voc::Load("sound/chomp.voc"));
+    static raylib::Sound hurt_sound(Voc::Load("sound/errhaa.voc"));
+    static raylib::Sound death_sound(Voc::Load("sound/roykill.voc"));
 
     health = 30;
     state = MonsterState::Asleep;
@@ -411,17 +378,10 @@ Roy::Roy(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
 }
 
 Tor::Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/wake.voc");
-    static raylib::Sound wake_sound(wake_wav);
-
-    static const raylib::Wave attack_wav = Voc::Load("sound/chomp.voc");
-    static raylib::Sound attack_sound(attack_wav);
-
-    static const raylib::Wave hurt_wav = Voc::Load("sound/errhaa.voc");
-    static raylib::Sound hurt_sound(hurt_wav);
-
-    static const raylib::Wave death_wav = Voc::Load("sound/tordie.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/wake.voc"));
+    static raylib::Sound attack_sound(Voc::Load("sound/chomp.voc"));
+    static raylib::Sound hurt_sound(Voc::Load("sound/errhaa.voc"));
+    static raylib::Sound death_sound(Voc::Load("sound/tordie.voc"));
 
     health = 30;
     state = MonsterState::Asleep;
@@ -444,17 +404,10 @@ Tor::Tor(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
 }
 
 Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
-    static const raylib::Wave wake_wav = Voc::Load("sound/wolfw.voc");
-    static raylib::Sound wake_sound(wake_wav);
-
-    static const raylib::Wave attack_wav = Voc::Load("sound/wolfbite.voc");
-    static raylib::Sound attack_sound(attack_wav);
-
-    static const raylib::Wave hurt_wav = Voc::Load("sound/dogdie.voc");
-    static raylib::Sound hurt_sound(hurt_wav);
-
-    static const raylib::Wave death_wav = Voc::Load("sound/wolfdie.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound wake_sound(Voc::Load("sound/wolfw.voc"));
+    static raylib::Sound attack_sound(Voc::Load("sound/wolfbite.voc"));
+    static raylib::Sound hurt_sound(Voc::Load("sound/dogdie.voc"));
+    static raylib::Sound death_sound(Voc::Load("sound/wolfdie.voc"));
 
     health = 5;
     state = MonsterState::Asleep;
@@ -474,6 +427,12 @@ Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
     stateFrames[MonsterState::Dead] = std::make_tuple(44, 44, MonsterState::Repeat);
 
     currentFrame = std::get<0>(stateFrames[state]);
+}
+
+void Wolf::onDeath(Player *player) {
+    if (!player->getItemCount(Item::DeadWolf)) {
+        player->addItem(Item::DeadWolf);
+    }
 }
 
 Drummer::Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 0, 50.f, 20.0f, 200.0f) {
@@ -513,8 +472,7 @@ Tank::Tank(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
     health = 20;
     state = MonsterState::Standing;
 
-    static const raylib::Wave death_wav = Voc::Load("sound/explode.voc");
-    static raylib::Sound death_sound(death_wav);
+    static raylib::Sound death_sound(Voc::Load("sound/explode.voc"));
 
     sounds[MonsterSound::Death] = &death_sound;
 

@@ -954,6 +954,9 @@ ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
     layouts.emplace_back(raylib::Vector2(230, 61), raylib::Vector2(19, 50), Item::Bong, Strings::Lookup(352), Strings::Lookup(353), "");
     layouts.emplace_back(raylib::Vector2(189, 0), raylib::Vector2(30, 30), Item::Mask, Strings::Lookup(357), Strings::Lookup(358), "");
     layouts.emplace_back(raylib::Vector2(83, 0), raylib::Vector2(30, 30), Item::Mask, Strings::Lookup(357), Strings::Lookup(358), "");
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
 }
 
 std::optional<Scene::Dialogue> ShamanScene::talk(Player *player) {
@@ -1041,7 +1044,7 @@ std::tuple<bool, std::string, DeathType> ShamanScene::getItem(const Layout &layo
 }
 
 ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/chiefbkg.cel") {
-    layouts.emplace_back(raylib::Vector2(137, 73), StillCel("stillcel/medal2.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
+    layouts.emplace_back(raylib::Vector2(137, 73), StillCel("stillcel/medal2.cel").getTexture(), Item::GoldMedal2, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes_left = {
         StillCel("stillcel/eyesl1.cel").getTexture(),
@@ -1154,6 +1157,9 @@ ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel
         Dialogue(Strings::Lookup(171), raylib::RAYWHITE, &chief_chat9),
         Dialogue(Strings::Lookup(173)),
     };
+
+    navigation[Input::StepBack] = State::World;
+    navigation[Input::LookDown] = State::World;
 }
 
 std::optional<Scene::Dialogue> ChiefScene::talk(Player *player) {
@@ -1177,6 +1183,7 @@ std::optional<Scene::Dialogue> ChiefScene::talk(Player *player) {
 
         if (player->testFlag(Flag::NoiseStopped)) {
             script = 2;
+            dialogueIndex = 0;
         }
     } else if (script == 2) {
         if (dialogueIndex < scripts[script].size()) {

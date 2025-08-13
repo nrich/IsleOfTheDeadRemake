@@ -483,8 +483,8 @@ int main(int argc, char *argv[]) {
         player.setState(State::World);
         player.respawn(spawn_point, true);
         player.addItem(Item::Machete);
-        player.addItem(Item::GoldMedal1);
-        player.addItem(Item::GoldMedal2);
+//        player.addItem(Item::GoldMedal1);
+//        player.addItem(Item::GoldMedal2);
         player.addItem(Item::DeadWolf);
         player.addItem(Item::Book);
         player.addItem(Item::Smokes);

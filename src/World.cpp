@@ -85,14 +85,23 @@ void World::spawnPassage(const Segment &segment) {
         "cels3/bigdoor4.cel",
     });
 
-    static const auto temple_door = load_cel3_texture("cels3/tmpdoor1.cel");
+    static const auto temple_door_anim = load_cel3_texture({
+        "cels3/tmpdoor1.cel",
+        "cels3/tmpdoor2.cel",
+        "cels3/tmpdoor3.cel",
+        "cels3/tmpdoor4.cel",
+    });
 
     static const auto cave_entry = load_cel3_texture("cels3/cav2cave.cel");
     static const auto jungle_entry = load_cel3_texture("cels3/cavetoj.cel");
     static const auto unknown = load_cel3_texture("cels3/unknown.cel");
 
     static const auto boogate = load_cel3_texture("cels3/boogate.cel");
-    static const auto hut_door = load_cel3_texture("cels3/hutdoor1.cel");
+    static const auto hut_door_anim = load_cel3_texture({
+        "cels3/hutdoor1.cel",
+        "cels3/hutdoor2.cel",
+        "cels3/hutdoor3.cel",
+    });
 
     static const auto mansion_door = load_cel3_texture("cels3/mansext3.cel");
     static const auto mansion_door_broken = load_cel3_texture("cels3/mansext5.cel");
@@ -379,25 +388,25 @@ void World::spawnPassage(const Segment &segment) {
 
         // 19.map
         case 0xe946a381db5b0c60:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village2EyesLU));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village2EyesLU));
             break;
         case 0xe9a4a26bdbb90dc6:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village2EyesL));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village2EyesL));
             break;
         case 0xe9b2a21ddbb90d8a:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Shower));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Shower));
             break;
         case 0xe93aa3e9db270c74:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village2EyesRU));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village2EyesRU));
             break;
         case 0xe930a3b9db2d0c24:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Developers));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Developers));
             break;
         case 0xe8c4a209dad90d94:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village2EyesRD));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village2EyesRD));
             break;
         case 0xe97ea3c5db690c52:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Chief));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Chief));
             break;
         case 0xe902a21ddb690d8a:
             // 17.map
@@ -447,25 +456,25 @@ void World::spawnPassage(const Segment &segment) {
 
         // 23.map
         case 0xc7cc4d312129fc95:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village1EyesLU));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village1EyesLU));
             break;
         case 0xc7cc4c812129fcc5:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Toilet));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Toilet));
             break;
         case 0xc7cc4cd12129fd75:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village1EyesLD));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village1EyesLD));
             break;
         case 0xc6324d2f20d7fc8b:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village1EyesRU));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village1EyesRU));
             break;
         case 0xc6324d7f20d7fd3b:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village1EyesR));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village1EyesR));
             break;
         case 0xc6324ccf20d7fd6b:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Village1EyesRD));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Village1EyesRD));
             break;
         case 0xc6004ca9211bfd13:
-            entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, hut_door, State::Shaman));
+            entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, hut_door_anim, 6, State::Shaman));
             break;
         case 0xc7fe4d1320e5fca9:
             // 20.map
@@ -525,7 +534,7 @@ void World::spawnPassage(const Segment &segment) {
             // 28.map
             // TEMPLE DOOR
             // LOCKED WITHOUT COMPANION
-            entities.emplace(segment.id, std::make_unique<Passage>(&segment, temple_door, entrances[117]));
+            entities.emplace(segment.id, std::make_unique<ClosedDoor>(&segment, temple_door_anim, 6, entrances[117]));
             break;
 
         // 28.map

@@ -248,7 +248,7 @@ Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
 
 void Doc::touch(Player *player) {
     static raylib::Sound pickup_sound(Voc::Load("sound/tap.voc"));
-    static const Item item = Item::Chemicals;
+    const Item item = Item::Chemicals;
 
     if (state != MonsterState::Dead)
         return;
@@ -449,7 +449,7 @@ Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
 
 void Wolf::touch(Player *player) {
     static raylib::Sound pickup_sound(Voc::Load("sound/tap.voc"));
-    static const Item item = Item::DeadWolf;
+    const Item item = Item::DeadWolf;
 
     if (state != MonsterState::Dead)
         return;
@@ -460,8 +460,9 @@ void Wolf::touch(Player *player) {
     if (!player->getItemCount(item)) {
         pickup_sound.Play();
         player->addItem(item);
-        taken = true;
     }
+
+    taken = true;
 }
 
 Collision Wolf::collide() const {

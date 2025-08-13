@@ -52,11 +52,16 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
         player->takeDamage(999, DeathType::Rifle);
     });
 
-    weapons[Item::OiledRifle] = Weapon(45, {
+    weapons[Item::OiledRifle] = Weapon(55, {
         StillCel("stillcel/gun1.cel").getTexture(),
         StillCel("stillcel/gun2.cel").getTexture(),
         StillCel("stillcel/gun3.cel").getTexture(),
     }, [](Player *player) {
+        if (player->items[Item::Ammo1] <= 0)
+            return;
+
+        player->items[Item::Ammo1] -= 1;
+
         static const raylib::Wave wav = Voc::Load("sound/gun.voc");
         static raylib::Sound sound(wav);
 
@@ -80,18 +85,22 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
 
                     if (collision.GetDistance() < 1000) {
                         entity->damage(player, DamageType::Bullet, 20);
-                        break;
                     }
                 }
             }
         }
     });
 
-    weapons[Item::Shotgun] = Weapon(60, {
+    weapons[Item::Shotgun] = Weapon(40, {
         StillCel("stillcel/sgun1.cel").getTexture(),
         StillCel("stillcel/sgun2.cel").getTexture(),
         StillCel("stillcel/sgun3.cel").getTexture(),
     }, [](Player *player) {
+        if (player->items[Item::Ammo2] <= 0)
+            return;
+
+        player->items[Item::Ammo2] -= 1;
+
         static const raylib::Wave wav = Voc::Load("sound/shotgun.voc");
         static raylib::Sound sound(wav);
 
@@ -121,11 +130,16 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
         }
     });
 
-    weapons[Item::Uzi] = Weapon(15, {
+    weapons[Item::Uzi] = Weapon(10, {
         StillCel("stillcel/uzi1.cel").getTexture(),
         StillCel("stillcel/uzi2.cel").getTexture(),
         StillCel("stillcel/uzi3.cel").getTexture(),
     }, [](Player *player) {
+        if (player->items[Item::Ammo3] <= 0)
+            return;
+
+        player->items[Item::Ammo3] -= 1;
+
         static const raylib::Wave wav = Voc::Load("sound/uzi.voc");
         static raylib::Sound sound(wav);
 
@@ -148,8 +162,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                     auto collision = *if_collision;
 
                     if (collision.GetDistance() < 1000) {
-                        entity->damage(player, DamageType::Bullet, 5);
-                        break;
+                        entity->damage(player, DamageType::Bullet, 15);
                     }
                 }
             }

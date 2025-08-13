@@ -151,7 +151,6 @@ public:
         return Collision::Touch;
     }
 
-    //void draw(const raylib::Camera3D *camera, uint64_t frame_count) const;
     void touch(Player *player);
 
     SegmentType getType() const {
@@ -234,6 +233,15 @@ public:
     SegmentType getType() const {
         return SegmentType::Door;
     }
+};
+
+class ClosedDoorPlayAnim : public ClosedDoor {
+    bool played = false;
+public:
+    ClosedDoorPlayAnim(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const Entrance &entrance) : ClosedDoor(segment, textures, frame_rate, entrance) {
+    }
+
+    void touch(Player *player);
 };
 
 class ElectrifiedFence : public ClosedDoor {

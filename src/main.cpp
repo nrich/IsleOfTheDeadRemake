@@ -340,7 +340,8 @@ static void play_ending_anim(Player *player, raylib::Window &window, const int s
 }
 
 static void play_doc_transform_anim(Player *player, raylib::Window &window, const int scale) {
-    static auto transform_anim = Animation("fli/memgro.fli");
+    static auto transform_anim = Animation("fli/memgro.fli", "sound/mem1.voc");
+    static raylib::Sound transform_sound = raylib::Sound(Voc::Load("sound/mem1.voc"));
 
     BeginDrawing();
     {
@@ -352,7 +353,7 @@ static void play_doc_transform_anim(Player *player, raylib::Window &window, cons
 }
 
 static void play_doc_die_anim(Player *player, raylib::Window &window, const int scale) {
-    static auto die_anim = Animation("fli/membom.fli");
+    static auto die_anim = Animation("fli/membom.fli", "sound/mem6.voc");
     static raylib::Sound countdown_sound = raylib::Sound(Voc::Load("sound/15min.voc"));
 
     BeginDrawing();
@@ -423,8 +424,8 @@ int main(int argc, char *argv[]) {
         LevelSettings("maps/24.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/25.map", Sky::Mansion, Ground::Carpet, "music/out1fm.mid"),
         LevelSettings("maps/26.map", Sky::Mansion, Ground::Carpet, "music/out1fm.mid"),
-        LevelSettings("maps/27.map", Sky::Basement, Ground::Basement, "music/out4fm.mid"),
-        LevelSettings("maps/28.map", Sky::Cave, Ground::Cave, "music/out4fm.mid"),
+        LevelSettings("maps/27.map", Sky::Basement, Ground::Basement, "music/out1fm.mid"),
+        LevelSettings("maps/28.map", Sky::Cave, Ground::Cave, "music/out3fm.mid"),
         LevelSettings("maps/29.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),
         LevelSettings("maps/30.map", Sky::Day, Ground::Sea, "music/out4fm.mid"),
         LevelSettings("maps/31.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),

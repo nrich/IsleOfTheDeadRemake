@@ -212,6 +212,14 @@ void ClosedDoor::update(Player *player, uint64_t frame_count) {
     }
 }
 
+void ClosedDoorPlayAnim::touch(Player *player) {
+    ClosedDoor::touch(player);
+
+    if (!played) {
+        player->setState(State::DocTransform);
+    }
+}
+
 void ElectrifiedFence::use(Player *player, std::optional<Item> item_if) {
     if (item_if || *item_if == Item::BoltCutters) {
         if (player->testFlag(Flag::PowerOff)) {

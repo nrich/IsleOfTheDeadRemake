@@ -273,6 +273,10 @@ Collision Doc::collide() const {
     return Collision::Block;
 }
 
+void Doc::onDeath(Player *player) {
+    player->setState(State::DocDie);
+}
+
 Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
     static raylib::Sound wake_sound(Voc::Load("sound/wake.voc"));
     static raylib::Sound attack_sound(Voc::Load("sound/chomp.voc"));

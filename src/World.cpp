@@ -505,8 +505,7 @@ void World::spawnPassage(const Segment &segment) {
             break;
         case 0x7a99601d9dd21e9d:
             // 27.map
-            // PLAY MOVIE HERE
-            entities.emplace(segment.id, std::make_unique<ClosedDoor>(&segment, big_door_anim, 6, entrances[114]));
+            entities.emplace(segment.id, std::make_unique<ClosedDoorPlayAnim>(&segment, big_door_anim, 6, entrances[114]));
             break;
         case 0x7a9960319dd21ea9:
             entities.emplace(segment.id, std::make_unique<ClosedRoomEntry>(&segment, big_door_anim, 6, State::Lab2));

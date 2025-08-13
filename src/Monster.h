@@ -101,6 +101,7 @@ public:
 
 class Doc : public Base {
     bool taken = false;
+    void onDeath(Player *player);
 public:
     Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
     void touch(Player *player);

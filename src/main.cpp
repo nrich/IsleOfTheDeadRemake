@@ -494,6 +494,8 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::Drug);
         player.addItem(Item::Antidote);
         player.addItem(Item::WireClipper);
+        player.addItem(Item::Raft);
+        player.addItem(Item::FlareGun);
 //        player.setFlag(Flag::PowerOff);
     } else {
         player.setState(State::Title);

@@ -399,6 +399,26 @@ void Player::useItem(const Item item) {
                     break;
             }
             break;
+        case Item::Raft:
+            if (world->getCurrentLevel()->getMap()->getFilename() == "maps/04.map") {
+                if (this->testFlag(Flag::CompanionCured)) {
+                    world->setCurrentLevel("maps/30.map");
+                    auto spawn_point = world->findSpawn();
+                    this->setPosition(spawn_point);
+                } else {
+                    this->takeDamage(999, DeathType::Companion);
+                }
+            }
+            break;
+        case Item::FlareGun:
+            if (world->getCurrentLevel()->getMap()->getFilename() == "maps/30.map") {
+                if (this->getItemCount(Item::Companion)) {
+                    this->setState(State::Ending1);
+                } else {
+                    this->setState(State::Ending);
+                }
+            }
+            break;
         default:
             break;
     }

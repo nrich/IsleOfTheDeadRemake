@@ -214,33 +214,23 @@ void ClosedDoor::update(Player *player, uint64_t frame_count) {
 
 void ElectrifiedFence::use(Player *player, std::optional<Item> item_if) {
     if (item_if || *item_if == Item::BoltCutters) {
-        state = DoorState::Opened;
+        if (player->testFlag(Flag::PowerOff)) {
+            state = DoorState::Opened;
+        } else {
+            player->takeDamage(999, DeathType::Fence);
+        }
     }
 }
 
 void ElectrifiedFence::update(Player *player, uint64_t frame_count) {
     static raylib::Sound zap = raylib::Sound(Voc::Load("sound/zap.voc"));
 
-    if (state == DoorState::Closed && frame_count % 120 == 0) {
+    if (!player->testFlag(Flag::PowerOff) && frame_count % 120 == 0) {
         zap.Play();
     }
 
     ClosedDoor::update(player, frame_count);
 }
-
-Collision ElectrifiedFence::collide() const {
-    return Collision::Touch;
-}
-
-void ElectrifiedFence::touch(Player *player) {
-    if (state == DoorState::Closed) {
-        player->takeDamage(999, DeathType::Fence);
-        return;
-    }
-
-    ClosedDoor::touch(player);
-}
-
 
 std::optional<raylib::RayCollision> Barricade::collide(const raylib::Ray &ray) {
     const float height = 12.0f;

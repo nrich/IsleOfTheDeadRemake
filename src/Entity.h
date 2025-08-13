@@ -241,10 +241,8 @@ public:
     ElectrifiedFence(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, uint32_t frame_rate, const Entrance &entrance) : ClosedDoor(segment, textures, frame_rate, entrance) {
     }
 
-    Collision collide() const;
     void use(Player *player, std::optional<Item> item_if);
     void update(Player *player, uint64_t frame_count);
-    void touch(Player *player);
 };
 
 

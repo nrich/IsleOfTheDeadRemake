@@ -493,6 +493,7 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::Drug);
         player.addItem(Item::Antidote);
         player.addItem(Item::WireClipper);
+//        player.setFlag(Flag::PowerOff);
     } else {
         player.setState(State::Title);
     }

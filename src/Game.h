@@ -268,7 +268,7 @@ enum class DoorState {
 enum Flag : uint64_t {
     VisitedVillage      = (1<<0),
     NoiseStopped        = (1<<1),
-    TankExploded        = (1<<2),
+    PowerOff            = (1<<2),
     BombCountdown       = (1<<3),
     RocketsDisabled     = (1<<4),
     CompanionCalmed     = (1<<5),

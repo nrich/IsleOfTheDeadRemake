@@ -524,6 +524,6 @@ Tank::Tank(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
 }
 
 void Tank::onDeath(Player *player) {
-    player->setFlag(Flag::TankExploded);
+    player->setFlag(Flag::PowerOff);
 }
 

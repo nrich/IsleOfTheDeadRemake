@@ -381,6 +381,25 @@ void Player::useItem(const Item item) {
         case Item::GoldMedal2:
             items[item] = 0;
             break;
+        case Item::Book:
+            switch(state) {
+                case State::VillageGate1:
+                    this->setFlag(Flag::TranslateVillage1);
+                    break;
+                case State::VillageGate2:
+                    this->setFlag(Flag::TranslateVillage2);
+                    break;
+                case State::Shaman:
+                    std::cerr << "HERE?\n";
+                    this->setFlag(Flag::TranslateShaman);
+                    break;
+                case State::Chief:
+                    this->setFlag(Flag::TranslateChief);
+                    break;
+                default:
+                    break;
+            }
+            break;
         default:
             break;
     }

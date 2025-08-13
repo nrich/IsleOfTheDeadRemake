@@ -766,7 +766,6 @@ std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item
         return std::make_tuple(true, Strings::Lookup(444), DeathType::None);
     }
 
-    // GRB
     if (source == Item::WireClipper && destination == Item::GreenWire) {
         if (cut != RocketLauncherScene::WireCut::Green) {
             return std::make_tuple(false, "", DeathType::Missile);
@@ -1128,7 +1127,6 @@ std::tuple<bool, std::string, DeathType> ShamanScene::getItem(const Layout &layo
     return Scene::getItem(layout);
 }
 
-
 ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/chiefbkg.cel") {
     layouts.emplace_back(raylib::Vector2(137, 73), StillCel("stillcel/medal2.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
 
@@ -1246,6 +1244,10 @@ ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel
 }
 
 std::optional<Scene::Dialogue> ChiefScene::talk(Player *player) {
+    if (!player->testFlag(Flag::TranslateShaman)) {
+        script = 0;
+    }
+
     if (script == 0) {
         if (dialogueIndex >= scripts[script].size()) {
             dialogueIndex = 0;

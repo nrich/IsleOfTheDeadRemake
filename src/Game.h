@@ -274,6 +274,11 @@ enum Flag : uint64_t {
     RocketsDisabled     = (1<<4),
     CompanionCalmed     = (1<<5),
     CompanionCured      = (1<<6),
+
+    TranslateVillage1   = (1<<7),
+    TranslateVillage2   = (1<<8),
+    TranslateShaman     = (1<<9),
+    TranslateChief      = (1<<10),
 };
 
 #endif //GAME_H

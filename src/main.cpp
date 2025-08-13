@@ -497,7 +497,7 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-//    player.setState(State::Shaman);
+    player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
     //player.setState(State::PlaneCockpit);
     //player.setState(State::RocketLauncher);

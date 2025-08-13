@@ -107,26 +107,46 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
         Vector3 r_segment_position(0.0f, 0.0f, 0.0f);
 
         if (!le) {
-            l_segment_position = Vector3((l.x2 - l.x1)/2 + l.x1, 0, (l.y2 - l.y1)/2 + l.y1);
+            uint16_t min_x = std::min(l.x1, l.x2);
+            uint16_t max_x = std::max(l.x1, l.x2);
+            uint16_t min_y = std::min(l.y1, l.y2);
+            uint16_t max_y = std::max(l.y1, l.y2);
+
+            l_segment_position = Vector3((max_x-min_x)/2 + min_x, 0, (max_y - min_y)/2 + min_y);
         } else {
             auto position_if = le->getPosition();
 
             if (position_if) {
                 l_segment_position = Vector3(position_if->x, 0, position_if->y);
             } else {
-                l_segment_position = Vector3((l.x2 - l.x1)/2 + l.x1, 0, (l.y2 - l.y1)/2 + l.y1);
+                uint16_t min_x = std::min(l.x1, l.x2);
+                uint16_t max_x = std::max(l.x1, l.x2);
+                uint16_t min_y = std::min(l.y1, l.y2);
+                uint16_t max_y = std::max(l.y1, l.y2);
+
+                l_segment_position = Vector3((max_x-min_x)/2 + min_x, 0, (max_y - min_y)/2 + min_y);
             }
         }
 
         if (!re) {
-            r_segment_position = Vector3((r.x2 - r.x1)/2 + r.x1, 0, (r.y2 - r.y1)/2 + r.y1);
+            uint16_t min_x = std::min(r.x1, r.x2);
+            uint16_t max_x = std::max(r.x1, r.x2);
+            uint16_t min_y = std::min(r.y1, r.y2);
+            uint16_t max_y = std::max(r.y1, r.y2);
+
+            r_segment_position = Vector3((max_x-min_x)/2 + min_x, 0, (max_y - min_y)/2 + min_y);
         } else {
             auto position_if = re->getPosition();
 
             if (position_if) {
                 r_segment_position = Vector3(position_if->x, 0, position_if->y);
             } else {
-                r_segment_position = Vector3((r.x2 - r.x1)/2 + r.x1, 0, (r.y2 - r.y1)/2 + r.y1);
+                uint16_t min_x = std::min(r.x1, r.x2);
+                uint16_t max_x = std::max(r.x1, r.x2);
+                uint16_t min_y = std::min(r.y1, r.y2);
+                uint16_t max_y = std::max(r.y1, r.y2);
+
+                r_segment_position = Vector3((max_x-min_x)/2 + min_x, 0, (max_y - min_y)/2 + min_y);
             }
         }
 

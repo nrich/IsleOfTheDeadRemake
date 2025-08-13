@@ -331,16 +331,6 @@ void World::spawnPassage(const Segment &segment) {
             entities.emplace(segment.id, std::make_unique<Passage>(&segment, cave_entry, entrances[68]));
             break;
 
-        // 15.map
-        case 0x29ffb0a225bdc9f2:
-            // 13.map
-            entities.emplace(segment.id, std::make_unique<Passage>(&segment, cave_entry, Entrance("maps/13.map", 80, 170, 270)));
-            break;
-        case 0x28d1b0942493c9c4:
-            // 14.map
-            entities.emplace(segment.id, std::make_unique<Passage>(&segment, cave_entry, Entrance("maps/14.map", 320, 170, 90)));
-            break;
- 
         // 16.map
         case 0x867b5289b921129:
             // 03.map
@@ -707,11 +697,11 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
 
     static const auto red_chair = load_cel3_texture("cels3/frnture2.cel");
     static const auto red_chair_damaged = load_cel3_texture("cels3/frnture1.cel");
+    static const auto trapdoor = load_cel3_texture("cels3/trapdoor.cel");
 
     // Traps
     static const auto pit = load_cel3_texture("cels3/pit.cel");
     static const auto snare = load_cel3_texture("cels3/snare.cel");
-    static const auto trapdoor = load_cel3_texture("cels3/trapdoor.cel");
 
     // Monsters
     static const auto bat = load_cel3_texture({
@@ -1399,13 +1389,13 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, banana, Item::Banana, 1));
             break;
         case 106:
-            entities.emplace(segment.id, std::make_unique<Trap>(&segment, pit, DeathType::Acid));
+            entities.emplace(segment.id, std::make_unique<Prop>(&segment, pit, Collision::Pass));
             break;
         case 107:
             entities.emplace(segment.id, std::make_unique<Prop>(&segment, trees, Collision::Block));
             break;
         case 108:
-            entities.emplace(segment.id, std::make_unique<WallProp>(&segment, vine, Collision::Pass));
+            entities.emplace(segment.id, std::make_unique<Passage>(&segment, vine, entrances[57]));
             break;
         case 109:
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, crystal, Item::Crystal, -1));
@@ -1490,7 +1480,6 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 146:
             entities.emplace(segment.id, std::make_unique<Trap>(&segment, trapdoor, DeathType::Acid));
             break;
-
        case 147:
             entities.emplace(segment.id, std::make_unique<RoomEntry>(&segment, missile_left, State::RocketLauncher));
             break;

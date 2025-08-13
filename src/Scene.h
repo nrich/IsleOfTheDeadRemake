@@ -189,24 +189,6 @@ public:
     BunkerRightScene(Panel *panel);
 };
 
-class VillageGateShamanScene : public Scene {
-    std::vector<Dialogue> script;
-    std::optional<Dialogue> talk(Player *player);
-    size_t dialogueIndex = 0;
-    bool pass = false;
-public:
-    VillageGateShamanScene(Panel *panel, const Entrance &new_entrance);
-};
-
-class VillageGateChiefScene : public Scene {
-    std::vector<Dialogue> script;
-    std::optional<Dialogue> talk(Player *player);
-    size_t dialogueIndex = 0;
-    bool pass = false;
-public:
-    VillageGateChiefScene(Panel *panel, const Entrance &new_entrance);
-};
-
 class TempleEntranceScene : public Scene {
     std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     std::tuple<bool, std::string, DeathType> useItemOnItem(Item source, Item destination);
@@ -323,6 +305,24 @@ class ChiefScene : public Scene {
     std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
 public:
     ChiefScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class VillageGateShamanScene : public Scene {
+    std::array<std::vector<Dialogue>, 2> scripts;
+    std::optional<Dialogue> talk(Player *player);
+    size_t dialogueIndex = 0;
+    size_t script = 0;
+public:
+    VillageGateShamanScene(Panel *panel, const Entrance &new_entrance);
+};
+
+class VillageGateChiefScene : public Scene {
+    std::array<std::vector<Dialogue>, 3> scripts;
+    std::optional<Dialogue> talk(Player *player);
+    size_t dialogueIndex = 0;
+    size_t script = 0;
+public:
+    VillageGateChiefScene(Panel *panel, const Entrance &new_entrance);
 };
 
 #endif //SCENE_H

@@ -497,11 +497,13 @@ int main(int argc, char *argv[]) {
         player.setState(State::Title);
     }
 
-    player.setState(State::Shaman);
+    //player.setState(State::Shaman);
     //player.setState(State::TempleEntrance);
     //player.setState(State::PlaneCockpit);
     //player.setState(State::RocketLauncher);
     //player.setState(State::Oracle);
+    player.setState(State::VillageGate2);
+    player.setFlag(Flag::VisitedVillage);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();

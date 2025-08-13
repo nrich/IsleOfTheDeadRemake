@@ -390,7 +390,6 @@ void Player::useItem(const Item item) {
                     this->setFlag(Flag::TranslateVillage2);
                     break;
                 case State::Shaman:
-                    std::cerr << "HERE?\n";
                     this->setFlag(Flag::TranslateShaman);
                     break;
                 case State::Chief:

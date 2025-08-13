@@ -620,6 +620,11 @@ int main(int argc, char *argv[]) {
 
         player.setInput(player_input);
 
+        if (player.showInventory()) {
+            inventory.draw(&player, scale);
+            continue;
+        }
+
         switch (player.getState()) {
             case State::World: 
                 draw_world(&player, &music_player, window, scale);
@@ -814,9 +819,6 @@ int main(int argc, char *argv[]) {
 
             case State::Map:
                 draw_map(&player, window, scale);
-                break;
-            case State::Inventory: 
-                inventory.draw(&player, scale);
                 break;
         }
     }

@@ -440,7 +440,7 @@ std::pair<raylib::Vector3, raylib::Vector3> Player::processInput(const uint64_t 
 
     if (player_input & ViewInventory) {
         player_input &= ~Input::ViewInventory;
-        this->setState(State::Inventory);
+        showInventory(true);
     }
 
     if (player_input & Input::ViewMap) {

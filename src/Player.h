@@ -63,8 +63,6 @@ class Player {
 
     uint64_t input = 0;
 
-    State inventoryReturnState;
-
     std::string highlight = "";
     std::optional<raylib::Color> highlightColour = std::nullopt;
 
@@ -75,6 +73,8 @@ class Player {
     uint64_t flags = 0;
 
     int radius = 3;
+
+    bool inventory = false;
 public:
     Player(World *world);
 
@@ -114,16 +114,7 @@ public:
         return state;
     }
 
-    State getInventoryReturnState() const {
-        return inventoryReturnState;
-    }
-
     void setState(State new_state) {
-        if (new_state == State::Inventory) {
-            inventoryReturnState = state;
-            action = Action::Inventory;
-        }
-
         state = new_state;
         input = 0;
     }
@@ -207,6 +198,14 @@ public:
 
     bool testFlag(const Flag flag) const {
         return flags & flag;
+    }
+
+    bool showInventory() const {
+        return inventory;
+    }
+
+    void showInventory(bool show) {
+        inventory = show;
     }
 
     ~Player();

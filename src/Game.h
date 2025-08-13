@@ -24,7 +24,6 @@ enum class State {
 
     World,
     Map,
-    Inventory,
     Dead,
     Laugh,
 

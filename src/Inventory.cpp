@@ -159,7 +159,7 @@ void Inventory::draw(Player *player, int scale) {
                                 case Item::DeadWolf:
                                 case Item::Machete:
                                 case Item::Smokes:
-                                    player->setState(player->getInventoryReturnState());
+                                    player->showInventory(false);
                                     player->setHighlight(USE + layout.name + USE_ON);
                                     break;
                                 case Item::Coconut:
@@ -184,7 +184,7 @@ void Inventory::draw(Player *player, int scale) {
             }
 
             if (exit_button.CheckCollision(position)) {
-                player->setState(player->getInventoryReturnState());
+                player->showInventory(false);
                 player->setSelectedItem(std::nullopt);
                 player->setHighlight();
             }

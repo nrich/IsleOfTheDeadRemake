@@ -66,7 +66,7 @@ void Panel::draw(Player *player, const std::pair<std::string, std::optional<rayl
                     player->setSelectedItem(std::nullopt);
                 } else if (action == Action::Inventory) {
                     player->setSelectedItem(std::nullopt);
-                    player->setState(State::Inventory);
+                    player->showInventory(true);
                 } else if (action == Action::Talk) {
                     player->setSelectedItem(std::nullopt);
                 }

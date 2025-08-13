@@ -100,9 +100,11 @@ public:
 };
 
 class Doc : public Base {
+    bool taken = false;
 public:
     Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
-    void onDeath(Player *player);
+    void touch(Player *player);
+    Collision collide() const;
 };
 
 class Dude : public Base {
@@ -136,9 +138,11 @@ public:
 };
 
 class Wolf : public Base {
-    void onDeath(Player *player);
+    bool taken = false;
 public:
     Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures);
+    void touch(Player *player);
+    Collision collide() const;
 };
 
 class Drummer : public Base {

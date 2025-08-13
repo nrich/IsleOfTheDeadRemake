@@ -502,8 +502,8 @@ int main(int argc, char *argv[]) {
     //player.setState(State::PlaneCockpit);
     //player.setState(State::RocketLauncher);
     //player.setState(State::Oracle);
-    player.setState(State::VillageGate2);
-    player.setFlag(Flag::VisitedVillage);
+//    player.setState(State::VillageGate2);
+//    player.setFlag(Flag::VisitedVillage);
 
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();

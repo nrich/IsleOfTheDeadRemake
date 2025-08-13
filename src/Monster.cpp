@@ -58,9 +58,8 @@ Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
 }
 
 Collision Base::collide() const {
-    if (state == MonsterState::Asleep || state == MonsterState::Dying || state == MonsterState::Dead) {
+    if (state == MonsterState::Asleep || state == MonsterState::Dying || state == MonsterState::Dead)
         return Collision::Pass;
-    }
 
     return Collision::Block;
 }
@@ -247,12 +246,31 @@ Doc::Doc(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &te
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-void Doc::onDeath(Player *player) {
-    if (!player->getItemCount(Item::Chemicals)) {
-        player->addItem(Item::Chemicals);
-    }
+void Doc::touch(Player *player) {
+    static raylib::Sound pickup_sound(Voc::Load("sound/tap.voc"));
+    static const Item item = Item::Chemicals;
 
-    player->setState(State::DocDie);
+    if (state != MonsterState::Dead)
+        return;
+
+    if (taken)
+        return;
+
+    if (!player->getItemCount(item)) {
+        pickup_sound.Play();
+        player->addItem(item);
+        taken = true;
+    }
+}
+
+Collision Doc::collide() const {
+    if (state == MonsterState::Dead && !taken)
+        return Collision::Touch;
+
+    if (state == MonsterState::Asleep || state == MonsterState::Dying || state == MonsterState::Dead)
+        return Collision::Pass;
+
+    return Collision::Block;
 }
 
 Dude::Dude(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 2, 50.f, 20.0f, 200.0f) {
@@ -429,10 +447,31 @@ Wolf::Wolf(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &
     currentFrame = std::get<0>(stateFrames[state]);
 }
 
-void Wolf::onDeath(Player *player) {
-    if (!player->getItemCount(Item::DeadWolf)) {
-        player->addItem(Item::DeadWolf);
+void Wolf::touch(Player *player) {
+    static raylib::Sound pickup_sound(Voc::Load("sound/tap.voc"));
+    static const Item item = Item::DeadWolf;
+
+    if (state != MonsterState::Dead)
+        return;
+
+    if (taken)
+        return;
+
+    if (!player->getItemCount(item)) {
+        pickup_sound.Play();
+        player->addItem(item);
+        taken = true;
     }
+}
+
+Collision Wolf::collide() const {
+    if (state == MonsterState::Dead && !taken)
+        return Collision::Touch;
+
+    if (state == MonsterState::Asleep || state == MonsterState::Dying || state == MonsterState::Dead)
+        return Collision::Pass;
+
+    return Collision::Block;
 }
 
 Drummer::Drummer(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures) : Base(segment, textures, 75.0f, DeathType::Zombie, 0, 50.f, 20.0f, 200.0f) {

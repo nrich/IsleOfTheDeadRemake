@@ -51,12 +51,27 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 static void draw_world(Player *player, MusicPlayer *music_player, raylib::Window &window, const int scale) {
     static uint64_t frame_count = 0;
+    static uint64_t countdown = 0;
 
     frame_count += 1;
 
     auto *world = player->getWorld();
     auto *level = world->getCurrentLevel();
     auto *map = level->getMap();
+
+    if (player->testFlag(Flag::BombCountdown)) {
+        if (countdown) {
+            if ((frame_count - countdown) > (2 * 60 * 60)) {
+                player->takeDamage(999, DeathType::Bomb);
+                countdown = 0;
+            }
+        } else {
+            static raylib::Sound countdown_sound = raylib::Sound(Voc::Load("sound/15min.voc"));
+
+            countdown_sound.Play();
+            countdown = frame_count;
+        }
+    }
 
     player->update(frame_count);
 
@@ -144,6 +159,7 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
 
     static auto acid_anim = Animation("fli/acid.fli");
     static auto bat_anim = Animation("fli/batkill.fli");
+    static auto bomb_anim = Animation("fli/isle.fli");
     static auto companion_anim = Animation("fli/zombabe.fli");
     static auto doc_anim = Animation("fli/memkill.fli");
     static auto fence_anim = Animation("fli/zap.fli", "sound/zap.voc");
@@ -168,6 +184,9 @@ static void play_death_anim(Player *player, raylib::Window &window, const int sc
                 break;
             case DeathType::Bat:
                 anim_finished = bat_anim.play(scale);
+                break;
+            case DeathType::Bomb:
+                anim_finished = bomb_anim.play(scale);
                 break;
             case DeathType::Companion:
                 anim_finished = companion_anim.play(scale);
@@ -354,12 +373,10 @@ static void play_doc_transform_anim(Player *player, raylib::Window &window, cons
 
 static void play_doc_die_anim(Player *player, raylib::Window &window, const int scale) {
     static auto die_anim = Animation("fli/membom.fli", "sound/mem6.voc");
-    static raylib::Sound countdown_sound = raylib::Sound(Voc::Load("sound/15min.voc"));
 
     BeginDrawing();
     {
         if (die_anim.play(scale)) {
-            countdown_sound.Play();
             player->setState(State::World);
             player->setFlag(Flag::BombCountdown);
         }
@@ -814,12 +831,15 @@ int main(int argc, char *argv[]) {
                 break;
 
             case State::Ending:
+                music_player.play("music/out1fm.mid");
                 play_ending_anim(&player, window, scale, 0);
                 break;
             case State::Ending1:
+                music_player.play("music/out1fm.mid");
                 play_ending_anim(&player, window, scale, 1);
                 break;
             case State::Ending2:
+                music_player.play("music/out1fm.mid");
                 play_ending_anim(&player, window, scale, 2);
                 break;
 

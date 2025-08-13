@@ -220,6 +220,7 @@ enum class DeathType {
     None,
     Acid,
     Bat,
+    Bomb,
     Companion,
     Doc,
     Fence,

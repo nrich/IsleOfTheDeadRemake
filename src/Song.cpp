@@ -286,6 +286,9 @@ void Song::generateTones() {
                     case Instrument::SynthBrass:
                         channels[i][note].multi(freqency, play_delay/500, {WaveForm::Square}, velocity, 10, 5, 10, 5);
                         break;
+                    case Instrument::Default:
+                        channels[i][note].multi(freqency, play_delay/500, {WaveForm::Square}, velocity, 10, 10, 0, 5);
+                        break;
                     default:
                         channels[i][note].multi(freqency, play_delay/500, {WaveForm::Triangle, WaveForm::Square}, velocity, 40, 20, 128, 40);
                         break;

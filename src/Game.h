@@ -21,6 +21,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 enum class State {
     Title,
+    Quit,
+    Exit,
 
     World,
     Map,

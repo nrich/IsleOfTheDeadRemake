@@ -71,10 +71,6 @@ Map::Map(const std::string &filename) : filename(filename), x(0), y(0), width(0)
         fh.read((char *)&map_segment, sizeof(map_segment));
         size_t segment_id = map_hash_id ^ hash_map_segment(map_segment);
 
-        if (map_segment._flags5) {
-            //std::cerr << filename << " " << map_segment.footer << " " << map_segment._flags5 << "\n";
-        }
-
         segments.push_back(Segment(segment_id, map_segment.x1, map_segment.y1, map_segment.x2, map_segment.y2, map_segment.footer, map_segment._flags5, map_segment.count));
 
         x = std::min(x, std::min(map_segment.x1, map_segment.x2));
@@ -82,8 +78,6 @@ Map::Map(const std::string &filename) : filename(filename), x(0), y(0), width(0)
         width = std::max(width, std::max(map_segment.x1, map_segment.x2));
         height = std::max(height, std::max(map_segment.y1, map_segment.y2));
     }
-
-    std::cout << filename << " " << fh.tellg() << "\n";
 }
 
 void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
@@ -91,7 +85,7 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
         auto camera_position = camera->GetPosition();
         camera_position.y = 0;
 
-
+        // special case for fence/tank rendering
         if (l.texture != 63 && r.texture != 63) {
             if (l.texture < 100 && r.texture >= 100)
                 return true;

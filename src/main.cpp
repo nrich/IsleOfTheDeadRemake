@@ -33,9 +33,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <cmdline.h>
 #include <raylib-cpp.hpp>
 
-#include "Palette.h"
-#include "CelThree.h"
-#include "StillCel.h"
 #include "Flic.h"
 #include "Fnt.h"
 #include "World.h"
@@ -384,6 +381,45 @@ static void play_doc_die_anim(Player *player, raylib::Window &window, const int 
     EndDrawing();
 }
 
+static void show_quit(Player *player, raylib::Window &window, const int scale, const State old_state) {
+    static auto quit_message = StillCel("stillcel/quit.cel").getTexture();
+
+    BeginDrawing();
+    {
+        window.ClearBackground(raylib::BLACK);
+
+        quit_message.Draw(Vector2(2*scale, 74*scale), 0.0f, scale);
+
+        if (IsKeyPressed(KEY_Y)) {
+            player->setState(State::Exit);
+        } else if (IsKeyPressed(KEY_N)) {
+            player->setState(old_state);
+        }
+    }
+    EndDrawing();
+}
+
+static void play_exit_anim(Player *player, raylib::Window &window, const int scale) {
+    static auto suicide_anim = Animation("fli/suicide.fli");
+    static auto laugh_anim = Animation("fli/memnabha.fli", "sound/dielaugh.voc");
+    static bool play_laugh = false;
+
+    BeginDrawing();
+    {
+        window.ClearBackground(raylib::BLACK);
+
+        if (!play_laugh) {
+            if (suicide_anim.play(scale)) {
+                play_laugh = true;
+            }
+        } else {
+            if (laugh_anim.play(scale)) {
+                exit(0);
+            }
+        }
+    }
+    EndDrawing();
+}
 
 int main(int argc, char *argv[]) {
     cmdline::parser argparser;
@@ -401,8 +437,10 @@ int main(int argc, char *argv[]) {
     std::filesystem::current_path(datadir);
 
     SetConfigFlags(FLAG_MSAA_4X_HINT|FLAG_WINDOW_RESIZABLE);
-    raylib::Window window(320*scale, 200*scale, "Isle of the Dead remake" + std::string(" (v") + std::string(VERSION) + ")");
+    raylib::Window window(320*scale, 200*scale, "Isle of the Dead Remake" + std::string(" (v") + std::string(VERSION) + ")");
     SetTargetFPS(60);
+
+    window.SetExitKey(KEY_NULL);
 
     raylib::AudioDevice audiodevice;
 
@@ -506,13 +544,19 @@ int main(int argc, char *argv[]) {
         player.addItem(Item::DeadWolf);
         player.addItem(Item::Book);
         player.addItem(Item::Smokes);
+        player.addItem(Item::OiledRifle);
         player.addItem(Item::Shotgun);
+        player.addItem(Item::Uzi);
         player.addItem(Item::Companion);
         player.addItem(Item::Drug);
         player.addItem(Item::Antidote);
         player.addItem(Item::WireClipper);
         player.addItem(Item::Raft);
         player.addItem(Item::FlareGun);
+
+        player.addItem(Item::Ammo1, 100);
+        player.addItem(Item::Ammo2, 100);
+        player.addItem(Item::Ammo3, 100);
 //        player.setFlag(Flag::PowerOff);
     } else {
         player.setState(State::Title);
@@ -526,6 +570,7 @@ int main(int argc, char *argv[]) {
 //    player.setState(State::VillageGate2);
 //    player.setFlag(Flag::VisitedVillage);
 
+    State old_state = player.getState();
     while (!window.ShouldClose()) {
         uint64_t player_input = player.getInput();
 
@@ -556,6 +601,12 @@ int main(int argc, char *argv[]) {
         if (IsKeyPressed(KEY_I)) {
             player_input |= Input::ViewInventory;
         } else if (IsKeyReleased(KEY_I)) {
+            player_input &= ~Input::ViewInventory;
+        }
+
+        if (IsKeyPressed(KEY_TAB)) {
+            player_input |= Input::ViewInventory;
+        } else if (IsKeyReleased(KEY_TAB)) {
             player_input &= ~Input::ViewInventory;
         }
 
@@ -646,6 +697,11 @@ int main(int argc, char *argv[]) {
         if (player.showInventory()) {
             inventory.draw(&player, scale);
             continue;
+        }
+
+        if (IsKeyPressed(KEY_ESCAPE)) {
+            old_state = player.getState();
+            player.setState(State::Quit);
         }
 
         switch (player.getState()) {
@@ -828,6 +884,13 @@ int main(int argc, char *argv[]) {
                 break;
             case State::Laugh:
                 play_laugh_anim(&player, window, scale);
+                break;
+
+            case State::Quit:
+                show_quit(&player, window, scale, old_state);
+                break;
+            case State::Exit:
+                play_exit_anim(&player, window, scale);
                 break;
 
             case State::Ending:

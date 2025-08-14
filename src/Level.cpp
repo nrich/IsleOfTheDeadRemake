@@ -110,6 +110,30 @@ void Level::draw(Player *player, raylib::Window &window, const uint64_t frame_co
 
         Fnt::Write(map->getFilename(), 0, 0, scale);
         Fnt::Write(std::to_string(player->getHealth()), 0, (200-10) * scale, scale);
+
+        auto weapon_if = player->equippedWeapon();
+        if (weapon_if) {
+            auto weapon = *weapon_if;
+
+            std::string ammo_count = "";
+
+            switch (weapon) {
+                case Item::Rifle:
+                case Item::OiledRifle:
+                    ammo_count = std::to_string(player->getItemCount(Item::Ammo1));
+                    break;
+                case Item::Shotgun:
+                    ammo_count = std::to_string(player->getItemCount(Item::Ammo2));
+                    break;
+                case Item::Uzi:
+                    ammo_count = std::to_string(player->getItemCount(Item::Ammo3));
+                    break;
+                default:
+                    break;
+            }
+
+            Fnt::Write(ammo_count, (320-(ammo_count.size()*6))*scale, (200-10) * scale, scale);
+        }
     }
     EndDrawing();
 }

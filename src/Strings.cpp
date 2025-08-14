@@ -44,7 +44,7 @@ void Strings::Extract(const std::string &filename) {
         current.push_back(c);
         if (!c) {
             auto str = std::string(current.data());
-            std::cout << strings_table.size() << " " << str << "\n";
+            //std::cout << strings_table.size() << " " << str << "\n";
             strings_table.push_back(str);
             current.clear();
             continue;

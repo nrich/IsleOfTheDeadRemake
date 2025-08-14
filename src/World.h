@@ -48,6 +48,10 @@ class World {
 public:
     World(MusicPlayer *music_player, const std::vector<LevelSettings> &level_settings, const std::string &entrance_filename); 
 
+    MusicPlayer *getMusicPlayer() const {
+        return musicPlayer;
+    }
+
     Level *getCurrentLevel() {
         return &levels.at(currentMap);
     }

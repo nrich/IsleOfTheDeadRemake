@@ -147,6 +147,10 @@ public:
         return music;
     }
 
+    void setLevelMusic(const std::string &new_music) {
+        music = new_music;
+    }
+
     void draw(Player *player, raylib::Window &window, const uint64_t frame_count, const int scale);
 
     std::vector<raylib::Vector2> findPath(const raylib::Vector2 &start, const raylib::Vector2 &goal);

@@ -54,7 +54,7 @@ std::vector<Entrance> Entrance::Parse(const std::string &filename) {
                 Entrance entrance(full_map_name, x, y, flags);
                 entrances.push_back(entrance);
 
-                std::cout << count << " " << full_map_name << " " << x<< " " << y << " " << flags << "\n";
+                //std::cout << count << " " << full_map_name << " " << x<< " " << y << " " << flags << "\n";
                 count++;
             }
         }

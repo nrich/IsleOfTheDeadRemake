@@ -61,7 +61,7 @@ World::World(MusicPlayer *music_player, const std::vector<LevelSettings> &level_
     for (const auto &level_settings : level_settings_list) {
         auto level_data = levels.emplace(level_settings.filename, Level(level_settings));
 
-        std::cout << level_settings.filename << "\n";
+        //std::cout << level_settings.filename << "\n";
 
         if (level_data.second) {
             auto level = level_data.first;
@@ -329,6 +329,12 @@ void World::spawnPassage(const Segment &segment) {
         case 0xb94e7a189516f497:
             // 15.map
             entities.emplace(segment.id, std::make_unique<Passage>(&segment, cave_entry, entrances[68]));
+            break;
+
+        // 15.map
+        case 0x28d1b0942493c9c4:
+        case 0x29ffb0a225bdc9f2:
+            entities.emplace(segment.id, std::make_unique<Wall>(&segment, cave_entry));
             break;
 
         // 16.map
@@ -1216,7 +1222,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         case 26:
         case 27:
         case 28:
-            std::cout << "\t JUNGLE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //std::cout << "\t JUNGLE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             spawnPassage(segment);
             break;
         case 15:
@@ -1230,12 +1236,12 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             break;
         case 21:
         case 22:
-            std::cout << "\t CAVE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //std::cout << "\t CAVE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             spawnPassage(segment);
             break;
         case 23:
         case 24:
-            std::cout << "\t CAVE VINES " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //std::cout << "\t CAVE VINES " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             spawnPassage(segment);
             break;
         case 18:
@@ -1322,13 +1328,12 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, compound_window_dark));
             break;
         case 59:
-            std::cout << "\t TEMPLE DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
-            //entities.emplace(segment.id, std::make_unique<AnimatedWall>(&segment, temple_door, 6));
+            //std::cout << "\t TEMPLE DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             spawnPassage(segment);
             break;
 
         case 60:
-            std::cout << "\t BIG DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //std::cout << "\t BIG DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             spawnPassage(segment);
             break;
 
@@ -1355,7 +1360,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             break;
 
         case 83:
-            std::cout << "\t MANSION DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //std::cout << "\t MANSION DOOR " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             spawnPassage(segment);
             break;
 
@@ -1455,7 +1460,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<AnimatedProp>(&segment, tiki, 6, Collision::Pass));
             break;
         case 136:
-            std::cout << "\t TANK " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //std::cout << "\t TANK " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             entities.emplace(segment.id, std::make_unique<Monster::Tank>(&segment, tank));
             break;
         case 138:
@@ -1538,7 +1543,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, shotgun, Item::Shotgun, -1));
             break;
         default:
-            std::cout << "UNKNOWN " << segment.id << " " << segment.texture << "\n";
+            //std::cout << "UNKNOWN " << segment.id << " " << segment.texture << "\n";
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, unknown));
             break;
     }

@@ -53,16 +53,18 @@ void MusicPlayer::play(const std::string &midi_filename) {
 
     audioStream.Stop();
 
-    if (songs.count(midi_filename)) {
-        Song *song = &songs.at(midi_filename);
-        song->generateTones();
-    } else {
-        MIDI midi = MIDI(midi_filename);
-        songs.emplace(midi_filename, midi);
-    }
+    if (midi_filename.size()) {
+        if (songs.count(midi_filename)) {
+            Song *song = &songs.at(midi_filename);
+            song->generateTones();
+        } else {
+            MIDI midi = MIDI(midi_filename);
+            songs.emplace(midi_filename, midi);
+        }
 
-    audioStream.SetCallback(PlayCallback);
-    audioStream.Play();
+        audioStream.SetCallback(PlayCallback);
+        audioStream.Play();
+    }
 
     current_songname = midi_filename;
 }

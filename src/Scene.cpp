@@ -980,10 +980,18 @@ std::optional<Scene::Dialogue> ShamanScene::talk(Player *player) {
             return scripts[script][dialogueIndex++];
         }
 
+        if (!player->getItemCount(Item::GoldMedal2)) {
+            return Dialogue(Strings::Lookup(223), raylib::RAYWHITE);
+        }
+
         if (gaveSmokes) {
             script = 2;
         }
     } else if (script == 2) {
+        if (!player->getItemCount(Item::GoldMedal2)) {
+            return Dialogue(Strings::Lookup(223), raylib::RAYWHITE);
+        }
+
         if (dialogueIndex < scripts[script].size()) {
             return scripts[script][dialogueIndex++];
         }
@@ -1201,8 +1209,8 @@ std::optional<Scene::Dialogue> ChiefScene::talk(Player *player) {
 
 std::tuple<bool, std::string, DeathType> ChiefScene::getItem(const Layout &layout) {
     if (layout.item == Item::GoldMedal2) {
-        if (script == 3) {
-            return std::make_tuple(true, Strings::Lookup(339), DeathType::None);
+        if (script != 3) {
+            return std::make_tuple(false, Strings::Lookup(360), DeathType::None);
         }
     }
 

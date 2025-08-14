@@ -97,6 +97,8 @@ void Scene::draw(Player *player, int scale) {
 
                                 player->setPosition(raylib::Vector2(entrance->X(), entrance->Y()));
                                 player->setAngles(raylib::Vector2(entrance->getDirection(), 0));
+                            } else {
+                                throw std::runtime_error("World exit without an exit point");
                             }
                         }
 
@@ -274,8 +276,6 @@ std::tuple<bool, std::string, DeathType> CrashedPlaneCockpitScene::getItem(const
 CrashedPlaneRightScene::CrashedPlaneRightScene(Panel *panel) : Scene(panel, "stillcel/room4.cel") {
     layouts.emplace_back(raylib::Vector2(25, 62), StillCel("stillcel/machetis.cel").getTexture(), Item::Machete, Strings::Lookup(308), Strings::Lookup(309), Strings::Lookup(310));
 
-    navigation[Input::StepBack] = State::World;
-    navigation[Input::LookDown] = State::World;
     navigation[Input::TurnLeft] = State::CrashedPlaneEntry;
     navigation[Input::TurnRight] = State::CrashedPlaneExit;
 }
@@ -876,6 +876,8 @@ MirrorScene::MirrorScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
 }
 
 ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/shaman1.cel") {
+    entrance = new_entrance;
+
     static const std::vector<std::optional<raylib::TextureUnmanaged>> smoke = {
         StillCel("stillcel/smoke1.cel").getTexture(),
         StillCel("stillcel/smoke2.cel").getTexture(),
@@ -1044,6 +1046,8 @@ std::tuple<bool, std::string, DeathType> ShamanScene::getItem(const Layout &layo
 }
 
 ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/chiefbkg.cel") {
+    entrance = new_entrance;
+
     layouts.emplace_back(raylib::Vector2(137, 73), StillCel("stillcel/medal2.cel").getTexture(), Item::GoldMedal2, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes_left = {

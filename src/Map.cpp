@@ -152,7 +152,7 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
         float l_dist = Vector3Distance(camera_position, l_segment_position);
         float r_dist = Vector3Distance(camera_position, r_segment_position);
 
-        if ((int)l_dist == (int)r_dist) {
+        if (std::abs(l_dist-r_dist) < 0.1) {
             return r_priority < l_priority;
         }
 

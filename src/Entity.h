@@ -192,6 +192,13 @@ public:
     Barricade(const Segment *segment, const raylib::TextureUnmanaged &closed_texture, const raylib::TextureUnmanaged &opened_texture, const Entrance &entrance, DamageType expected) : Door(segment, closed_texture, opened_texture, entrance), expected(expected) {
     }
 
+    Collision collide() const {
+        if (open)
+            return Collision::Touch;
+
+        return Collision::Block;
+    }
+
     std::optional<raylib::RayCollision> collide(const raylib::Ray &ray);
 
     void damage(Player *player, const DamageType damage_type, int amount) {

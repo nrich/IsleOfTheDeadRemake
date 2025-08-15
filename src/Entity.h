@@ -80,6 +80,10 @@ public:
     virtual void use(Player *player, std::optional<Item> item_if) {
     }
 
+    virtual uint8_t getPriority() const {
+        return 1;
+    }
+
     virtual ~Entity();
 };
 

@@ -86,6 +86,14 @@ public:
         return SegmentType::Monster;
     }
 
+    uint8_t priority() const {
+        if (state == MonsterState::Dying || state == MonsterState::Dead)
+            return 0;
+
+        return 2;
+    }
+
+
     ~Base();
 };
 

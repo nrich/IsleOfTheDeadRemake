@@ -28,7 +28,37 @@ static void draw_entity(const raylib::Camera3D *camera, const raylib::Vector2 &p
     const float y_offset = 5.0f;
     const float scale = 10.0f;
 
-    camera->DrawBillboard(texture, Vector3(position.GetX(), y_offset, position.GetY()), scale);
+
+    static const char *fragment_shader = R"(
+#version 330
+
+// Input vertex attributes (from vertex shader)
+in vec2 fragTexCoord;
+in vec4 fragColor;
+
+// Input uniform values
+uniform sampler2D texture0;
+uniform vec4 colDiffuse;
+
+// Output fragment color
+out vec4 finalColor;
+
+void main()
+{
+    vec4 texelColor = texture(texture0, fragTexCoord);
+    if (texelColor.a == 0.0) discard;
+    finalColor = texelColor * fragColor * colDiffuse;
+}
+    )";
+
+    static raylib::ShaderUnmanaged shader = raylib::ShaderUnmanaged::LoadFromMemory(nullptr, fragment_shader);
+
+    shader.BeginMode();
+    {
+        camera->DrawBillboard(texture, Vector3(position.GetX(), y_offset, position.GetY()), scale);
+    }
+    shader.EndMode();
+
 }
 
 Base::Base(const Segment *segment, const std::vector<raylib::TextureUnmanaged> &textures, const float step_size, const DeathType death_type, const int attack_damage, float notice_distance, float attack_distance, float walk_distance) : Entity(segment), textures(textures), stepSize(step_size), deathType(death_type), attackDamage(attack_damage), noticeDistance(notice_distance), attackDistance(attack_distance), walkDistance(walk_distance) {

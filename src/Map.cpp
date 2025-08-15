@@ -100,9 +100,6 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
         Vector3 l_segment_position(0.0f, 0.0f, 0.0f);
         Vector3 r_segment_position(0.0f, 0.0f, 0.0f);
 
-        int l_priority = 1;
-        int r_priority = 1;
-
         if (!le) {
             uint16_t min_x = std::min(l.x1, l.x2);
             uint16_t max_x = std::max(l.x1, l.x2);
@@ -112,7 +109,6 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
             l_segment_position = Vector3((max_x-min_x)/2 + min_x, 0, (max_y - min_y)/2 + min_y);
         } else {
             auto position_if = le->getPosition();
-            l_priority = le->getPriority();
 
             if (position_if) {
                 l_segment_position = Vector3(position_if->x, 0, position_if->y);
@@ -135,7 +131,6 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
             r_segment_position = Vector3((max_x-min_x)/2 + min_x, 0, (max_y - min_y)/2 + min_y);
         } else {
             auto position_if = re->getPosition();
-            r_priority = re->getPriority();
 
             if (position_if) {
                 r_segment_position = Vector3(position_if->x, 0, position_if->y);
@@ -151,10 +146,6 @@ void Map::sortSegments(const raylib::Camera3D *camera, World *world) {
 
         float l_dist = Vector3Distance(camera_position, l_segment_position);
         float r_dist = Vector3Distance(camera_position, r_segment_position);
-
-        if (std::abs(l_dist-r_dist) < 0.1) {
-            return r_priority < l_priority;
-        }
 
         return r_dist < l_dist;
     }); 

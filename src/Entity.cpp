@@ -76,7 +76,35 @@ static void draw_entity(const raylib::Camera3D *camera, const uint16_t x1, const
     float mid_x = x1;
     float mid_y = y1;
 
-    camera->DrawBillboard(texture, Vector3(mid_x, y_offset, mid_y), scale);
+    static const char *fragment_shader = R"(
+#version 330
+
+// Input vertex attributes (from vertex shader)
+in vec2 fragTexCoord;
+in vec4 fragColor;
+
+// Input uniform values
+uniform sampler2D texture0;
+uniform vec4 colDiffuse;
+
+// Output fragment color
+out vec4 finalColor;
+
+void main()
+{
+    vec4 texelColor = texture(texture0, fragTexCoord);
+    if (texelColor.a == 0.0) discard;
+    finalColor = texelColor * fragColor * colDiffuse;
+}
+    )";
+
+    static raylib::ShaderUnmanaged shader = raylib::ShaderUnmanaged::LoadFromMemory(nullptr, fragment_shader);
+
+    shader.BeginMode();
+    {
+        camera->DrawBillboard(texture, Vector3(mid_x, y_offset, mid_y), scale);
+    }
+    shader.EndMode();
 }
 
 Entity::~Entity() {

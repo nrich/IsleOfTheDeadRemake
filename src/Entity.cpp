@@ -217,6 +217,7 @@ void ClosedDoorPlayAnim::touch(Player *player) {
 
     if (!played) {
         player->setState(State::DocTransform);
+        played = true;
     }
 }
 

@@ -43,11 +43,14 @@ static void PlayCallback(void *buffer, uint32_t frames) {
     }
 }
 
-MusicPlayer::MusicPlayer() {
+MusicPlayer::MusicPlayer(bool disable_playback) : disable(disable_playback) {
     audioStream.Load(44100, 32, 2);
 }
 
 void MusicPlayer::play(const std::string &midi_filename) {
+    if (disable)
+        return;
+
     if (current_songname == midi_filename)
         return;
 

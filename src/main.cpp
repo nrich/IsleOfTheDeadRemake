@@ -45,6 +45,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Flic.h"
 #include "MusicPlayer.h"
 #include "Animation.h"
+#include "LaunchOptions.h"
 
 static void draw_world(Player *player, MusicPlayer *music_player, raylib::Window &window, const int scale) {
     static uint64_t frame_count = 0;
@@ -425,19 +426,29 @@ int main(int argc, char *argv[]) {
     cmdline::parser argparser;
     argparser.add<std::string>("datadir", 'd', "Data directory", false, "./");
     argparser.add<std::string>("map", 'm', "map file", false, "");
-    argparser.add<int>("scale", 's', "render scale", false, 2);
+    argparser.add<int>("scale", 's', "render scale", false, 0);
+    argparser.add<bool>("playback", 'p', "Disable music playback", false, false);
     argparser.parse_check(argc, argv);
 
     SetTraceLogLevel(LOG_WARNING);
 
     std::string map_file = argparser.get<std::string>("map");
     std::string datadir = argparser.get<std::string>("datadir");
-    const int scale = argparser.get<int>("scale");
+    int scale = argparser.get<int>("scale");
+    bool disable_music_playback = argparser.get<bool>("playback");
+
+    const std::string title = "Isle of the Dead Remake" + std::string(" (v") + std::string(VERSION) + ")";
+
+    if (!scale) {
+        LaunchOptions launch_options(title, &scale, &disable_music_playback);
+        if (!launch_options.run())
+            exit(0);
+    }
 
     std::filesystem::current_path(datadir);
 
     SetConfigFlags(FLAG_MSAA_4X_HINT|FLAG_WINDOW_RESIZABLE);
-    raylib::Window window(320*scale, 200*scale, "Isle of the Dead Remake" + std::string(" (v") + std::string(VERSION) + ")");
+    raylib::Window window(320*scale, 200*scale, title);
     SetTargetFPS(60);
 
     window.SetExitKey(KEY_NULL);
@@ -450,7 +461,7 @@ int main(int argc, char *argv[]) {
     Strings::Extract("iodex1.exe");
     Panel panel;
 
-    MusicPlayer music_player;
+    MusicPlayer music_player(disable_music_playback);
 
     World world(&music_player, {
         LevelSettings("maps/01.map", Sky::Day, Ground::Dirt, "music/out4fm.mid"),

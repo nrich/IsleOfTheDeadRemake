@@ -3,7 +3,7 @@ CXX = g++
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-INC = -I src -I thirdparty -I thirdparty/raylib-5.5.0/include -I thirdparty/raylib-cpp-5.5.0
+INC = -I src -I thirdparty -I thirdparty/raylib-5.5.0/include -I thirdparty/raylib-cpp-5.5.0 -I thirdparty/fltk-1.4.4/include
 LDFLAGS = -static-libgcc -static-libstdc++
 CPPFLAGS = -g -O3 -std=c++20 $(INC) -Wall
 CFLAGS = -g -O3 $(INC) -Wall -pthread
@@ -18,7 +18,7 @@ endif
 ifdef CONFIG_W64
     CXX = x86_64-w64-mingw32-g++
     CC = x86_64-w64-mingw32-gcc
-    LDFLAGS = -mwindows -static-libgcc -static-libstdc++ -L thirdparty/raylib-5.5.0/lib/mingw-w64 -lraylib -lgdi32 -lopengl32 -lwinmm -lole32 -luuid -lshell32
+    LDFLAGS = -mwindows -static-libgcc -static-libstdc++ -L thirdparty/raylib-5.5.0/lib/mingw-w64 -lraylib -L thirdparty/fltk-1.4.4/lib/mingw-w64 -lgdi32 -lopengl32 -lwinmm -lole32 -luuid -lshell32 -lfltk -lgdiplus -lgdiplus -lole32 -luuid -lcomctl32 -lws2_32 -lwinspool
     INC +=
     CPPFLAGS += -pthread -D_WIN64 -Wall
     ifeq ($(UNAME), Linux)
@@ -30,7 +30,7 @@ ifdef CONFIG_W64
     endif
     WINDRESARGS = 
 else
-    LDFLAGS += -L thirdparty/raylib-5.5.0/lib/x84_64 -lraylib
+    LDFLAGS += -L thirdparty/raylib-5.5.0/lib/x84_64 -lraylib -L thirdparty/fltk-1.4.4/lib/x84_64 -lfltk -pthread -lpthread -lm -ldecor-0 -lwayland-cursor -lwayland-client -lxkbcommon -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0 -lharfbuzz -lcairo -lX11 -ldl -ldbus-1 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0 -lharfbuzz -lcairo -lXinerama -lXcursor -lXfixes -lXrender -lX11
 endif
 
 VERSION = $(shell cat VERSION.txt)
@@ -73,6 +73,7 @@ COMMON_OBJS := \
 	src/Flic.o \
 	src/Fnt.o \
 	src/Inventory.o \
+	src/LaunchOptions.o \
 	src/Level.o \
 	src/Map.o \
 	src/Monster.o \

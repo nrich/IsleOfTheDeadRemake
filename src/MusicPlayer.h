@@ -28,8 +28,9 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class MusicPlayer {
     raylib::AudioStream audioStream;
+    bool disable;
 public:
-    MusicPlayer();
+    MusicPlayer(bool disable_playback);
     void play(const std::string &midi_filename);
     void stop();
     ~MusicPlayer();

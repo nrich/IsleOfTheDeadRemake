@@ -108,7 +108,6 @@ void Level::draw(Player *player, raylib::Window &window, const uint64_t frame_co
 
         player->drawWeapon(frame_count, scale);
 
-        Fnt::Write(map->getFilename(), 0, 0, scale);
         Fnt::Write(std::to_string(player->getHealth()), 0, (200-10) * scale, scale);
 
         auto weapon_if = player->equippedWeapon();

@@ -113,6 +113,8 @@ static void draw_map(Player *player, raylib::Window &window, const int scale) {
     {
         window.ClearBackground(raylib::BLACK);
 
+        Fnt::Write(map->getFilename(), 800, 8, scale);
+
         camera.BeginMode();
         {
             for (const auto &segment : map->getSegments()) {
@@ -145,8 +147,10 @@ static void draw_map(Player *player, raylib::Window &window, const int scale) {
                 }
             }
 
-            DrawLineEx(player_position * 0.4 * scale, player_position_angled * 0.4 * scale, scale, raylib::BLUE);
-            DrawCircleV(player_position * 0.4 * scale, 0.4 * scale * 3, raylib::BLUE); 
+            if (player->getItemCount(Item::Compass)) {
+                DrawLineEx(player_position * 0.4 * scale, player_position_angled * 0.4 * scale, scale, raylib::BLUE);
+                DrawCircleV(player_position * 0.4 * scale, 0.4 * scale * 3, raylib::BLUE);
+            }
         }
         camera.EndMode();
     }

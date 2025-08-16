@@ -75,6 +75,7 @@ class Player {
     int radius = 3;
 
     bool inventory = false;
+    bool help = false;
 public:
     Player(World *world);
 
@@ -206,6 +207,14 @@ public:
 
     void showInventory(bool show) {
         inventory = show;
+    }
+
+    bool showHelp() const {
+        return help;
+    }
+
+    void showHelp(bool show) {
+        help = show;
     }
 
     ~Player();

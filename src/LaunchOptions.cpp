@@ -3,7 +3,7 @@
 
 #include "LaunchOptions.h"
 
-LaunchOptions::LaunchOptions(const std::string &title, int *scale, bool *disable) : Fl_Window(400, 180, title.c_str()), button(310, 150, 70, 28, "Launch"), slider(20, 50, 200, 28), checkbox(20, 100, 110, 28, "Disable music"), label(20, 10, 100, 28), scale(scale), disable(disable) { 
+LaunchOptions::LaunchOptions(const std::string &title, int *scale, bool *disable) : Fl_Window(400, 190, title.c_str()), button(310, 150, 70, 28, "Launch"), slider(20, 50, 200, 28), checkbox(20, 100, 110, 28, "Disable music"), label(20, 10, 200, 28), scale(scale), disable(disable) {
     slider.bounds(1, 10);
 
     *this->scale = 1;
@@ -54,7 +54,7 @@ const std::string &LaunchOptions::getDisplayWindowSize() const {
 
     int scale_size = *scale;
 
-    s << std::to_string(320 * scale_size) << "x" << std::to_string(200 * scale_size);
+    s << "Window size: " << std::to_string(320 * scale_size) << "x" << std::to_string(200 * scale_size);
 
     display_string = s.str();
 

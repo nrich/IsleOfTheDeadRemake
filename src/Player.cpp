@@ -470,9 +470,14 @@ std::pair<raylib::Vector3, raylib::Vector3> Player::processInput(const uint64_t 
         rotation.SetY(-rotate_this_frame);
     }
 
-    if (player_input & ViewInventory) {
+    if (player_input & Input::ViewInventory) {
         player_input &= ~Input::ViewInventory;
         showInventory(true);
+    }
+
+    if (player_input & Input::ShowHelp) {
+        player_input &= ~Input::ShowHelp;
+        showHelp(true);
     }
 
     if (player_input & Input::ViewMap) {

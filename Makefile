@@ -72,6 +72,7 @@ COMMON_OBJS := \
 	src/Entrance.o \
 	src/Flic.o \
 	src/Fnt.o \
+	src/Help.o \
 	src/Inventory.o \
 	src/LaunchOptions.o \
 	src/Level.o \

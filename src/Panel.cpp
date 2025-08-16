@@ -89,6 +89,8 @@ void Panel::draw(Player *player, const std::pair<std::string, std::optional<rayl
 
     auto action = player->getAction();
     if (action) {
+        player->showHelp(false);
+
         switch (*action) {
             case Action::Look:
                 buttons[Action::Look].draw(scale);
@@ -106,6 +108,7 @@ void Panel::draw(Player *player, const std::pair<std::string, std::optional<rayl
                 buttons[Action::Inventory].draw(scale);
                 break;
             case Action::Help:
+                player->showHelp(true);
                 buttons[Action::Help].draw(scale);
                 break;
         }

@@ -46,6 +46,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "MusicPlayer.h"
 #include "Animation.h"
 #include "LaunchOptions.h"
+#include "Help.h"
 
 static void draw_world(Player *player, MusicPlayer *music_player, raylib::Window &window, const int scale) {
     static uint64_t frame_count = 0;
@@ -498,6 +499,7 @@ int main(int argc, char *argv[]) {
     }, "entrance.tbl");
 
     Inventory inventory(&panel);
+    Help help(&panel);
 
     auto crashed_plane_entry_scene = std::make_unique<CrashedPlaneEntryScene>(&panel, world.getEntrance(5));
     auto crashed_plane_left_scene = std::make_unique<CrashedPlaneLeftScene>(&panel);
@@ -646,15 +648,15 @@ int main(int argc, char *argv[]) {
         }
 
         if (IsKeyPressed(KEY_UP)) {
-            player_input |= Input::LookUp;
+            player_input |= Input::StepForward;
         } else if (IsKeyReleased(KEY_UP)) {
-            player_input &= ~Input::LookUp;
+            player_input &= ~Input::StepForward;
         }
 
         if (IsKeyPressed(KEY_DOWN)) {
-            player_input |= Input::LookDown;
+            player_input |= Input::StepBack;
         } else if (IsKeyReleased(KEY_DOWN)) {
-            player_input &= ~Input::LookDown;
+            player_input &= ~Input::StepBack;
         }
 
         if (IsKeyPressed(KEY_LEFT)) {
@@ -699,11 +701,12 @@ int main(int argc, char *argv[]) {
             player_input &= ~Input::Use;
         }
 
-        if (IsKeyPressed(KEY_Q)) {
-            std::cerr << "POSITION " << player.getPosition().ToString() << "\n";
-        }
-
         player.setInput(player_input);
+
+        if (player.showHelp()) {
+            help.draw(&player, window, scale);
+            continue;
+        }
 
         if (player.showInventory()) {
             inventory.draw(&player, scale);

@@ -93,6 +93,11 @@ void Inventory::draw(Player *player, int scale) {
 
         uint64_t player_input = player->getInput();
 
+        if (player_input & Input::ViewInventory) {
+            player_input &= ~Input::ViewInventory;
+            player->showInventory(false);
+        }
+        
         if (player_input & Input::PrimaryAction) {
             player_input &= ~Input::PrimaryAction;
 
@@ -118,6 +123,7 @@ void Inventory::draw(Player *player, int scale) {
 
             auto action = player->getAction();
             auto selected = player->getSelectedItem();
+
             if (action && selected) {
                 auto layout = itemLayouts[*selected];
                 auto old_layout = itemLayouts[*old_selected];
@@ -176,6 +182,8 @@ void Inventory::draw(Player *player, int scale) {
                                     player->setHighlight(USE + layout.name + USE_ON);
                             }
                         }
+                        break;
+                    case Action::Help:
                         break;
                     default:
                         break;

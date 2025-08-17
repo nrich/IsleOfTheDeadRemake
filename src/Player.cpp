@@ -89,7 +89,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                 }
             }
         }
-    });
+    }, Item::Ammo1);
 
     weapons[Item::Shotgun] = Weapon(40, {
         StillCel("stillcel/sgun1.cel").getTexture(),
@@ -128,7 +128,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                 }
             }
         }
-    });
+    }, Item::Ammo2);
 
     weapons[Item::Uzi] = Weapon(10, {
         StillCel("stillcel/uzi1.cel").getTexture(),
@@ -167,7 +167,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
                 }
             }
         }
-    });
+    }, Item::Ammo3);
 
     weapons[Item::Machete] = Weapon(40, {
         StillCel("stillcel/machete1.cel").getTexture(),
@@ -216,6 +216,14 @@ void Player::addItem(Item item, int count) {
         items[item] += count;
     } else {
         items[item] = count;
+    }
+
+    if (item == Item::Shotgun) {
+        items[Item::Ammo2] += 25;
+    }
+
+    if (item == Item::Uzi) {
+        items[Item::Ammo3] += 50;
     }
 }
 
@@ -330,6 +338,15 @@ void Player::useWeapon(uint64_t frame_count) {
 
         if (weaponEndFrame < frame_count) {
             auto weapon_object = weapons.at(*weapon);
+            auto ammo = weapon_object.ammo;
+
+            if (ammo) {
+                if (getItemCount(*ammo) <= 0) {
+                    weaponEndFrame = 0;
+                    return;
+                }
+            }
+
             weapon_object.use(this);
             weaponStartFrame = frame_count;
             weaponEndFrame = frame_count + weapon_object.attackFrameCount;

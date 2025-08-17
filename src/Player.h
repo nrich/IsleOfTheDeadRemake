@@ -38,6 +38,7 @@ class Player {
         int attackFrameCount;
         std::vector<raylib::TextureUnmanaged> frames;
         std::function<void(Player *player)> use;
+        std::optional<Item> ammo = std::nullopt;
     };
 
     World *world;

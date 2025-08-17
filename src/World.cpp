@@ -1411,7 +1411,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
             entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, aid_kit, Item::FirstAid, 1));
             break;
         case 116:
-            entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_shells, Item::Ammo1, 50));
+            entities.emplace(segment.id, std::make_unique<ItemPickup>(&segment, ammo_shells, Item::Ammo1, 10));
             break;
         case 117:
             entities.emplace(segment.id, std::make_unique<Monster::Bat>(&segment, bat));

@@ -450,6 +450,21 @@ int main(int argc, char *argv[]) {
             exit(0);
     }
 
+    if (datadir.size() == 0) {
+        // Guess the path from location of iodex1.exe
+        std::vector<std::filesystem::path> paths = {
+            "./",
+            "./isledead",
+        };
+
+        for (const auto &path : paths) {
+            if (std::filesystem::exists(path / "iodex1.exe")) {
+                datadir = path;
+                break;
+            }
+        }
+    }
+
     std::filesystem::current_path(datadir);
 
     SetConfigFlags(FLAG_MSAA_4X_HINT|FLAG_WINDOW_RESIZABLE);

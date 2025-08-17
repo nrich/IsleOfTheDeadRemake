@@ -16,7 +16,6 @@ pacman -S git mingw-w64-x86_64-toolchain make unzip
 make
 ```
 
-
 ### MinGW (Linux cross compile)
 - Ubuntu / Debian
 - Install the build toolchain
@@ -40,4 +39,11 @@ sudo apt install build-essential
 - Build the executable
 ``` shell
 make
+```
+
+## Installing game content
+
+```
+wget https://archive.org/download/msdos_Isle_of_the_Dead_1993/Isle_of_the_Dead_1993.zip
+unzip Isle_of_the_Dead_1993.zip
 ```

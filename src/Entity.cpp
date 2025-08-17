@@ -22,61 +22,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Player.h"
 #include "Voc.h"
 
-static void draw_wall(const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2, const raylib::TextureUnmanaged &texture) {
-    const float height = 12.0f;
-
-    rlBegin(RL_TRIANGLES);
-    rlSetTexture(texture.id);
-
-    if (y1 == y2) {
-        rlTexCoord2f(0.0, 1.0);
-        rlVertex3f(x1, 0, y1);
-
-        rlTexCoord2f(1.0, 1.0);
-        rlVertex3f(x2, 0, y1);
-
-        rlTexCoord2f(1.0, 0.0);
-        rlVertex3f(x2, height, y1);
-
-        rlTexCoord2f(1.0, 0.0);
-        rlVertex3f(x2, height, y1);
-
-        rlTexCoord2f(0.0, 0.0);
-        rlVertex3f(x1, height, y1);
-
-        rlTexCoord2f(0.0, 1.0);
-        rlVertex3f(x1, 0, y1);
-    } else {
-        rlTexCoord2f(0.0, 1.0);
-        rlVertex3f(x1, 0, y1);
-
-        rlTexCoord2f(1.0, 1.0);
-        rlVertex3f(x1, 0, y2);
-
-        rlTexCoord2f(1.0, 0.0);
-        rlVertex3f(x1, height, y2);
-
-        rlTexCoord2f(1.0, 0.0);
-        rlVertex3f(x1, height, y2);
-
-        rlTexCoord2f(0.0, 0.0);
-        rlVertex3f(x1, height, y1);
-
-        rlTexCoord2f(0.0, 1.0);
-        rlVertex3f(x1, 0, y1);
-    }
-
-    rlEnd();
-}
-
-static void draw_entity(const raylib::Camera3D *camera, const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2, const raylib::TextureUnmanaged &texture) {
-    const float y_offset = 5.0f;
-    const float scale = 10.0f;
-
-    float mid_x = x1;
-    float mid_y = y1;
-
-    static const char *fragment_shader = R"(
+static const char *fragment_shader = R"(
 #version 330
 
 // Input vertex attributes (from vertex shader)
@@ -95,8 +41,67 @@ void main()
     vec4 texelColor = texture(texture0, fragTexCoord);
     if (texelColor.a == 0.0) discard;
     finalColor = texelColor * fragColor * colDiffuse;
+})";
+
+static void draw_wall(const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2, const raylib::TextureUnmanaged &texture) {
+    const float height = 12.0f;
+
+    static raylib::ShaderUnmanaged shader = raylib::ShaderUnmanaged::LoadFromMemory(nullptr, fragment_shader);
+
+    shader.BeginMode();
+    {
+        rlBegin(RL_TRIANGLES);
+        rlSetTexture(texture.id);
+
+        if (y1 == y2) {
+            rlTexCoord2f(0.0, 1.0);
+            rlVertex3f(x1, 0, y1);
+
+            rlTexCoord2f(1.0, 1.0);
+            rlVertex3f(x2, 0, y1);
+
+            rlTexCoord2f(1.0, 0.0);
+            rlVertex3f(x2, height, y1);
+
+            rlTexCoord2f(1.0, 0.0);
+            rlVertex3f(x2, height, y1);
+
+            rlTexCoord2f(0.0, 0.0);
+            rlVertex3f(x1, height, y1);
+
+            rlTexCoord2f(0.0, 1.0);
+            rlVertex3f(x1, 0, y1);
+        } else {
+            rlTexCoord2f(0.0, 1.0);
+            rlVertex3f(x1, 0, y1);
+
+            rlTexCoord2f(1.0, 1.0);
+            rlVertex3f(x1, 0, y2);
+
+            rlTexCoord2f(1.0, 0.0);
+            rlVertex3f(x1, height, y2);
+
+            rlTexCoord2f(1.0, 0.0);
+            rlVertex3f(x1, height, y2);
+
+            rlTexCoord2f(0.0, 0.0);
+            rlVertex3f(x1, height, y1);
+
+            rlTexCoord2f(0.0, 1.0);
+            rlVertex3f(x1, 0, y1);
+        }
+
+        rlEnd();
+    }
+    shader.EndMode();
 }
-    )";
+
+static void draw_entity(const raylib::Camera3D *camera, const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2, const raylib::TextureUnmanaged &texture) {
+    const float y_offset = 5.0f;
+    const float scale = 10.0f;
+
+    float mid_x = x1;
+    float mid_y = y1;
 
     static raylib::ShaderUnmanaged shader = raylib::ShaderUnmanaged::LoadFromMemory(nullptr, fragment_shader);
 

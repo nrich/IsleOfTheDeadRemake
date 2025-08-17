@@ -2,6 +2,8 @@
 
 A remake of the 1993 DOS game [Isle of the Dead](https://en.wikipedia.org/wiki/Isle_of_the_Dead_(video_game)) by Rainmaker Software.
 
+
+
 ## Build Instructions
 
 ### MinGW
@@ -42,6 +44,8 @@ make
 ```
 
 ## Installing game content
+
+The original game files are required to run the game. A copy of the original DOS game is hosted on the Internet Archive.
 
 ```
 wget https://archive.org/download/msdos_Isle_of_the_Dead_1993/Isle_of_the_Dead_1993.zip

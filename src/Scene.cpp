@@ -17,6 +17,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 ******************************************************************************/
 
 #include <iostream>
+#include <algorithm>
 
 #include "Scene.h"
 #include "StillCel.h"
@@ -124,8 +125,6 @@ void Scene::draw(Player *player, int scale) {
                         selected = layout;
                     }
                 }
-
-                std::cerr << position.ToString() << "\n";
             }
 
             auto action = player->getAction();

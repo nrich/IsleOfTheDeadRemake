@@ -342,8 +342,6 @@ public:
     }
 
     void damage(Player *player, const DamageType damage_type, int amount) {
-        std::cerr << "HERE\n";
-
         if (damage_type == expected) {
             open = true;
         }

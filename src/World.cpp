@@ -549,7 +549,7 @@ void World::spawnPassage(const Segment &segment) {
             break;
 
         default:
-            std::cout << "\t UNKNOWN PASSAGE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
+            //std::cout << "\t UNKNOWN PASSAGE " << std::hex << segment.id << " " << std::dec << segment.x1 << "," << segment.y1 << " " << segment.x2 << "," << segment.y2 <<  ": " << segment.texture << " " << segment.flags << " " << segment.count << "\n";
             entities.emplace(segment.id, std::make_unique<Wall>(&segment, unknown));
     }
 }

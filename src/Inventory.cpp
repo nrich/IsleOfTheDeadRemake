@@ -198,8 +198,6 @@ void Inventory::draw(Player *player, int scale) {
                 player->setSelectedItem(std::nullopt);
                 player->setHighlight();
             }
-
-            std::cerr << position.GetX() << " " << position.GetY() << "\n";
         }
 
         player->setInput(player_input);

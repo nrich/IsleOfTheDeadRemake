@@ -429,7 +429,7 @@ static void play_exit_anim(Player *player, raylib::Window &window, const int sca
 
 int main(int argc, char *argv[]) {
     cmdline::parser argparser;
-    argparser.add<std::string>("datadir", 'd', "Data directory", false, "./");
+    argparser.add<std::string>("datadir", 'd', "Data directory", false, "");
     argparser.add<std::string>("map", 'm', "map file", false, "");
     argparser.add<int>("scale", 's', "render scale", false, 0);
     argparser.add<bool>("playback", 'p', "Disable music playback", false, false);
@@ -459,7 +459,7 @@ int main(int argc, char *argv[]) {
 
         for (const auto &path : paths) {
             if (std::filesystem::exists(path / "iodex1.exe")) {
-                datadir = path;
+                datadir = path.string();
                 break;
             }
         }

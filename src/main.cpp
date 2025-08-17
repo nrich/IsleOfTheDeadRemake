@@ -547,45 +547,15 @@ int main(int argc, char *argv[]) {
 
     Player player(&world);
 
-    //player.death(DeathType::Zombie);
-
     if (map_file.size()) {
         world.setCurrentLevel(map_file);
         auto spawn_point = world.findSpawn();
 
         player.setState(State::World);
         player.respawn(spawn_point, true);
-        player.addItem(Item::Machete);
-//        player.addItem(Item::GoldMedal1);
-//        player.addItem(Item::GoldMedal2);
-        player.addItem(Item::DeadWolf);
-        player.addItem(Item::Book);
-        player.addItem(Item::Smokes);
-        player.addItem(Item::OiledRifle);
-        player.addItem(Item::Shotgun);
-        player.addItem(Item::Uzi);
-        player.addItem(Item::Companion);
-        player.addItem(Item::Drug);
-        player.addItem(Item::Antidote);
-        player.addItem(Item::WireClipper);
-        player.addItem(Item::Raft);
-        player.addItem(Item::FlareGun);
-
-        player.addItem(Item::Ammo1, 100);
-        player.addItem(Item::Ammo2, 100);
-        player.addItem(Item::Ammo3, 100);
-//        player.setFlag(Flag::PowerOff);
     } else {
         player.setState(State::Title);
     }
-
-    //player.setState(State::Shaman);
-    //player.setState(State::TempleEntrance);
-    //player.setState(State::PlaneCockpit);
-    //player.setState(State::RocketLauncher);
-    //player.setState(State::Oracle);
-//    player.setState(State::VillageGate2);
-//    player.setFlag(Flag::VisitedVillage);
 
     State old_state = player.getState();
     while (!window.ShouldClose()) {

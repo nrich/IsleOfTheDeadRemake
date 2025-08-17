@@ -112,12 +112,12 @@ void Level::draw(Player *player, raylib::Window &window, const uint64_t frame_co
             }
 
             if (showSkyOrMoon) {
-                raylib::Vector3 position(0, 40, 400);
+                raylib::Vector3 position(-400, 100, -400);
 
                 if (player->testFlag(Flag::BombCountdown))
-                    camera->DrawBillboard(moon, position, scale);
+                    camera->DrawBillboard(moon, position, scale*10);
                 else
-                    camera->DrawBillboard(sun, position, scale);
+                    camera->DrawBillboard(sun, position, scale*10);
             }
         }
         camera->EndMode();

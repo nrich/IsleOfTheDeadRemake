@@ -33,11 +33,11 @@ CONFIG_W64=1 make
 
 - Ubuntu / Debian
 
-- Install raylib
+- Install the build toolchain
 ``` shell
 sudo apt install build-essential
 ```
-
+- Build the executable
 ``` shell
 make
 ```

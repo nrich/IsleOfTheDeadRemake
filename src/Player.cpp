@@ -475,11 +475,6 @@ std::pair<raylib::Vector3, raylib::Vector3> Player::processInput(const uint64_t 
         showInventory(true);
     }
 
-    if (player_input & Input::ShowHelp) {
-        player_input &= ~Input::ShowHelp;
-        showHelp(true);
-    }
-
     if (player_input & Input::ViewMap) {
         player_input &= ~Input::ViewMap;
         this->setState(State::Map);

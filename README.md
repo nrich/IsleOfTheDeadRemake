@@ -9,7 +9,7 @@ A remake of the 1993 DOS game [Isle of the Dead](https://en.wikipedia.org/wiki/I
 - Download and run the installer from https://www.msys2.org/
 - Install the build dependencies from the shell
 ``` shell
-pacman -S git mingw-w64-x86_64-toolchain make
+pacman -S git mingw-w64-x86_64-toolchain make unzip
 ```
 - Build the executable
 ``` shell

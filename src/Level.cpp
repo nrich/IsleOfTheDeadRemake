@@ -24,6 +24,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Fnt.h"
 #include "Level.h"
 #include "Player.h"
+#include "StillCel.h"
 
 Level::Level(const LevelSettings &level_settings) : map(level_settings.filename), music(level_settings.music) {
     size_t width = map.getWidth() / 10 + 1;
@@ -44,6 +45,7 @@ Level::Level(const LevelSettings &level_settings) : map(level_settings.filename)
     switch (level_settings.sky) {
         case Sky::Day:
             sky = raylib::Color(0x0C, 0x14, 0x51, 0xFF);
+            showSkyOrMoon = true;
             break;
         case Sky::Cave:
             sky = raylib::Color(0x30, 0x20, 0x20, 0xFF);
@@ -77,6 +79,11 @@ Level::Level(const LevelSettings &level_settings) : map(level_settings.filename)
 }
 
 void Level::draw(Player *player, raylib::Window &window, const uint64_t frame_count, const int scale) {
+    static const Palette palette("cels3/palette.pal");
+
+    static const auto sun = StillCel("stillcel/sun.cel").getTexture();
+    static const auto moon = StillCel("stillcel/moon.cel").getTexture();
+
     auto *world = player->getWorld();
     auto *level = world->getCurrentLevel();
     auto *map = level->getMap();
@@ -102,6 +109,15 @@ void Level::draw(Player *player, raylib::Window &window, const uint64_t frame_co
                 }
 
                 rlDrawRenderBatchActive();
+            }
+
+            if (showSkyOrMoon) {
+                raylib::Vector3 position(0, 40, 400);
+
+                if (player->testFlag(Flag::BombCountdown))
+                    camera->DrawBillboard(moon, position, scale);
+                else
+                    camera->DrawBillboard(sun, position, scale);
             }
         }
         camera->EndMode();

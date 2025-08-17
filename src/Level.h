@@ -137,6 +137,7 @@ class Level {
     raylib::Color ground;
 
     std::string music;
+    bool showSkyOrMoon = false;
 public:
     Level(const LevelSettings &level_settings); 
     Map *getMap() {

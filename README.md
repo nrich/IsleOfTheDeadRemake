@@ -36,7 +36,7 @@ CONFIG_W64=1 make
 
 - Install the build toolchain
 ``` shell
-sudo apt install build-essential
+sudo apt install build-essential libx11-dev libxext-dev libxft-dev libxinerama-dev libfontconfig-dev libwayland-dev libcairo-dev libxfixes-dev libxcursor-dev libharfbuzz-dev libpango1.0-dev libxkbcommon-dev libdecor-0-dev libdbus-1-dev
 ```
 - Build the executable
 ``` shell

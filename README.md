@@ -2,6 +2,8 @@
 
 A remake of the 1993 DOS game [Isle of the Dead](https://en.wikipedia.org/wiki/Isle_of_the_Dead_(video_game)) by Rainmaker Software.
 
+
+
 ## Build Instructions
 
 ### MinGW
@@ -15,7 +17,6 @@ pacman -S git mingw-w64-x86_64-toolchain make unzip
 ``` shell
 make
 ```
-
 
 ### MinGW (Linux cross compile)
 - Ubuntu / Debian
@@ -33,11 +34,20 @@ CONFIG_W64=1 make
 
 - Ubuntu / Debian
 
-- Install raylib
+- Install the build toolchain
 ``` shell
-sudo apt install build-essential
+sudo apt install build-essential libx11-dev libxext-dev libxft-dev libxinerama-dev libfontconfig-dev libwayland-dev libcairo-dev libxfixes-dev libxcursor-dev libharfbuzz-dev libpango1.0-dev libxkbcommon-dev libdecor-0-dev libdbus-1-dev
 ```
-
+- Build the executable
 ``` shell
 make
+```
+
+## Installing game content
+
+The original game files are required to run the game. A copy of the original DOS game is hosted on the Internet Archive.
+
+```
+wget https://archive.org/download/msdos_Isle_of_the_Dead_1993/Isle_of_the_Dead_1993.zip
+unzip Isle_of_the_Dead_1993.zip
 ```

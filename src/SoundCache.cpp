@@ -16,28 +16,18 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 ******************************************************************************/
 
-#ifndef TONE_H
-#define TONE_H
+#include <unordered_map>
 
-#include <cstdint>
-#include <deque>
+#include "Voc.h"
+#include "SoundCache.h"
 
-#include <raylib-cpp.hpp>
+raylib::Sound *SoundCache::Load(const std::string &filename) {
+    static std::unordered_map<std::string, raylib::Sound> cache;
 
-#include "Flic.h"
+    if (cache.contains(filename))
+        return &cache[filename];
 
-class Animation {
-    size_t frame = 0;
+    cache.emplace(filename, Voc::Load(filename));
 
-    Flic flic;
-    raylib::Sound *sound;
-public:
-    Animation(const std::string &flic_filename, const std::string &sound_filename);
-    Animation(const std::string &flic_filename);
-
-    bool play(const int scale);
-
-    ~Animation();
-};
-
-#endif //TONE_H
+    return &cache[filename];
+}

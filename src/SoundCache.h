@@ -16,28 +16,16 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 ******************************************************************************/
 
-#ifndef TONE_H
-#define TONE_H
+#ifndef SOUNDCACHE_H
+#define SOUNDCACHE_H
 
 #include <cstdint>
-#include <deque>
 
 #include <raylib-cpp.hpp>
 
-#include "Flic.h"
-
-class Animation {
-    size_t frame = 0;
-
-    Flic flic;
-    raylib::Sound *sound;
+class SoundCache {
 public:
-    Animation(const std::string &flic_filename, const std::string &sound_filename);
-    Animation(const std::string &flic_filename);
-
-    bool play(const int scale);
-
-    ~Animation();
+    static raylib::Sound *Load(const std::string &filename);
 };
 
-#endif //TONE_H
+#endif //SOUNDCACHE_H

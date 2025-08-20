@@ -85,6 +85,7 @@ COMMON_OBJS := \
 	src/Player.o \
 	src/Scene.o \
 	src/Segment.o \
+	src/SoundCache.o \
 	src/StillCel.o \
 	src/Strings.o \
 	src/Song.o \

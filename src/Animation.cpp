@@ -17,12 +17,13 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 ******************************************************************************/
 
 #include "Animation.h"
-#include "Voc.h"
+#include "SoundCache.h"
 
-Animation::Animation(const std::string &flic_filename, const std::string &sound_filename) : flic(flic_filename), sound(Voc::Load(sound_filename)) { 
+
+Animation::Animation(const std::string &flic_filename, const std::string &sound_filename) : flic(flic_filename), sound(SoundCache::Load(sound_filename)) {
 }
 
-Animation::Animation(const std::string &flic_filename) : flic(flic_filename), sound(std::nullopt) {
+Animation::Animation(const std::string &flic_filename) : flic(flic_filename), sound(nullptr) {
 
 }
 

@@ -41,12 +41,12 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Inventory.h"
 #include "Panel.h"
 #include "Scene.h"
-#include "Voc.h"
 #include "Flic.h"
 #include "MusicPlayer.h"
 #include "Animation.h"
 #include "LaunchOptions.h"
 #include "Help.h"
+#include "SoundCache.h"
 
 static void draw_world(Player *player, MusicPlayer *music_player, raylib::Window &window, const int scale) {
     static uint64_t frame_count = 0;
@@ -65,9 +65,9 @@ static void draw_world(Player *player, MusicPlayer *music_player, raylib::Window
                 countdown = 0;
             }
         } else {
-            static raylib::Sound countdown_sound = raylib::Sound(Voc::Load("sound/15min.voc"));
+            raylib::Sound *countdown_sound = SoundCache::Load("sound/15min.voc");
 
-            countdown_sound.Play();
+            countdown_sound->Play();
             countdown = frame_count;
         }
     }
@@ -274,9 +274,6 @@ static void play_title_anim(Player *player, raylib::Window &window, const int sc
 }
 
 static void play_lab2_anim(Player *player, raylib::Window &window, const int scale, char anim_index) {
-    static raylib::Sound way_out_basement = raylib::Sound(Voc::Load("sound/wayout.voc"));
-    static raylib::Sound help = raylib::Sound(Voc::Load("sound/helpbabe.voc"));
-
     static auto lab2a_anim = Animation("fli/babea.fli");
     static auto lab2b_anim = Animation("fli/babeb.fli");
     static auto lab2c_anim = Animation("fli/babec.fli");
@@ -317,13 +314,16 @@ static void play_lab2_anim(Player *player, raylib::Window &window, const int sca
         }
 
         if (anim_finished) {
+            raylib::Sound *way_out_basement = SoundCache::Load("sound/wayout.voc");
+            raylib::Sound *help = SoundCache::Load("sound/helpbabe.voc");
+
             switch (anim_index) {
                 case 'F':
                 case 'f':
-                    way_out_basement.Play();
+                    way_out_basement->Play();
                     break;
                 default:
-                    help.Play();
+                    help->Play();
                     break;
             }
             player->setState(State::Lab2);
@@ -363,7 +363,6 @@ static void play_ending_anim(Player *player, raylib::Window &window, const int s
 
 static void play_doc_transform_anim(Player *player, raylib::Window &window, const int scale) {
     static auto transform_anim = Animation("fli/memgro.fli", "sound/mem1.voc");
-    static raylib::Sound transform_sound = raylib::Sound(Voc::Load("sound/mem1.voc"));
 
     BeginDrawing();
     {

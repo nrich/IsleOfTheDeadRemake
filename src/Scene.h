@@ -33,7 +33,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Panel.h"
 #include "StillCel.h"
 #include "Entrance.h"
-#include "Voc.h"
 
 class Scene {
 protected:
@@ -274,6 +273,7 @@ public:
     LabCompanionScene(Panel *panel, const Entrance &new_entrance);
     std::tuple<bool, std::string, DeathType> getItem(const Layout &layout);
     std::string useItem(Player *player, Item item);
+    void draw(Player *player, int scale);
 };
 
 class MirrorScene : public Scene {

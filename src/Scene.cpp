@@ -22,6 +22,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Scene.h"
 #include "StillCel.h"
 #include "Strings.h"
+#include "SoundCache.h"
 
 Scene::Scene(Panel *panel, const std::string &background_filename) : panel(panel) {
     background = StillCel(background_filename).getTexture(); 
@@ -450,46 +451,35 @@ void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_
 OracleScene::OracleScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/oraclebg.cel") {
     entrance = new_entrance;
 
-    static raylib::Sound oracle_chat1 = raylib::Sound(Voc::Load("sound/or1.voc"));
-    static raylib::Sound oracle_chat2 = raylib::Sound(Voc::Load("sound/or2.voc"));
-    static raylib::Sound oracle_chat3 = raylib::Sound(Voc::Load("sound/or3.voc"));
-    static raylib::Sound oracle_chat4 = raylib::Sound(Voc::Load("sound/or4.voc"));
-    static raylib::Sound oracle_chat5 = raylib::Sound(Voc::Load("sound/or5.voc"));
-    static raylib::Sound oracle_chat7 = raylib::Sound(Voc::Load("sound/or7.voc"));
-    static raylib::Sound oracle_chat8 = raylib::Sound(Voc::Load("sound/or8.voc"));
-    static raylib::Sound oracle_chat9 = raylib::Sound(Voc::Load("sound/or9.voc"));
-    static raylib::Sound oracle_chat10 = raylib::Sound(Voc::Load("sound/or10.voc"));
-    static raylib::Sound oracle_chat11 = raylib::Sound(Voc::Load("sound/or11.voc"));
-
     layouts.emplace_back(raylib::Vector2(122, 10), raylib::Vector2(73, 83), Item::Oracle, Strings::Lookup(417), Strings::Lookup(418), "");
 
     scripts[0] = {
         Dialogue(Strings::Lookup(89)),
-        Dialogue(Strings::Lookup(90), raylib::RAYWHITE, &oracle_chat1),
+        Dialogue(Strings::Lookup(90), raylib::RAYWHITE, SoundCache::Load("sound/or1.voc")),
         Dialogue(Strings::Lookup(92)),
-        Dialogue(Strings::Lookup(93), raylib::RAYWHITE, &oracle_chat2),
+        Dialogue(Strings::Lookup(93), raylib::RAYWHITE, SoundCache::Load("sound/or2.voc")),
         Dialogue(Strings::Lookup(95), raylib::RAYWHITE),
         Dialogue(Strings::Lookup(96)),
-        Dialogue(Strings::Lookup(97), raylib::RAYWHITE, &oracle_chat3),
+        Dialogue(Strings::Lookup(97), raylib::RAYWHITE, SoundCache::Load("sound/or3.voc")),
         Dialogue(Strings::Lookup(99)),
-        Dialogue(Strings::Lookup(100), raylib::RAYWHITE, &oracle_chat4),
+        Dialogue(Strings::Lookup(100), raylib::RAYWHITE, SoundCache::Load("sound/or4.voc")),
         Dialogue(Strings::Lookup(102)),
-        Dialogue(Strings::Lookup(103), raylib::RAYWHITE, &oracle_chat5),
+        Dialogue(Strings::Lookup(103), raylib::RAYWHITE, SoundCache::Load("sound/or5.voc")),
         Dialogue(Strings::Lookup(106)),
-        Dialogue(Strings::Lookup(107), raylib::RAYWHITE, &oracle_chat7),
+        Dialogue(Strings::Lookup(107), raylib::RAYWHITE, SoundCache::Load("sound/or7.voc")),
         Dialogue(Strings::Lookup(109)),
-        Dialogue(Strings::Lookup(110), raylib::RAYWHITE, &oracle_chat8),
+        Dialogue(Strings::Lookup(110), raylib::RAYWHITE, SoundCache::Load("sound/or8.voc")),
         Dialogue(Strings::Lookup(112)),
-        Dialogue(Strings::Lookup(113), raylib::RAYWHITE, &oracle_chat9),
+        Dialogue(Strings::Lookup(113), raylib::RAYWHITE, SoundCache::Load("sound/or9.voc")),
         Dialogue(Strings::Lookup(115)),
     };
 
     scripts[1] = {
-        Dialogue(Strings::Lookup(116), raylib::RAYWHITE, &oracle_chat10),
+        Dialogue(Strings::Lookup(116), raylib::RAYWHITE, SoundCache::Load("sound/or10.voc")),
     };
 
     scripts[2] = {
-        Dialogue(Strings::Lookup(118), raylib::RAYWHITE, &oracle_chat11),
+        Dialogue(Strings::Lookup(118), raylib::RAYWHITE, SoundCache::Load("sound/or11.voc")),
     };
 
     navigation[Input::StepBack] = State::World;
@@ -729,8 +719,8 @@ std::string PlaneCockpitScene::useItem(Player *player, Item item) {
         }
 
         if (player->getItemCount(Item::Companion) && !player->testFlag(Flag::CompanionCalmed)) {
-            static raylib::Sound afraid(Voc::Load("sound/afraid.voc"));
-            afraid.Play();
+            raylib::Sound *afraid = SoundCache::Load("sound/afraid.voc");
+            afraid->Play();
 
             return Strings::Lookup(228);
         }
@@ -865,6 +855,18 @@ std::tuple<bool, std::string, DeathType> LabCompanionScene::getItem(const Layout
     return std::make_tuple(false, "", DeathType::None);
 }
 
+void LabCompanionScene::draw(Player *player, int scale) {
+    static bool sound_played = false;
+
+    if (!sound_played) {
+        raylib::Sound *help = SoundCache::Load("sound/helpbabe.voc");
+        help->Play();
+        sound_played = true;
+    }
+
+    Scene::draw(player, scale);
+}
+
 MirrorScene::MirrorScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room16.cel") {
     entrance = new_entrance;
 
@@ -886,64 +888,44 @@ ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
 
     animations[1] = Animation(raylib::Vector2(230, 61), smoke, 12);
 
-    static raylib::Sound shaman_talk(Voc::Load("sound/umaguma.voc"));
-    static raylib::Sound shaman_chat1 = raylib::Sound(Voc::Load("sound/sha1.voc"));
-    static raylib::Sound shaman_chat2 = raylib::Sound(Voc::Load("sound/sha2.voc"));
-    static raylib::Sound shaman_chat3 = raylib::Sound(Voc::Load("sound/sha3.voc"));
-    static raylib::Sound shaman_chat4 = raylib::Sound(Voc::Load("sound/sha4.voc"));
-    static raylib::Sound shaman_chat5 = raylib::Sound(Voc::Load("sound/sha5.voc"));
-    static raylib::Sound shaman_chat6 = raylib::Sound(Voc::Load("sound/sha6.voc"));
-    static raylib::Sound shaman_chat7 = raylib::Sound(Voc::Load("sound/sha7.voc"));
-    static raylib::Sound shaman_chat8 = raylib::Sound(Voc::Load("sound/sha8.voc"));
-    static raylib::Sound shaman_chat9 = raylib::Sound(Voc::Load("sound/sha9.voc"));
-    static raylib::Sound shaman_chat10 = raylib::Sound(Voc::Load("sound/sha10.voc"));
-    static raylib::Sound shaman_chat11 = raylib::Sound(Voc::Load("sound/sha11.voc"));
-    static raylib::Sound shaman_chat12 = raylib::Sound(Voc::Load("sound/sha12.voc"));
-    static raylib::Sound shaman_chat13 = raylib::Sound(Voc::Load("sound/sha13.voc"));
-    static raylib::Sound shaman_chat14 = raylib::Sound(Voc::Load("sound/sha14.voc"));
-    static raylib::Sound shaman_chat15 = raylib::Sound(Voc::Load("sound/sha15.voc"));
-    static raylib::Sound shaman_chat16 = raylib::Sound(Voc::Load("sound/sha16.voc"));
-    static raylib::Sound shaman_chat17 = raylib::Sound(Voc::Load("sound/sha17.voc"));
-    static raylib::Sound shaman_chat18 = raylib::Sound(Voc::Load("sound/sha18.voc"));
-
     scripts[0] = {
-        Dialogue(Strings::Lookup(0), raylib::RAYWHITE, &shaman_talk),
+        Dialogue(Strings::Lookup(0), raylib::RAYWHITE, SoundCache::Load("sound/umaguma.voc")),
         Dialogue(Strings::Lookup(2)),
     };
 
     scripts[1] = {
-        Dialogue(Strings::Lookup(3), raylib::RAYWHITE, &shaman_chat1),
+        Dialogue(Strings::Lookup(3), raylib::RAYWHITE, SoundCache::Load("sound/sha1.voc")),
         Dialogue(Strings::Lookup(5)),
-        Dialogue(Strings::Lookup(6), raylib::RAYWHITE, &shaman_chat2),
+        Dialogue(Strings::Lookup(6), raylib::RAYWHITE, SoundCache::Load("sound/sha2.voc")),
         Dialogue(Strings::Lookup(8)),
-        Dialogue(Strings::Lookup(9), raylib::RAYWHITE, &shaman_chat3),
-        Dialogue(Strings::Lookup(12), raylib::RAYWHITE, &shaman_chat4),
+        Dialogue(Strings::Lookup(9), raylib::RAYWHITE, SoundCache::Load("sound/sha3.voc")),
+        Dialogue(Strings::Lookup(12), raylib::RAYWHITE, SoundCache::Load("sound/sha4.voc")),
         Dialogue(Strings::Lookup(14)),
-        Dialogue(Strings::Lookup(15), raylib::RAYWHITE, &shaman_chat5),
-        Dialogue(Strings::Lookup(17), raylib::RAYWHITE, &shaman_chat6),
+        Dialogue(Strings::Lookup(15), raylib::RAYWHITE, SoundCache::Load("sound/sha5.voc")),
+        Dialogue(Strings::Lookup(17), raylib::RAYWHITE, SoundCache::Load("sound/sha6.voc")),
         Dialogue(Strings::Lookup(19)),
-        Dialogue(Strings::Lookup(20), raylib::RAYWHITE, &shaman_chat7),
-        Dialogue(Strings::Lookup(22), raylib::RAYWHITE, &shaman_chat8),
+        Dialogue(Strings::Lookup(20), raylib::RAYWHITE, SoundCache::Load("sound/sha7.voc")),
+        Dialogue(Strings::Lookup(22), raylib::RAYWHITE, SoundCache::Load("sound/sha8.voc")),
         Dialogue(Strings::Lookup(24)),
-        Dialogue(Strings::Lookup(25), raylib::RAYWHITE, &shaman_chat9),
+        Dialogue(Strings::Lookup(25), raylib::RAYWHITE, SoundCache::Load("sound/sha9.voc")),
         Dialogue(Strings::Lookup(27)),
         Dialogue(Strings::Lookup(28)),
-        Dialogue(Strings::Lookup(29), raylib::RAYWHITE, &shaman_chat10),
+        Dialogue(Strings::Lookup(29), raylib::RAYWHITE, SoundCache::Load("sound/sha10.voc")),
         Dialogue(Strings::Lookup(31)),
-        Dialogue(Strings::Lookup(32), raylib::RAYWHITE, &shaman_chat11),
+        Dialogue(Strings::Lookup(32), raylib::RAYWHITE, SoundCache::Load("sound/sha11.voc")),
         Dialogue(Strings::Lookup(34)),
-        Dialogue(Strings::Lookup(35), raylib::RAYWHITE, &shaman_chat12),
-        Dialogue(Strings::Lookup(38), raylib::RAYWHITE, &shaman_chat13),
-        Dialogue(Strings::Lookup(40), raylib::RAYWHITE, &shaman_chat14),
+        Dialogue(Strings::Lookup(35), raylib::RAYWHITE, SoundCache::Load("sound/sha12.voc")),
+        Dialogue(Strings::Lookup(38), raylib::RAYWHITE, SoundCache::Load("sound/sha13.voc")),
+        Dialogue(Strings::Lookup(40), raylib::RAYWHITE, SoundCache::Load("sound/sha14.voc")),
         Dialogue(Strings::Lookup(42)),
-        Dialogue(Strings::Lookup(43), raylib::RAYWHITE, &shaman_chat15),
+        Dialogue(Strings::Lookup(43), raylib::RAYWHITE, SoundCache::Load("sound/sha15.voc")),
     };
 
     scripts[2] = {
-        Dialogue(Strings::Lookup(45), raylib::RAYWHITE, &shaman_chat16),
-        Dialogue(Strings::Lookup(47), raylib::RAYWHITE, &shaman_chat17),
+        Dialogue(Strings::Lookup(45), raylib::RAYWHITE, SoundCache::Load("sound/sha16.voc")),
+        Dialogue(Strings::Lookup(47), raylib::RAYWHITE, SoundCache::Load("sound/sha17.voc")),
         Dialogue(Strings::Lookup(49)),
-        Dialogue(Strings::Lookup(50), raylib::RAYWHITE, &shaman_chat18),
+        Dialogue(Strings::Lookup(50), raylib::RAYWHITE, SoundCache::Load("sound/sha18.voc")),
         Dialogue(Strings::Lookup(52)),
     };
 
@@ -1108,64 +1090,44 @@ ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel
 
     animations[3] = Animation(raylib::Vector2(243, 3), fan, 6);
 
-    static raylib::Sound chief_talk(Voc::Load("sound/umaguma.voc"));
-    static raylib::Sound chief_chat1 = raylib::Sound(Voc::Load("sound/chf1.voc"));
-    static raylib::Sound chief_chat2a = raylib::Sound(Voc::Load("sound/chf2a.voc"));
-    static raylib::Sound chief_chat3a = raylib::Sound(Voc::Load("sound/chf3a.voc"));
-    static raylib::Sound chief_chat3b = raylib::Sound(Voc::Load("sound/chf3b.voc"));
-    static raylib::Sound chief_chat3c = raylib::Sound(Voc::Load("sound/chf3c.voc"));
-    static raylib::Sound chief_chat4a = raylib::Sound(Voc::Load("sound/chf4a.voc"));
-    static raylib::Sound chief_chat4b = raylib::Sound(Voc::Load("sound/chf4b.voc"));
-    static raylib::Sound chief_chat4c = raylib::Sound(Voc::Load("sound/chf4c.voc"));
-    static raylib::Sound chief_chat4d = raylib::Sound(Voc::Load("sound/chf4d.voc"));
-    static raylib::Sound chief_chat4e = raylib::Sound(Voc::Load("sound/chf4e.voc"));
-    static raylib::Sound chief_chat4f = raylib::Sound(Voc::Load("sound/chf4f.voc"));
-    static raylib::Sound chief_chat5 = raylib::Sound(Voc::Load("sound/chf5.voc"));
-    static raylib::Sound chief_chat6a = raylib::Sound(Voc::Load("sound/chf6a.voc"));
-    static raylib::Sound chief_chat6b = raylib::Sound(Voc::Load("sound/chf6b.voc"));
-    static raylib::Sound chief_chat7b = raylib::Sound(Voc::Load("sound/chf7b.voc"));
-    static raylib::Sound chief_chattake = raylib::Sound(Voc::Load("sound/chftake.voc"));
-    static raylib::Sound chief_chat8 = raylib::Sound(Voc::Load("sound/chf8.voc"));
-    static raylib::Sound chief_chat9 = raylib::Sound(Voc::Load("sound/chf9.voc"));
-
     scripts[0] = {
-        Dialogue(Strings::Lookup(120), raylib::RAYWHITE, &chief_talk),
+        Dialogue(Strings::Lookup(120), raylib::RAYWHITE, SoundCache::Load("sound/umaguma.voc")),
         Dialogue(Strings::Lookup(122)),
     };
 
     scripts[1] = {
-        Dialogue(Strings::Lookup(124), raylib::RAYWHITE, &chief_chat1),
+        Dialogue(Strings::Lookup(124), raylib::RAYWHITE, SoundCache::Load("sound/chf1.voc")),
         Dialogue(Strings::Lookup(126)),
         Dialogue(Strings::Lookup(127)),
-        Dialogue(Strings::Lookup(128), raylib::RAYWHITE, &chief_chat2a),
+        Dialogue(Strings::Lookup(128), raylib::RAYWHITE, SoundCache::Load("sound/chf2a.voc")),
         Dialogue(Strings::Lookup(130)),
-        Dialogue(Strings::Lookup(131), raylib::RAYWHITE, &chief_chat3a),
-        Dialogue(Strings::Lookup(133), raylib::RAYWHITE, &chief_chat3b),
-        Dialogue(Strings::Lookup(135), raylib::RAYWHITE, &chief_chat3c),
+        Dialogue(Strings::Lookup(131), raylib::RAYWHITE, SoundCache::Load("sound/chf3a.voc")),
+        Dialogue(Strings::Lookup(133), raylib::RAYWHITE, SoundCache::Load("sound/chf3b.voc")),
+        Dialogue(Strings::Lookup(135), raylib::RAYWHITE, SoundCache::Load("sound/chf3c.voc")),
         Dialogue(Strings::Lookup(137)),
         Dialogue(Strings::Lookup(138)),
         Dialogue(Strings::Lookup(139)),
-        Dialogue(Strings::Lookup(141), raylib::RAYWHITE, &chief_chat4a),
-        Dialogue(Strings::Lookup(143), raylib::RAYWHITE, &chief_chat4b),
-        Dialogue(Strings::Lookup(145), raylib::RAYWHITE, &chief_chat4c),
-        Dialogue(Strings::Lookup(147), raylib::RAYWHITE, &chief_chat4d),
-        Dialogue(Strings::Lookup(149), raylib::RAYWHITE, &chief_chat4e),
-        Dialogue(Strings::Lookup(151), raylib::RAYWHITE, &chief_chat4f),
+        Dialogue(Strings::Lookup(141), raylib::RAYWHITE, SoundCache::Load("sound/chf4a.voc")),
+        Dialogue(Strings::Lookup(143), raylib::RAYWHITE, SoundCache::Load("sound/chf4b.voc")),
+        Dialogue(Strings::Lookup(145), raylib::RAYWHITE, SoundCache::Load("sound/chf4c.voc")),
+        Dialogue(Strings::Lookup(147), raylib::RAYWHITE, SoundCache::Load("sound/chf4d.voc")),
+        Dialogue(Strings::Lookup(149), raylib::RAYWHITE, SoundCache::Load("sound/chf4e.voc")),
+        Dialogue(Strings::Lookup(151), raylib::RAYWHITE, SoundCache::Load("sound/chf4f.voc")),
         Dialogue(Strings::Lookup(153)),
-        Dialogue(Strings::Lookup(154), raylib::RAYWHITE, &chief_chat5),
+        Dialogue(Strings::Lookup(154), raylib::RAYWHITE, SoundCache::Load("sound/chf5.voc")),
         Dialogue(Strings::Lookup(156)),
     };
 
     scripts[2] = {
-        Dialogue(Strings::Lookup(157), raylib::RAYWHITE, &chief_chat6a),
-        Dialogue(Strings::Lookup(160), raylib::RAYWHITE, &chief_chat6b),
+        Dialogue(Strings::Lookup(157), raylib::RAYWHITE, SoundCache::Load("sound/chf6a.voc")),
+        Dialogue(Strings::Lookup(160), raylib::RAYWHITE, SoundCache::Load("sound/chf6b.voc")),
         Dialogue(Strings::Lookup(162)),
-        Dialogue(Strings::Lookup(163), raylib::RAYWHITE, &chief_chat7b),
-        Dialogue(Strings::Lookup(165), raylib::RAYWHITE, &chief_chattake),
+        Dialogue(Strings::Lookup(163), raylib::RAYWHITE, SoundCache::Load("sound/chf7b.voc")),
+        Dialogue(Strings::Lookup(165), raylib::RAYWHITE, SoundCache::Load("sound/chftake.voc")),
         Dialogue(Strings::Lookup(167)),
-        Dialogue(Strings::Lookup(168), raylib::RAYWHITE, &chief_chat8),
+        Dialogue(Strings::Lookup(168), raylib::RAYWHITE, SoundCache::Load("sound/chf8.voc")),
         Dialogue(Strings::Lookup(170)),
-        Dialogue(Strings::Lookup(171), raylib::RAYWHITE, &chief_chat9),
+        Dialogue(Strings::Lookup(171), raylib::RAYWHITE, SoundCache::Load("sound/chf9.voc")),
         Dialogue(Strings::Lookup(173)),
     };
 
@@ -1217,11 +1179,9 @@ std::tuple<bool, std::string, DeathType> ChiefScene::getItem(const Layout &layou
 }
 
 VillageGateShamanScene::VillageGateShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsabg.cel") {
-    static raylib::Sound guard_talk(Voc::Load("sound/umaguma.voc"));
-
     entrance = new_entrance;
     scripts[0] = {
-        Dialogue(Strings::Lookup(53), raylib::RAYWHITE, &guard_talk),
+        Dialogue(Strings::Lookup(53), raylib::RAYWHITE, SoundCache::Load("sound/umaguma.voc")),
         Dialogue(Strings::Lookup(54)),
     };
 
@@ -1283,11 +1243,9 @@ std::optional<Scene::Dialogue> VillageGateShamanScene::talk(Player *player) {
 }
 
 VillageGateChiefScene::VillageGateChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/gardsbbg.cel") {
-    static raylib::Sound guard_talk(Voc::Load("sound/umaguma.voc"));
-
     entrance = new_entrance;
     scripts[0] = {
-        Dialogue(Strings::Lookup(72), raylib::RAYWHITE, &guard_talk),
+        Dialogue(Strings::Lookup(72), raylib::RAYWHITE, SoundCache::Load("sound/umaguma.voc")),
         Dialogue(Strings::Lookup(73)),
 
     };

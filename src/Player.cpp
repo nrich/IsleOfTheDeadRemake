@@ -19,7 +19,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Player.h"
 #include "Strings.h"
 #include "StillCel.h"
-#include "Voc.h"
+#include "SoundCache.h"
 
 #include <iostream>
 
@@ -62,8 +62,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
 
         player->items[Item::Ammo1] -= 1;
 
-        static const raylib::Wave wav = Voc::Load("sound/gun.voc");
-        static raylib::Sound sound(wav);
+        raylib::Sound *sound = SoundCache::Load("sound/gun.voc");
 
         auto *camera = player->getCamera();
         auto ray = camera->GetScreenToWorldRay(raylib::Vector2(160, 100), 320, 200);
@@ -72,7 +71,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
         Level *level = world->getCurrentLevel();
         Map *map = level->getMap();
 
-        sound.Play();
+        sound->Play();
 
         for (const auto &segment : map->getSegments()) {
             Entity *entity = world->getEntity(segment.id);
@@ -101,8 +100,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
 
         player->items[Item::Ammo2] -= 1;
 
-        static const raylib::Wave wav = Voc::Load("sound/shotgun.voc");
-        static raylib::Sound sound(wav);
+        raylib::Sound *sound = SoundCache::Load("sound/shotgun.voc");
 
         auto *camera = player->getCamera();
         auto ray = camera->GetScreenToWorldRay(raylib::Vector2(160, 100), 320, 200);
@@ -111,7 +109,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
         Level *level = world->getCurrentLevel();
         Map *map = level->getMap();
 
-        sound.Play();
+        sound->Play();
 
         for (const auto &segment : map->getSegments()) {
             Entity *entity = world->getEntity(segment.id);
@@ -140,8 +138,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
 
         player->items[Item::Ammo3] -= 1;
 
-        static const raylib::Wave wav = Voc::Load("sound/uzi.voc");
-        static raylib::Sound sound(wav);
+        raylib::Sound *sound = SoundCache::Load("sound/uzi.voc");
 
         auto *camera = player->getCamera();
         auto ray = camera->GetScreenToWorldRay(raylib::Vector2(160, 100), 320, 200);
@@ -150,7 +147,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
         Level *level = world->getCurrentLevel();
         Map *map = level->getMap();
 
-        sound.Play();
+        sound->Play();
 
         for (const auto &segment : map->getSegments()) {
             Entity *entity = world->getEntity(segment.id);
@@ -174,8 +171,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
         StillCel("stillcel/machete2.cel").getTexture(),
         StillCel("stillcel/machete3.cel").getTexture(),
     }, [](Player *player) {
-        static const raylib::Wave wav = Voc::Load("sound/whack.voc");
-        static raylib::Sound sound(wav);
+        raylib::Sound *sound = SoundCache::Load("sound/whack.voc");
 
         auto *camera = player->getCamera();
         auto ray = camera->GetScreenToWorldRay(raylib::Vector2(160, 100), 320, 200);
@@ -184,7 +180,7 @@ Player::Player(World *world) : world(world), angles(0, 0), state(State::World), 
         Level *level = world->getCurrentLevel();
         Map *map = level->getMap();
 
-        sound.Play();
+        sound->Play();
 
         for (const auto &segment : map->getSegments()) {
             Entity *entity = world->getEntity(segment.id);

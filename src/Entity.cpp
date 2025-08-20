@@ -20,7 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "Entity.h"
 #include "Player.h"
-#include "Voc.h"
+#include "SoundCache.h"
 
 static const char *fragment_shader = R"(
 #version 330
@@ -265,10 +265,9 @@ void ElectrifiedFence::use(Player *player, std::optional<Item> item_if) {
 }
 
 void ElectrifiedFence::update(Player *player, uint64_t frame_count) {
-    static raylib::Sound zap = raylib::Sound(Voc::Load("sound/zap.voc"));
-
     if (!player->testFlag(Flag::PowerOff) && frame_count % 120 == 0) {
-        zap.Play();
+        raylib::Sound *zap = SoundCache::Load("sound/zap.voc");
+        zap->Play();
     }
 
     ClosedDoor::update(player, frame_count);
@@ -550,8 +549,8 @@ void ItemPickup::draw(const raylib::Camera3D *camera, uint64_t frame_count) cons
 }
 
 void ItemPickup::touch(Player *player) {
-    static raylib::Sound pickup_sound(Voc::Load("sound/tap.voc"));
-    pickup_sound.Play();
+    raylib::Sound *pickup_sound = SoundCache::Load("sound/tap.voc");
+    pickup_sound->Play();
 
     player->addItem(item, count);
     taken = true;

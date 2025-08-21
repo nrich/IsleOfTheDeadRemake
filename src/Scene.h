@@ -31,7 +31,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <raylib-cpp.hpp>
 
 #include "Panel.h"
-#include "StillCel.h"
 #include "Entrance.h"
 
 class Scene {

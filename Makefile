@@ -89,6 +89,7 @@ COMMON_OBJS := \
 	src/StillCel.o \
 	src/Strings.o \
 	src/Song.o \
+	src/TextureCache.o \
 	src/Tone.o \
 	src/Voc.o \
 	src/World.o \

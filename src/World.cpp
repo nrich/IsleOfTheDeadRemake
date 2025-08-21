@@ -27,33 +27,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "CelThree.h"
 #include "Entity.h"
 #include "Monster.h"
-
-static std::unordered_map<std::string, raylib::TextureUnmanaged> cel3_texture;
-
-static raylib::TextureUnmanaged load_cel3_texture(const std::string &filename) {
-    static Palette palette("cels3/palette.pal");
-
-    if (cel3_texture.contains(filename))
-        return cel3_texture[filename];
-
-    const auto cel3 = CelThree(filename, palette);
-    auto texture = cel3.getTexture();
-
-    cel3_texture[filename] = texture;
-
-    return texture;
-}
-
-static std::vector<raylib::TextureUnmanaged> load_cel3_texture(const std::vector<std::string> &filenames) {
-    std::vector<raylib::TextureUnmanaged> textures;
-
-    for (const auto &filename : filenames) {
-        auto texture = load_cel3_texture(filename);
-        textures.push_back(texture);
-    }
-
-    return textures;
-}
+#include "TextureCache.h"
 
 World::World(MusicPlayer *music_player, const std::vector<LevelSettings> &level_settings_list, const std::string &entrance_filename) : musicPlayer(music_player) {
     entrances = Entrance::Parse(entrance_filename); 
@@ -75,36 +49,36 @@ World::World(MusicPlayer *music_player, const std::vector<LevelSettings> &level_
 }
 
 void World::spawnPassage(const Segment &segment) {
-    static const auto tree_closed_entry = load_cel3_texture("cels3/rent1.cel");
-    static const auto tree_opened_entry = load_cel3_texture("cels3/jtocave.cel");
+    static const auto tree_closed_entry = TextureCache::LoadCelThree("cels3/rent1.cel");
+    static const auto tree_opened_entry = TextureCache::LoadCelThree("cels3/jtocave.cel");
 
-    static const auto big_door_anim = load_cel3_texture({
+    static const auto big_door_anim = TextureCache::LoadCelThree({
         "cels3/bigdoor1.cel",
         "cels3/bigdoor2.cel",
         "cels3/bigdoor3.cel",
         "cels3/bigdoor4.cel",
     });
 
-    static const auto temple_door_anim = load_cel3_texture({
+    static const auto temple_door_anim = TextureCache::LoadCelThree({
         "cels3/tmpdoor1.cel",
         "cels3/tmpdoor2.cel",
         "cels3/tmpdoor3.cel",
         "cels3/tmpdoor4.cel",
     });
 
-    static const auto cave_entry = load_cel3_texture("cels3/cav2cave.cel");
-    static const auto jungle_entry = load_cel3_texture("cels3/cavetoj.cel");
-    static const auto unknown = load_cel3_texture("cels3/unknown.cel");
+    static const auto cave_entry = TextureCache::LoadCelThree("cels3/cav2cave.cel");
+    static const auto jungle_entry = TextureCache::LoadCelThree("cels3/cavetoj.cel");
+    static const auto unknown = TextureCache::LoadCelThree("cels3/unknown.cel");
 
-    static const auto boogate = load_cel3_texture("cels3/boogate.cel");
-    static const auto hut_door_anim = load_cel3_texture({
+    static const auto boogate = TextureCache::LoadCelThree("cels3/boogate.cel");
+    static const auto hut_door_anim = TextureCache::LoadCelThree({
         "cels3/hutdoor1.cel",
         "cels3/hutdoor2.cel",
         "cels3/hutdoor3.cel",
     });
 
-    static const auto mansion_door = load_cel3_texture("cels3/mansext3.cel");
-    static const auto mansion_door_broken = load_cel3_texture("cels3/mansext5.cel");
+    static const auto mansion_door = TextureCache::LoadCelThree("cels3/mansext3.cel");
+    static const auto mansion_door_broken = TextureCache::LoadCelThree("cels3/mansext5.cel");
 
     switch (segment.id) {
         // 01.map
@@ -555,7 +529,7 @@ void World::spawnPassage(const Segment &segment) {
 }
 
 void World::spawnEntityForSegment(const std::string &map_filename, const Segment &segment) {
-    static const auto beach = load_cel3_texture({
+    static const auto beach = TextureCache::LoadCelThree({
         "cels3/beach1.cel",
         "cels3/beach2.cel",
         "cels3/beach3.cel",
@@ -563,135 +537,137 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
     });
 
     // Walls
-    static const auto trees1 = load_cel3_texture("cels3/rtrees1.cel");
-    static const auto trees2 = load_cel3_texture("cels3/rtrees2.cel");
+    static const auto trees1 = TextureCache::LoadCelThree("cels3/rtrees1.cel");
+    static const auto trees2 = TextureCache::LoadCelThree("cels3/rtrees2.cel");
 
-    static const auto rcave1 = load_cel3_texture("cels3/rcave1.cel");
-    static const auto rcave2 = load_cel3_texture("cels3/rcave2.cel");
-    static const auto rcave3 = load_cel3_texture("cels3/rcave3.cel");
-    static const auto rcave4 = load_cel3_texture("cels3/rcave4.cel");
+    static const auto rcave1 = TextureCache::LoadCelThree("cels3/rcave1.cel");
+    static const auto rcave2 = TextureCache::LoadCelThree("cels3/rcave2.cel");
+    static const auto rcave3 = TextureCache::LoadCelThree("cels3/rcave3.cel");
+    static const auto rcave4 = TextureCache::LoadCelThree("cels3/rcave4.cel");
 
-    static const auto hut_wall_north = load_cel3_texture("cels3/nhut.cel");
-    static const auto hut_wall_west = load_cel3_texture("cels3/whut.cel");
-    static const auto hut_wall_east = load_cel3_texture("cels3/ehut.cel");
-    static const auto hut_wall_south = load_cel3_texture("cels3/shut.cel");
+    static const auto hut_wall_north = TextureCache::LoadCelThree("cels3/nhut.cel");
+    static const auto hut_wall_west = TextureCache::LoadCelThree("cels3/whut.cel");
+    static const auto hut_wall_east = TextureCache::LoadCelThree("cels3/ehut.cel");
+    static const auto hut_wall_south = TextureCache::LoadCelThree("cels3/shut.cel");
 
-    static const auto boowall_north = load_cel3_texture("cels3/nboowall.cel");
-    static const auto boowall_west = load_cel3_texture("cels3/wboowall.cel");
-    static const auto boowall_east = load_cel3_texture("cels3/eboowall.cel");
-    static const auto boowall_south = load_cel3_texture("cels3/sboowall.cel");
+    static const auto boowall_north = TextureCache::LoadCelThree("cels3/nboowall.cel");
+    static const auto boowall_west = TextureCache::LoadCelThree("cels3/wboowall.cel");
+    static const auto boowall_east = TextureCache::LoadCelThree("cels3/eboowall.cel");
+    static const auto boowall_south = TextureCache::LoadCelThree("cels3/sboowall.cel");
 
-    static const auto mansion_window_light = load_cel3_texture("cels3/mansext1.cel");
-    static const auto mansion_window_dark = load_cel3_texture("cels3/mansext2.cel");
-    static const auto mansion_wall_light = load_cel3_texture("cels3/mansext7.cel");
-    static const auto mansion_wall_dark = load_cel3_texture("cels3/mansext8.cel");
+    static const auto mansion_window_light = TextureCache::LoadCelThree("cels3/mansext1.cel");
+    static const auto mansion_window_dark = TextureCache::LoadCelThree("cels3/mansext2.cel");
+    static const auto mansion_wall_light = TextureCache::LoadCelThree("cels3/mansext7.cel");
+    static const auto mansion_wall_dark = TextureCache::LoadCelThree("cels3/mansext8.cel");
 
-    static const auto hanger_dark = load_cel3_texture("cels3/hngar01.cel");
-    static const auto hanger_light = load_cel3_texture("cels3/hngar02.cel");
+    static const auto hanger_dark = TextureCache::LoadCelThree("cels3/hngar01.cel");
+    static const auto hanger_light = TextureCache::LoadCelThree("cels3/hngar02.cel");
 
-    static const auto compound_wall_light = load_cel3_texture("cels3/compnd51.cel");
-    static const auto compound_wall_dark = load_cel3_texture("cels3/compnd53.cel");
-    static const auto compound_window_light = load_cel3_texture("cels3/compnd54.cel");
-    static const auto compound_window_dark = load_cel3_texture("cels3/compnd55.cel");
+    static const auto compound_wall_light = TextureCache::LoadCelThree("cels3/compnd51.cel");
+    static const auto compound_wall_dark = TextureCache::LoadCelThree("cels3/compnd53.cel");
+    static const auto compound_window_light = TextureCache::LoadCelThree("cels3/compnd54.cel");
+    static const auto compound_window_dark = TextureCache::LoadCelThree("cels3/compnd55.cel");
 
-    static const auto husk1 = load_cel3_texture("cels3/husk1.cel");
-    static const auto husk2 = load_cel3_texture("cels3/husk2.cel");
-    static const auto husk3 = load_cel3_texture("cels3/husk3.cel");
+    static const auto husk1 = TextureCache::LoadCelThree("cels3/husk1.cel");
+    static const auto husk2 = TextureCache::LoadCelThree("cels3/husk2.cel");
+    static const auto husk3 = TextureCache::LoadCelThree("cels3/husk3.cel");
 
-    static const auto temple_wall_light = load_cel3_texture("cels3/tmpl2.cel");
-    static const auto temple_wall_dark = load_cel3_texture("cels3/tmpl4.cel");
-    static const auto temple_face_left = load_cel3_texture("cels3/tmpltex1.cel");
-    static const auto temple_face_mid = load_cel3_texture("cels3/tmpltex2.cel");
-    static const auto temple_face_right = load_cel3_texture("cels3/tmpltex3.cel");
+    static const auto temple_wall_light = TextureCache::LoadCelThree("cels3/tmpl2.cel");
+    static const auto temple_wall_dark = TextureCache::LoadCelThree("cels3/tmpl4.cel");
+    static const auto temple_face_left = TextureCache::LoadCelThree("cels3/tmpltex1.cel");
+    static const auto temple_face_mid = TextureCache::LoadCelThree("cels3/tmpltex2.cel");
+    static const auto temple_face_right = TextureCache::LoadCelThree("cels3/tmpltex3.cel");
 
-    static const auto shack1 = load_cel3_texture("cels3/shack1.cel");
-    static const auto shack2 = load_cel3_texture("cels3/shack2.cel");
-    static const auto shack3 = load_cel3_texture("cels3/shack3.cel");
+    static const auto shack1 = TextureCache::LoadCelThree("cels3/shack1.cel");
+    static const auto shack2 = TextureCache::LoadCelThree("cels3/shack2.cel");
+    static const auto shack3 = TextureCache::LoadCelThree("cels3/shack3.cel");
 
-    static const auto fence = load_cel3_texture("cels3/fence.cel");
-    static const auto jungle_fence = load_cel3_texture("cels3/jfence.cel");
+    static const auto fence = TextureCache::LoadCelThree("cels3/fence.cel");
+    static const auto jungle_fence = TextureCache::LoadCelThree("cels3/jfence.cel");
 
-    static const auto runway = load_cel3_texture("cels3/runway.cel");
+    static const auto runway = TextureCache::LoadCelThree("cels3/runway.cel");
 
     // Damageable/animated walls
-    static const auto fireplace_left = load_cel3_texture({
+    static const auto fireplace_left = TextureCache::LoadCelThree({
         "cels3/firepl1a.cel",
         "cels3/firepl1b.cel",
         "cels3/firepl1c.cel",
     });
 
-    static const auto fireplace_right = load_cel3_texture({
+    static const auto fireplace_right = TextureCache::LoadCelThree({
         "cels3/firepl2a.cel",
         "cels3/firepl2b.cel",
         "cels3/firepl2c.cel",
     });
 
-    static const auto bookshelf = load_cel3_texture("cels3/frnture4.cel");
-    static const auto bookshelf_damaged = load_cel3_texture("cels3/frnture3.cel");
+    static const auto bookshelf = TextureCache::LoadCelThree("cels3/frnture4.cel");
+    static const auto bookshelf_damaged = TextureCache::LoadCelThree("cels3/frnture3.cel");
 
-    static const auto tv = load_cel3_texture("cels3/frnture7.cel");
-    static const auto tv_damaged = load_cel3_texture("cels3/frnture8.cel");
+    static const auto tv = TextureCache::LoadCelThree("cels3/frnture7.cel");
+    static const auto tv_damaged = TextureCache::LoadCelThree("cels3/frnture8.cel");
 
-    static const auto portrait = load_cel3_texture("cels3/frnture5.cel");
-    static const auto portrait_damaged = load_cel3_texture("cels3/frnture6.cel");
+    static const auto portrait = TextureCache::LoadCelThree("cels3/frnture5.cel");
+    static const auto portrait_damaged = TextureCache::LoadCelThree("cels3/frnture6.cel");
 
     // Doors,passages,entries
-    static const auto bunker_entry_closed = load_cel3_texture("cels3/bunkent1.cel");
-    static const auto bunker_entry_opened = load_cel3_texture("cels3/bunkent2.cel");
+    static const auto bunker_entry_closed = TextureCache::LoadCelThree("cels3/bunkent1.cel");
+    static const auto bunker_entry_opened = TextureCache::LoadCelThree("cels3/bunkent2.cel");
 
-    static const auto temple_door = load_cel3_texture({
+/*
+    static const auto temple_door = TextureCache::LoadCelThree({
         "cels3/tmpdoor1.cel",
         "cels3/tmpdoor2.cel",
         "cels3/tmpdoor3.cel",
         "cels3/tmpdoor4.cel",
     });
+*/
 
-    static const auto plane_fire_left = load_cel3_texture({
+    static const auto plane_fire_left = TextureCache::LoadCelThree({
         "cels3/fire1a.cel",
         "cels3/fire2a.cel",
         "cels3/fire3a.cel",
     });
 
-    static const auto plane_fire_mid = load_cel3_texture({
+    static const auto plane_fire_mid = TextureCache::LoadCelThree({
         "cels3/fire1b.cel",
         "cels3/fire2b.cel",
         "cels3/fire3b.cel",
     });
 
-    static const auto plane_fire_right = load_cel3_texture({
+    static const auto plane_fire_right = TextureCache::LoadCelThree({
         "cels3/fire1c.cel",
         "cels3/fire2c.cel",
         "cels3/fire3c.cel",
     });
 
-    static const auto camp_gate_open = load_cel3_texture("cels3/cmpgate3.cel");
+    static const auto camp_gate_open = TextureCache::LoadCelThree("cels3/cmpgate3.cel");
 
-    static const auto plane_fence_left = load_cel3_texture("cels3/fencepl1.cel");
-    static const auto plane_fence_right = load_cel3_texture("cels3/fencepl2.cel");
+    static const auto plane_fence_left = TextureCache::LoadCelThree("cels3/fencepl1.cel");
+    static const auto plane_fence_right = TextureCache::LoadCelThree("cels3/fencepl2.cel");
 
     // Items
-    static const auto jacket = load_cel3_texture("cels3/jacket.cel");
-    static const auto coconut = load_cel3_texture("cels3/food2c1.cel");
-    static const auto banana = load_cel3_texture("cels3/food3c1.cel");
-    static const auto aid_kit = load_cel3_texture("cels3/aidkitc1.cel");
-    static const auto ammo_shells = load_cel3_texture("cels3/ammo1c1.cel");
-    static const auto ammo_bullets = load_cel3_texture("cels3/ammo2c1.cel");
-    static const auto ammo_clips = load_cel3_texture("cels3/ammo3c1.cel");
-    static const auto shotgun = load_cel3_texture("cels3/sgunc1.cel");
-    static const auto flower = load_cel3_texture("cels3/flowerc1.cel");
-    static const auto crystal = load_cel3_texture("cels3/crystalc.cel");
+    static const auto jacket = TextureCache::LoadCelThree("cels3/jacket.cel");
+    static const auto coconut = TextureCache::LoadCelThree("cels3/food2c1.cel");
+    static const auto banana = TextureCache::LoadCelThree("cels3/food3c1.cel");
+    static const auto aid_kit = TextureCache::LoadCelThree("cels3/aidkitc1.cel");
+    static const auto ammo_shells = TextureCache::LoadCelThree("cels3/ammo1c1.cel");
+    static const auto ammo_bullets = TextureCache::LoadCelThree("cels3/ammo2c1.cel");
+    static const auto ammo_clips = TextureCache::LoadCelThree("cels3/ammo3c1.cel");
+    static const auto shotgun = TextureCache::LoadCelThree("cels3/sgunc1.cel");
+    static const auto flower = TextureCache::LoadCelThree("cels3/flowerc1.cel");
+    static const auto crystal = TextureCache::LoadCelThree("cels3/crystalc.cel");
 
     // Props
-    static const auto trees = load_cel3_texture("cels3/rtrees.cel");
-    static const auto barrel = load_cel3_texture("cels3/barrel.cel");
-    static const auto bed = load_cel3_texture("cels3/bed.cel");
-    static const auto dish = load_cel3_texture("cels3/dish.cel");
-    static const auto driftwood = load_cel3_texture("cels3/driftwd.cel");
-    static const auto labsink = load_cel3_texture("cels3/labsink.cel");
-    static const auto labtable = load_cel3_texture("cels3/labtable.cel");
-    static const auto table = load_cel3_texture("cels3/table.cel");
-    static const auto vine = load_cel3_texture("cels3/vine.cel");
-    static const auto tiki = load_cel3_texture({
+    static const auto trees = TextureCache::LoadCelThree("cels3/rtrees.cel");
+    static const auto barrel = TextureCache::LoadCelThree("cels3/barrel.cel");
+    static const auto bed = TextureCache::LoadCelThree("cels3/bed.cel");
+    static const auto dish = TextureCache::LoadCelThree("cels3/dish.cel");
+    static const auto driftwood = TextureCache::LoadCelThree("cels3/driftwd.cel");
+    static const auto labsink = TextureCache::LoadCelThree("cels3/labsink.cel");
+    static const auto labtable = TextureCache::LoadCelThree("cels3/labtable.cel");
+    static const auto table = TextureCache::LoadCelThree("cels3/table.cel");
+    static const auto vine = TextureCache::LoadCelThree("cels3/vine.cel");
+    static const auto tiki = TextureCache::LoadCelThree({
         "cels3/tiki1.cel",
         "cels3/tiki2.cel",
         "cels3/tiki3.cel",
@@ -700,16 +676,16 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/tiki6.cel",
     });
 
-    static const auto red_chair = load_cel3_texture("cels3/frnture2.cel");
-    static const auto red_chair_damaged = load_cel3_texture("cels3/frnture1.cel");
-    static const auto trapdoor = load_cel3_texture("cels3/trapdoor.cel");
+    static const auto red_chair = TextureCache::LoadCelThree("cels3/frnture2.cel");
+    static const auto red_chair_damaged = TextureCache::LoadCelThree("cels3/frnture1.cel");
+    static const auto trapdoor = TextureCache::LoadCelThree("cels3/trapdoor.cel");
 
     // Traps
-    static const auto pit = load_cel3_texture("cels3/pit.cel");
-    static const auto snare = load_cel3_texture("cels3/snare.cel");
+    static const auto pit = TextureCache::LoadCelThree("cels3/pit.cel");
+    static const auto snare = TextureCache::LoadCelThree("cels3/snare.cel");
 
     // Monsters
-    static const auto bat = load_cel3_texture({
+    static const auto bat = TextureCache::LoadCelThree({
         "cels3/rbat01.cel",
         "cels3/rbat02.cel",
         "cels3/rbat03.cel",
@@ -750,7 +726,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rbat38.cel",
     });
 
-    static const auto cj = load_cel3_texture({
+    static const auto cj = TextureCache::LoadCelThree({
         "cels3/cj01.cel",
         "cels3/cj02.cel",
         "cels3/cj03.cel",
@@ -801,7 +777,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/cj48.cel",
     });
 
-    static const auto dude = load_cel3_texture({
+    static const auto dude = TextureCache::LoadCelThree({
         "cels3/dude01.cel",
         "cels3/dude02.cel",
         "cels3/dude03.cel",
@@ -844,7 +820,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/dude40.cel",
     });
 
-    static const auto doc = load_cel3_texture({
+    static const auto doc = TextureCache::LoadCelThree({
         "cels3/rdoc01.cel",
         "cels3/rdoc02.cel",
         "cels3/rdoc03.cel",
@@ -888,7 +864,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rdoc41.cel",
     });
 
-    static const auto kid = load_cel3_texture({
+    static const auto kid = TextureCache::LoadCelThree({
         "cels3/kidsit.cel",
         "cels3/rkid01.cel",
         "cels3/rkid02.cel",
@@ -925,7 +901,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rkid33.cel",
     });
 
-    static const auto harry = load_cel3_texture({
+    static const auto harry = TextureCache::LoadCelThree({
         "cels3/rharry01.cel",
         "cels3/rharry02.cel",
         "cels3/rharry03.cel",
@@ -975,7 +951,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rharry47.cel",
     });
 
-    static const auto nurse = load_cel3_texture({
+    static const auto nurse = TextureCache::LoadCelThree({
         "cels3/rnurse01.cel",
         "cels3/rnurse02.cel",
         "cels3/rnurse03.cel",
@@ -1011,7 +987,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rnurse33.cel",
     });
 
-    static const auto roy = load_cel3_texture({
+    static const auto roy = TextureCache::LoadCelThree({
         "cels3/roy01.cel",
         "cels3/roy02.cel",
         "cels3/roy03.cel",
@@ -1058,7 +1034,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/roy44.cel",
     });
 
-    static const auto tor = load_cel3_texture({
+    static const auto tor = TextureCache::LoadCelThree({
         "cels3/rtor01.cel",
         "cels3/rtor02.cel",
         "cels3/rtor03.cel",
@@ -1114,7 +1090,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rtor53.cel",
     });
 
-    static const auto wolf = load_cel3_texture({
+    static const auto wolf = TextureCache::LoadCelThree({
         "cels3/rwolf01.cel",
         "cels3/rwolf02.cel",
         "cels3/rwolf03.cel",
@@ -1162,7 +1138,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/rwolf45.cel",
     });
 
-    static const auto drummer = load_cel3_texture({
+    static const auto drummer = TextureCache::LoadCelThree({
         "cels3/drumr01.cel",
         "cels3/drumr02.cel",
         "cels3/drumr03.cel",
@@ -1172,7 +1148,7 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/drumr07.cel",
     });
 
-    static const auto tank = load_cel3_texture({
+    static const auto tank = TextureCache::LoadCelThree({
         "cels3/tnk01.cel",
         "cels3/tnk02.cel",
         "cels3/tnk03.cel",
@@ -1185,20 +1161,20 @@ void World::spawnEntityForSegment(const std::string &map_filename, const Segment
         "cels3/tnk10.cel",
     });
 
-    static const auto hanger_door = load_cel3_texture({
+    static const auto hanger_door = TextureCache::LoadCelThree({
         "cels3/hngar03.cel",
         "cels3/hngar04.cel",
         "cels3/hngar05.cel",
     });
 
-    static const auto camp_gate = load_cel3_texture(std::vector<std::string>({
+    static const auto camp_gate = TextureCache::LoadCelThree(std::vector<std::string>({
         "cels3/cmpgate1.cel",
         "cels3/cmpgate2.cel"
         }));
-    static const auto unknown = load_cel3_texture("cels3/unknown.cel");
+    static const auto unknown = TextureCache::LoadCelThree("cels3/unknown.cel");
 
-    static const auto missile_left = load_cel3_texture("cels3/misslec1.cel");
-    static const auto missile_right = load_cel3_texture("cels3/misslec2.cel");
+    static const auto missile_left = TextureCache::LoadCelThree("cels3/misslec1.cel");
+    static const auto missile_right = TextureCache::LoadCelThree("cels3/misslec2.cel");
 
     switch (segment.texture) {
         case 0:

@@ -47,6 +47,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "LaunchOptions.h"
 #include "Help.h"
 #include "SoundCache.h"
+#include "TextureCache.h"
 
 static void draw_world(Player *player, MusicPlayer *music_player, raylib::Window &window, const int scale) {
     static uint64_t frame_count = 0;
@@ -387,7 +388,7 @@ static void play_doc_die_anim(Player *player, raylib::Window &window, const int 
 }
 
 static void show_quit(Player *player, raylib::Window &window, const int scale, const State old_state) {
-    static auto quit_message = StillCel("stillcel/quit.cel").getTexture();
+    static auto quit_message = TextureCache::LoadStillCel("stillcel/quit.cel");
 
     BeginDrawing();
     {

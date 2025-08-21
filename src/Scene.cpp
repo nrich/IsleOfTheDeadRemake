@@ -20,12 +20,12 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 
 #include "Scene.h"
-#include "StillCel.h"
 #include "Strings.h"
 #include "SoundCache.h"
+#include "TextureCache.h"
 
 Scene::Scene(Panel *panel, const std::string &background_filename) : panel(panel) {
-    background = StillCel(background_filename).getTexture(); 
+    background = TextureCache::LoadStillCel(background_filename);
 }
 
 std::tuple<bool, std::string, DeathType> Scene::useItemOnItem(Item source, Item destination) {
@@ -224,7 +224,7 @@ Scene::~Scene() {
 CrashedPlaneEntryScene::CrashedPlaneEntryScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room3.cel") {
     entrance = new_entrance;
 
-    layouts.emplace_back(raylib::Vector2(203, 115), StillCel("stillcel/clippers.cel").getTexture(), Item::WireClipper, Strings::Lookup(315), Strings::Lookup(316), Strings::Lookup(317));
+    layouts.emplace_back(raylib::Vector2(203, 115), TextureCache::LoadStillCel("stillcel/clippers.cel"), Item::WireClipper, Strings::Lookup(315), Strings::Lookup(316), Strings::Lookup(317));
 
     navigation[Input::StepBack] = State::World;
     navigation[Input::LookDown] = State::World;
@@ -233,7 +233,7 @@ CrashedPlaneEntryScene::CrashedPlaneEntryScene(Panel *panel, const Entrance &new
 }
 
 CrashedPlaneLeftScene::CrashedPlaneLeftScene(Panel *panel) : Scene(panel, "stillcel/room1.cel") {
-    layouts.emplace_back(raylib::Vector2(36, 127), StillCel("stillcel/phbook.cel").getTexture(), Item::Book, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+    layouts.emplace_back(raylib::Vector2(36, 127), TextureCache::LoadStillCel("stillcel/phbook.cel"), Item::Book, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
 
     navigation[Input::StepForward] = State::CrashedPlaneCockpit;
     navigation[Input::LookUp] = State::CrashedPlaneCockpit;
@@ -242,8 +242,8 @@ CrashedPlaneLeftScene::CrashedPlaneLeftScene(Panel *panel) : Scene(panel, "still
 }
 
 CrashedPlaneCockpitScene::CrashedPlaneCockpitScene(Panel *panel) : Scene(panel, "stillcel/room2.cel") {
-    layouts.emplace_back(raylib::Vector2(166, 48), StillCel("stillcel/compass.cel").getTexture(), Item::StuckCompass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
-    layouts.emplace_back(raylib::Vector2(98, 92), StillCel("stillcel/flaregun.cel").getTexture(), Item::FlareGun, Strings::Lookup(327), Strings::Lookup(328), Strings::Lookup(329));
+    layouts.emplace_back(raylib::Vector2(166, 48), TextureCache::LoadStillCel("stillcel/compass.cel"), Item::StuckCompass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
+    layouts.emplace_back(raylib::Vector2(98, 92), TextureCache::LoadStillCel("stillcel/flaregun.cel"), Item::FlareGun, Strings::Lookup(327), Strings::Lookup(328), Strings::Lookup(329));
 
     navigation[Input::StepBack] = State::CrashedPlaneLeft;
     navigation[Input::LookDown] = State::CrashedPlaneLeft;
@@ -257,7 +257,7 @@ std::tuple<bool, std::string, DeathType> CrashedPlaneCockpitScene::useItemOnItem
             return layout.item == Item::StuckCompass;
         }));
 
-        layouts.emplace_back(raylib::Vector2(166, 48), StillCel("stillcel/compass.cel").getTexture(), Item::Compass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
+        layouts.emplace_back(raylib::Vector2(166, 48), TextureCache::LoadStillCel("stillcel/compass.cel"), Item::Compass, Strings::Lookup(320), Strings::Lookup(321), Strings::Lookup(322));
 
         return std::make_tuple(true, Strings::Lookup(324), DeathType::None);
     }
@@ -274,7 +274,7 @@ std::tuple<bool, std::string, DeathType> CrashedPlaneCockpitScene::getItem(const
 }
 
 CrashedPlaneRightScene::CrashedPlaneRightScene(Panel *panel) : Scene(panel, "stillcel/room4.cel") {
-    layouts.emplace_back(raylib::Vector2(25, 62), StillCel("stillcel/machetis.cel").getTexture(), Item::Machete, Strings::Lookup(308), Strings::Lookup(309), Strings::Lookup(310));
+    layouts.emplace_back(raylib::Vector2(25, 62), TextureCache::LoadStillCel("stillcel/machetis.cel"), Item::Machete, Strings::Lookup(308), Strings::Lookup(309), Strings::Lookup(310));
 
     navigation[Input::TurnLeft] = State::CrashedPlaneEntry;
     navigation[Input::TurnRight] = State::CrashedPlaneExit;
@@ -292,9 +292,9 @@ CrashedPlaneExitScene::CrashedPlaneExitScene(Panel *panel, const Entrance &new_e
 BunkerEntryScene::BunkerEntryScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/bunkerbg.cel") {
     entrance = new_entrance;
 
-    layouts.emplace_back(raylib::Vector2(244, 71), StillCel("stillcel/guninbun.cel").getTexture(), Item::Rifle, Strings::Lookup(376), Strings::Lookup(377), Strings::Lookup(378));
-    layouts.emplace_back(raylib::Vector2(14, 83), StillCel("stillcel/crates.cel").getTexture(), Item::Crate, Strings::Lookup(364), Strings::Lookup(365), Strings::Lookup(366));
-    layouts.emplace_back(raylib::Vector2(64, 133), StillCel("stillcel/wire.cel").getTexture(), Item::TripWire, Strings::Lookup(370), Strings::Lookup(370), Strings::Lookup(370));
+    layouts.emplace_back(raylib::Vector2(244, 71), TextureCache::LoadStillCel("stillcel/guninbun.cel"), Item::Rifle, Strings::Lookup(376), Strings::Lookup(377), Strings::Lookup(378));
+    layouts.emplace_back(raylib::Vector2(14, 83), TextureCache::LoadStillCel("stillcel/crates.cel"), Item::Crate, Strings::Lookup(364), Strings::Lookup(365), Strings::Lookup(366));
+    layouts.emplace_back(raylib::Vector2(64, 133), TextureCache::LoadStillCel("stillcel/wire.cel"), Item::TripWire, Strings::Lookup(370), Strings::Lookup(370), Strings::Lookup(370));
 
     navigation[Input::TurnLeft] = State::BunkerLeft;
     navigation[Input::TurnRight] = State::BunkerRight;
@@ -333,7 +333,7 @@ BunkerExitScene::BunkerExitScene(Panel *panel, const Entrance &new_entrance) : S
 }
 
 BunkerLeftScene::BunkerLeftScene(Panel *panel) : Scene(panel, "stillcel/bunkleft.cel") {
-    layouts.emplace_back(raylib::Vector2(0, 0), StillCel("stillcel/bunkleft.cel").getTexture(), Item::Soldier, Strings::Lookup(391), Strings::Lookup(392), Strings::Lookup(393));
+    layouts.emplace_back(raylib::Vector2(120, 38), raylib::Vector2(140, 100), Item::Soldier, Strings::Lookup(391), Strings::Lookup(392), Strings::Lookup(393));
 
     navigation[Input::TurnLeft] = State::BunkerExit;
     navigation[Input::TurnRight] = State::BunkerEntry;
@@ -350,8 +350,8 @@ std::tuple<bool, std::string, DeathType> BunkerLeftScene::useItemOnItem(Item sou
 }
 
 BunkerRightScene::BunkerRightScene(Panel *panel) : Scene(panel, "stillcel/bunkrt.cel") {
-    layouts.emplace_back(raylib::Vector2(7, 41), StillCel("stillcel/rag.cel").getTexture(), Item::Rags, Strings::Lookup(376), Strings::Lookup(377), Strings::Lookup(378));
-    layouts.emplace_back(raylib::Vector2(86, 66), StillCel("stillcel/oil.cel").getTexture(), Item::OilCan, Strings::Lookup(364), Strings::Lookup(365), Strings::Lookup(366));
+    layouts.emplace_back(raylib::Vector2(7, 41), TextureCache::LoadStillCel("stillcel/rag.cel"), Item::Rags, Strings::Lookup(376), Strings::Lookup(377), Strings::Lookup(378));
+    layouts.emplace_back(raylib::Vector2(86, 66), TextureCache::LoadStillCel("stillcel/oil.cel"), Item::OilCan, Strings::Lookup(364), Strings::Lookup(365), Strings::Lookup(366));
 
     navigation[Input::TurnRight] = State::BunkerExit;
     navigation[Input::TurnLeft] = State::BunkerEntry;
@@ -387,26 +387,26 @@ std::tuple<bool, std::string, DeathType> TempleEntranceScene::getItem(const Layo
 
 std::tuple<bool, std::string, DeathType> TempleEntranceScene::useItemOnItem(Item source, Item destination) {
     if (source == Item::GoldMedal1 && destination == Item::MedalHole1) {
-        layouts.emplace_back(raylib::Vector2(144, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHoleFilled1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+        layouts.emplace_back(raylib::Vector2(144, 97), TextureCache::LoadStillCel("stillcel/hole1.cel"), Item::MedalHoleFilled1, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
         return make_tuple(true, Strings::Lookup(425), DeathType::None);
     }
 
     if (source == Item::GoldMedal2 && destination == Item::MedalHole2) {
         static const std::vector<std::optional<raylib::TextureUnmanaged>> left_eye = {
-             StillCel("stillcel/lefteye1.cel").getTexture(),
-             StillCel("stillcel/lefteye2.cel").getTexture(),
-             StillCel("stillcel/lefteye3.cel").getTexture(),
-             StillCel("stillcel/lefteye4.cel").getTexture(),
+             TextureCache::LoadStillCel("stillcel/lefteye1.cel"),
+             TextureCache::LoadStillCel("stillcel/lefteye2.cel"),
+             TextureCache::LoadStillCel("stillcel/lefteye3.cel"),
+             TextureCache::LoadStillCel("stillcel/lefteye4.cel"),
         };
 
         static const std::vector<std::optional<raylib::TextureUnmanaged>> right_eye = {
-             StillCel("stillcel/rteye1.cel").getTexture(),
-             StillCel("stillcel/rteye2.cel").getTexture(),
-             StillCel("stillcel/rteye3.cel").getTexture(),
-             StillCel("stillcel/rteye4.cel").getTexture(),
+             TextureCache::LoadStillCel("stillcel/rteye1.cel"),
+             TextureCache::LoadStillCel("stillcel/rteye2.cel"),
+             TextureCache::LoadStillCel("stillcel/rteye3.cel"),
+             TextureCache::LoadStillCel("stillcel/rteye4.cel"),
         };
 
-        layouts.emplace_back(raylib::Vector2(168, 97), StillCel("stillcel/hole1.cel").getTexture(), Item::MedalHoleFilled2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
+        layouts.emplace_back(raylib::Vector2(168, 97), TextureCache::LoadStillCel("stillcel/hole1.cel"), Item::MedalHoleFilled2, Strings::Lookup(334), Strings::Lookup(335), Strings::Lookup(336));
 
         animations[1] = Animation(raylib::Vector2(102.0f, 31.0f), left_eye, false);
         animations[2] = Animation(raylib::Vector2(181.0f, 32.0f), right_eye, false);
@@ -424,14 +424,14 @@ void TempleEntranceScene::draw(Player *player, int scale) {
 void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_id) {
     if (animation_id == 1) {
         static const std::vector<std::optional<raylib::TextureUnmanaged>> doors = {
-            StillCel("stillcel/tmpdoor1.cel").getTexture(),
-            StillCel("stillcel/tmpdoor2.cel").getTexture(),
-            StillCel("stillcel/tmpdoor3.cel").getTexture(),
-            StillCel("stillcel/tmpdoor4.cel").getTexture(),
-            StillCel("stillcel/tmpdoor5.cel").getTexture(),
-            StillCel("stillcel/tmpdoor6.cel").getTexture(),
-            StillCel("stillcel/tmpdoor7.cel").getTexture(),
-            StillCel("stillcel/tmpdoor8.cel").getTexture(),
+            TextureCache::LoadStillCel("stillcel/tmpdoor1.cel"),
+            TextureCache::LoadStillCel("stillcel/tmpdoor2.cel"),
+            TextureCache::LoadStillCel("stillcel/tmpdoor3.cel"),
+            TextureCache::LoadStillCel("stillcel/tmpdoor4.cel"),
+            TextureCache::LoadStillCel("stillcel/tmpdoor5.cel"),
+            TextureCache::LoadStillCel("stillcel/tmpdoor6.cel"),
+            TextureCache::LoadStillCel("stillcel/tmpdoor7.cel"),
+            TextureCache::LoadStillCel("stillcel/tmpdoor8.cel"),
         };
 
         removeItemLayout(Item::MedalHoleFilled1);
@@ -444,7 +444,7 @@ void TempleEntranceScene::animationCompleted(Player *player, uint16_t animation_
         navigation[Input::StepForward] = State::Oracle;
         navigation[Input::LookUp] = State::Oracle;
 
-        animations[4] = Animation(raylib::Vector2(101.0f, 86.0f), {StillCel("stillcel/tmpdoor8.cel").getTexture()});
+        animations[4] = Animation(raylib::Vector2(101.0f, 86.0f), {TextureCache::LoadStillCel("stillcel/tmpdoor8.cel")});
     }
 }
 
@@ -490,16 +490,16 @@ std::tuple<bool, std::string, DeathType> OracleScene::useItemOnItem(Item source,
     if (source == Item::DeadWolf && destination == Item::Oracle) {
         sacrifice = true;
         static const std::vector<std::optional<raylib::TextureUnmanaged>> oracle = {
-            StillCel("stillcel/flame1.cel").getTexture(),
-            StillCel("stillcel/flame2.cel").getTexture(),
-            StillCel("stillcel/flame3.cel").getTexture(),
-            StillCel("stillcel/flame4.cel").getTexture(),
-            StillCel("stillcel/flame5.cel").getTexture(),
-            StillCel("stillcel/flame6.cel").getTexture(),
-            StillCel("stillcel/flame7.cel").getTexture(),
-            StillCel("stillcel/flame8.cel").getTexture(),
-            StillCel("stillcel/flame9.cel").getTexture(),
-            StillCel("stillcel/flame10.cel").getTexture(),
+            TextureCache::LoadStillCel("stillcel/flame1.cel"),
+            TextureCache::LoadStillCel("stillcel/flame2.cel"),
+            TextureCache::LoadStillCel("stillcel/flame3.cel"),
+            TextureCache::LoadStillCel("stillcel/flame4.cel"),
+            TextureCache::LoadStillCel("stillcel/flame5.cel"),
+            TextureCache::LoadStillCel("stillcel/flame6.cel"),
+            TextureCache::LoadStillCel("stillcel/flame7.cel"),
+            TextureCache::LoadStillCel("stillcel/flame8.cel"),
+            TextureCache::LoadStillCel("stillcel/flame9.cel"),
+            TextureCache::LoadStillCel("stillcel/flame10.cel"),
         };
 
         animations[1] = Animation(raylib::Vector2(122, 10), oracle);
@@ -530,7 +530,7 @@ std::optional<Scene::Dialogue> OracleScene::talk(Player *player) {
             }
 
             if (!giveUzi) {
-                static const auto uzi_item_texture = StillCel("stillcel/rcluzi.cel").getTexture();
+                static const auto uzi_item_texture = TextureCache::LoadStillCel("stillcel/rcluzi.cel");
 
                 layouts.emplace_back(raylib::Vector2(134, 63), uzi_item_texture, Item::Uzi, Strings::Lookup(262), Strings::Lookup(263), "");
                 giveUzi = true;
@@ -554,8 +554,8 @@ ToiletScene::ToiletScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes = {
         std::nullopt,
-        StillCel("stillcel/closeye1.cel").getTexture(),
-        StillCel("stillcel/closeye2.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/closeye1.cel"),
+        TextureCache::LoadStillCel("stillcel/closeye2.cel"),
     };
 
     animations[1] = Animation(raylib::Vector2(139, 18), eyes, true, 12);
@@ -568,8 +568,8 @@ ShowerScene::ShowerScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
     entrance = new_entrance;
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes = {
-        StillCel("stillcel/shower2.cel").getTexture(),
-        StillCel("stillcel/shower3.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/shower2.cel"),
+        TextureCache::LoadStillCel("stillcel/shower3.cel"),
     };
 
     animations[1] = Animation(raylib::Vector2(82, 0), eyes, true, 6);
@@ -614,7 +614,7 @@ std::optional<Scene::Dialogue> VillageEyesScene::talk(Player *player) {
 RocketLauncherScene::RocketLauncherScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room23.cel") {
     entrance = new_entrance;
 
-    layouts.emplace_back(raylib::Vector2(29, 57), StillCel("stillcel/panel.cel").getTexture(), Item::Panel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
+    layouts.emplace_back(raylib::Vector2(29, 57), TextureCache::LoadStillCel("stillcel/panel.cel"), Item::Panel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
 
     navigation[Input::StepBack] = State::World;
     navigation[Input::LookDown] = State::World;
@@ -622,7 +622,7 @@ RocketLauncherScene::RocketLauncherScene(Panel *panel, const Entrance &new_entra
 
 std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layout &layout) {
     static const std::vector<std::optional<raylib::TextureUnmanaged>> wires1_anim = {
-        StillCel("stillcel/wires1.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/wires1.cel"),
     };
 
     if (layout.item == Item::Panel) {
@@ -645,16 +645,16 @@ std::tuple<bool, std::string, DeathType> RocketLauncherScene::getItem(const Layo
 
 std::tuple<bool, std::string, DeathType> RocketLauncherScene::useItemOnItem(Item source, Item destination, Player *player) {
     static const std::vector<std::optional<raylib::TextureUnmanaged>> wires2_anim = {
-        StillCel("stillcel/wires2.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/wires2.cel"),
     };
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> wires3_anim = {
-        StillCel("stillcel/wires3.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/wires3.cel"),
     };
 
 
     if (source == Item::Machete && destination == Item::Panel) {
-        layouts.emplace_back(raylib::Vector2(29, 57), StillCel("stillcel/panel.cel").getTexture(), Item::OpenPanel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
+        layouts.emplace_back(raylib::Vector2(29, 57), TextureCache::LoadStillCel("stillcel/panel.cel"), Item::OpenPanel, Strings::Lookup(440), Strings::Lookup(441), Strings::Lookup(442));
 
         removeItemLayout(Item::Panel);
 
@@ -745,54 +745,54 @@ PlaneGalleyScene::PlaneGalleyScene(Panel *panel) : Scene(panel, "stillcel/room21
     navigation[Input::StepForward] = State::PlaneCockpit;
     navigation[Input::LookUp] = State::PlaneCockpit;
 
-    layouts.emplace_back(raylib::Vector2(247, 80), StillCel("stillcel/raft.cel").getTexture(), Item::Raft, Strings::Lookup(432), Strings::Lookup(433), Strings::Lookup(434));
+    layouts.emplace_back(raylib::Vector2(247, 80), TextureCache::LoadStillCel("stillcel/raft.cel"), Item::Raft, Strings::Lookup(432), Strings::Lookup(433), Strings::Lookup(434));
 }
 
 LabZombieScene::LabZombieScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/labbkg.cel") {
     entrance = new_entrance;
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> monitor = {
-        StillCel("stillcel/labd1.cel").getTexture(),
-        StillCel("stillcel/labd2.cel").getTexture(),
-        StillCel("stillcel/labd3.cel").getTexture(),
-        StillCel("stillcel/labd4.cel").getTexture(),
-        StillCel("stillcel/labd5.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/labd1.cel"),
+        TextureCache::LoadStillCel("stillcel/labd2.cel"),
+        TextureCache::LoadStillCel("stillcel/labd3.cel"),
+        TextureCache::LoadStillCel("stillcel/labd4.cel"),
+        TextureCache::LoadStillCel("stillcel/labd5.cel"),
     };
 
     animations[1] = Animation(raylib::Vector2(260, 6), monitor);
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> arc = {
-        StillCel("stillcel/labb1.cel").getTexture(),
-        StillCel("stillcel/labb2.cel").getTexture(),
-        StillCel("stillcel/labb3.cel").getTexture(),
-        StillCel("stillcel/labb4.cel").getTexture(),
-        StillCel("stillcel/labb5.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/labb1.cel"),
+        TextureCache::LoadStillCel("stillcel/labb2.cel"),
+        TextureCache::LoadStillCel("stillcel/labb3.cel"),
+        TextureCache::LoadStillCel("stillcel/labb4.cel"),
+        TextureCache::LoadStillCel("stillcel/labb5.cel"),
     };
 
     animations[2] = Animation(raylib::Vector2(174, 0), arc);
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> test_tubes = {
-        StillCel("stillcel/laba1.cel").getTexture(),
-        StillCel("stillcel/laba2.cel").getTexture(),
-        StillCel("stillcel/laba3.cel").getTexture(),
-        StillCel("stillcel/laba4.cel").getTexture(),
-        StillCel("stillcel/laba5.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/laba1.cel"),
+        TextureCache::LoadStillCel("stillcel/laba2.cel"),
+        TextureCache::LoadStillCel("stillcel/laba3.cel"),
+        TextureCache::LoadStillCel("stillcel/laba4.cel"),
+        TextureCache::LoadStillCel("stillcel/laba5.cel"),
     };
 
     animations[3] = Animation(raylib::Vector2(10, 33), test_tubes);
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> scanner = {
-        StillCel("stillcel/labc1.cel").getTexture(),
-        StillCel("stillcel/labc2.cel").getTexture(),
-        StillCel("stillcel/labc3.cel").getTexture(),
-        StillCel("stillcel/labc4.cel").getTexture(),
-        StillCel("stillcel/labc5.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/labc1.cel"),
+        TextureCache::LoadStillCel("stillcel/labc2.cel"),
+        TextureCache::LoadStillCel("stillcel/labc3.cel"),
+        TextureCache::LoadStillCel("stillcel/labc4.cel"),
+        TextureCache::LoadStillCel("stillcel/labc5.cel"),
     };
 
     animations[4] = Animation(raylib::Vector2(259, 89), scanner);
 
-    layouts.emplace_back(raylib::Vector2(87, 46), StillCel("stillcel/beaker.cel").getTexture(), Item::Beaker, Strings::Lookup(403), Strings::Lookup(404), Strings::Lookup(405));
-    layouts.emplace_back(raylib::Vector2(163, 128), StillCel("stillcel/syringe.cel").getTexture(), Item::Syringe, Strings::Lookup(409), Strings::Lookup(410), Strings::Lookup(411));
+    layouts.emplace_back(raylib::Vector2(87, 46), TextureCache::LoadStillCel("stillcel/beaker.cel"), Item::Beaker, Strings::Lookup(403), Strings::Lookup(404), Strings::Lookup(405));
+    layouts.emplace_back(raylib::Vector2(163, 128), TextureCache::LoadStillCel("stillcel/syringe.cel"), Item::Syringe, Strings::Lookup(409), Strings::Lookup(410), Strings::Lookup(411));
 
     navigation[Input::StepBack] = State::World;
     navigation[Input::LookDown] = State::World;
@@ -813,7 +813,7 @@ LabCompanionScene::LabCompanionScene(Panel *panel, const Entrance &new_entrance)
 }
 
 std::string LabCompanionScene::useItem(Player *player, Item item) {
-    const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/room24.cel").getTexture();
+    const static raylib::TextureUnmanaged alt_background = TextureCache::LoadStillCel("stillcel/room24.cel");
 
     switch (item) {
         case Item::LabButtonA:
@@ -870,7 +870,7 @@ void LabCompanionScene::draw(Player *player, int scale) {
 MirrorScene::MirrorScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/room16.cel") {
     entrance = new_entrance;
 
-    layouts.emplace_back(raylib::Vector2(226, 103), StillCel("stillcel/drug.cel").getTexture(), Item::Drug, Strings::Lookup(409), Strings::Lookup(410), Strings::Lookup(411));
+    layouts.emplace_back(raylib::Vector2(226, 103), TextureCache::LoadStillCel("stillcel/drug.cel"), Item::Drug, Strings::Lookup(409), Strings::Lookup(410), Strings::Lookup(411));
 
     navigation[Input::StepBack] = State::World;
     navigation[Input::LookDown] = State::World;
@@ -880,10 +880,10 @@ ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
     entrance = new_entrance;
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> smoke = {
-        StillCel("stillcel/smoke1.cel").getTexture(),
-        StillCel("stillcel/smoke2.cel").getTexture(),
-        StillCel("stillcel/smoke3.cel").getTexture(),
-        StillCel("stillcel/smoke4.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/smoke1.cel"),
+        TextureCache::LoadStillCel("stillcel/smoke2.cel"),
+        TextureCache::LoadStillCel("stillcel/smoke3.cel"),
+        TextureCache::LoadStillCel("stillcel/smoke4.cel"),
     };
 
     animations[1] = Animation(raylib::Vector2(230, 61), smoke, 12);
@@ -929,8 +929,8 @@ ShamanScene::ShamanScene(Panel *panel, const Entrance &new_entrance) : Scene(pan
         Dialogue(Strings::Lookup(52)),
     };
 
-    layouts.emplace_back(raylib::Vector2(145, 58), StillCel("stillcel/medallio.cel").getTexture(), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
-    layouts.emplace_back(raylib::Vector2(275, 22), StillCel("stillcel/bolt.cel").getTexture(), Item::BoltCutters, Strings::Lookup(361), Strings::Lookup(338), Strings::Lookup(339));
+    layouts.emplace_back(raylib::Vector2(145, 58), TextureCache::LoadStillCel("stillcel/medallio.cel"), Item::GoldMedal1, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
+    layouts.emplace_back(raylib::Vector2(275, 22), TextureCache::LoadStillCel("stillcel/bolt.cel"), Item::BoltCutters, Strings::Lookup(361), Strings::Lookup(338), Strings::Lookup(339));
 
     layouts.emplace_back(raylib::Vector2(131, 7), raylib::Vector2(40, 36), Item::Shaman, Strings::Lookup(346), Strings::Lookup(347), "");
     layouts.emplace_back(raylib::Vector2(67, 93), raylib::Vector2(28, 40), Item::Bong, Strings::Lookup(341), Strings::Lookup(342), "");
@@ -1037,55 +1037,55 @@ std::tuple<bool, std::string, DeathType> ShamanScene::getItem(const Layout &layo
 ChiefScene::ChiefScene(Panel *panel, const Entrance &new_entrance) : Scene(panel, "stillcel/chiefbkg.cel") {
     entrance = new_entrance;
 
-    layouts.emplace_back(raylib::Vector2(137, 73), StillCel("stillcel/medal2.cel").getTexture(), Item::GoldMedal2, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
+    layouts.emplace_back(raylib::Vector2(137, 73), TextureCache::LoadStillCel("stillcel/medal2.cel"), Item::GoldMedal2, Strings::Lookup(337), Strings::Lookup(338), Strings::Lookup(339));
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes_left = {
-        StillCel("stillcel/eyesl1.cel").getTexture(),
-        StillCel("stillcel/eyesl2.cel").getTexture(),
-        StillCel("stillcel/eyesl3.cel").getTexture(),
-        StillCel("stillcel/eyesl4.cel").getTexture(),
-        StillCel("stillcel/eyesl5.cel").getTexture(),
-        StillCel("stillcel/eyesl6.cel").getTexture(),
-        StillCel("stillcel/eyesl7.cel").getTexture(),
-        StillCel("stillcel/eyesl8.cel").getTexture(),
-        StillCel("stillcel/eyesl9.cel").getTexture(),
-        StillCel("stillcel/eyesl10.cel").getTexture(),
-        StillCel("stillcel/eyesl11.cel").getTexture(),
-        StillCel("stillcel/eyesl11.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/eyesl1.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl2.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl3.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl4.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl5.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl6.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl7.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl8.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl9.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl10.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl11.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesl12.cel"),
     };
 
     animations[1] = Animation(raylib::Vector2(16, 55), eyes_left, 6);
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> eyes_middle = {
-        StillCel("stillcel/eyesm1.cel").getTexture(),
-        StillCel("stillcel/eyesm2.cel").getTexture(),
-        StillCel("stillcel/eyesm3.cel").getTexture(),
-        StillCel("stillcel/eyesm4.cel").getTexture(),
-        StillCel("stillcel/eyesm5.cel").getTexture(),
-        StillCel("stillcel/eyesm6.cel").getTexture(),
-        StillCel("stillcel/eyesm7.cel").getTexture(),
-        StillCel("stillcel/eyesm8.cel").getTexture(),
-        StillCel("stillcel/eyesm9.cel").getTexture(),
-        StillCel("stillcel/eyesm10.cel").getTexture(),
-        StillCel("stillcel/eyesm11.cel").getTexture(),
-        StillCel("stillcel/eyesm11.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/eyesm1.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm2.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm3.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm4.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm5.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm6.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm7.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm8.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm9.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm10.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm11.cel"),
+        TextureCache::LoadStillCel("stillcel/eyesm12.cel"),
     };
 
     animations[2] = Animation(raylib::Vector2(149, 23), eyes_middle, 6);
 
     static const std::vector<std::optional<raylib::TextureUnmanaged>> fan = {
-        StillCel("stillcel/fan1.cel").getTexture(),
-        StillCel("stillcel/fan2.cel").getTexture(),
-        StillCel("stillcel/fan3.cel").getTexture(),
-        StillCel("stillcel/fan4.cel").getTexture(),
-        StillCel("stillcel/fan5.cel").getTexture(),
-        StillCel("stillcel/fan6.cel").getTexture(),
-        StillCel("stillcel/fan7.cel").getTexture(),
-        StillCel("stillcel/fan8.cel").getTexture(),
-        StillCel("stillcel/fan9.cel").getTexture(),
-        StillCel("stillcel/fan10.cel").getTexture(),
-        StillCel("stillcel/fan11.cel").getTexture(),
-        StillCel("stillcel/fan12.cel").getTexture(),
+        TextureCache::LoadStillCel("stillcel/fan1.cel"),
+        TextureCache::LoadStillCel("stillcel/fan2.cel"),
+        TextureCache::LoadStillCel("stillcel/fan3.cel"),
+        TextureCache::LoadStillCel("stillcel/fan4.cel"),
+        TextureCache::LoadStillCel("stillcel/fan5.cel"),
+        TextureCache::LoadStillCel("stillcel/fan6.cel"),
+        TextureCache::LoadStillCel("stillcel/fan7.cel"),
+        TextureCache::LoadStillCel("stillcel/fan8.cel"),
+        TextureCache::LoadStillCel("stillcel/fan9.cel"),
+        TextureCache::LoadStillCel("stillcel/fan10.cel"),
+        TextureCache::LoadStillCel("stillcel/fan11.cel"),
+        TextureCache::LoadStillCel("stillcel/fan12.cel"),
     };
 
     animations[3] = Animation(raylib::Vector2(243, 3), fan, 6);
@@ -1206,7 +1206,7 @@ VillageGateShamanScene::VillageGateShamanScene(Panel *panel, const Entrance &new
 }
 
 std::optional<Scene::Dialogue> VillageGateShamanScene::talk(Player *player) {
-    const static raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsa2.cel").getTexture();
+    const static raylib::TextureUnmanaged alt_background = TextureCache::LoadStillCel("stillcel/gardsa2.cel");
 
     if (!player->testFlag(Flag::TranslateVillage1)) {
         script = 0;
@@ -1274,7 +1274,7 @@ VillageGateChiefScene::VillageGateChiefScene(Panel *panel, const Entrance &new_e
 }
 
 std::optional<Scene::Dialogue> VillageGateChiefScene::talk(Player *player) {
-    static const raylib::TextureUnmanaged alt_background = StillCel("stillcel/gardsb2.cel").getTexture();
+    static const raylib::TextureUnmanaged alt_background = TextureCache::LoadStillCel("stillcel/gardsb2.cel");
 
     if (!player->testFlag(Flag::TranslateVillage2)) {
         script = 0;
